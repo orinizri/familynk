@@ -7,7 +7,8 @@ export const getUsersController = (_req, res) => {
       { id: "2", name: "Alex" },
     ];
     return sendSuccess(res, users);
-  } catch {
+  } catch (error) {
+    console.error("Error fetching users:", error);
     return sendError(res, "Failed to fetch users", 500);
   }
 };
