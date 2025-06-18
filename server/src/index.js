@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import userRouter from "./routes/users.router.js";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
+import userRouter from "./routes/user.router.js";
+import authRouter from "./routes/auth.router.js";
 import { PORT } from "./config/env.js";
 
 dotenv.config();
@@ -18,8 +20,11 @@ app.use(express.json());
 app.get("/api/hello", (req, res) => {
   res.json({ message: "Hello from the backend!" });
 });
+app.use("/user", userRouter);
+app.use("/auth", authRouter);
 
-app.use("/api/users", userRouter);
+// Error handling middleware
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
