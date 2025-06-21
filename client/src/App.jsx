@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
-// import api from "./api/api";
+import { Routes, Route, Navigate } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 import LoginForm from "./components/LoginForm";
-import api from "./api/api";
+import { useAuth } from "./contexts/authContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
-  // const [message, setMessage] = useState("Loading...");
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    // Fetch a message from the backend
-    const fetchMessage = async () => {
-      console.log("token", token);
-      try {
-        const response = await api.get("/user/me", { headers: { Authorization: `Bearer ${token}` } });
-        console.log("Response:", response.data);
-        // setMessage(response.data.message);
-      } catch (error) {
-        console.error("Error fetching message:", error);
-        // setMessage("Failed to load message");
-      }
-    };
-
-    if (token) fetchMessage();
-  }, [token]);
+export default function App() {
+  const { user } = useAuth();
 
   return (
-    <div className="App">
-      <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-        {token ? (
-          <p>Logged in with token: {token}</p>
-        ) : (
-          <LoginForm onLogin={setToken} />
-        )}
-      </div>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user ? (
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/login"
+        element={!user ? <LoginForm /> : <Navigate to="/" replace />}
+      />
+    </Routes>
   );
 }
-
-export default App;

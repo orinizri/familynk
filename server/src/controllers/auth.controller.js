@@ -1,4 +1,8 @@
-import { loginUser, registerUser } from "../services/auth.service.js";
+import {
+  loginUserService,
+  registerUserService,
+  refreshTokenService,
+} from "../services/auth.service.js";
 import { sendSuccess, sendError } from "../utils/apiResponse.js";
 
 // LOG IN
@@ -10,10 +14,10 @@ export async function loginController(req, res, next) {
   }
 
   try {
-    const token = await loginUser(email, password);
-    return sendSuccess(res, { token, message: "Login successful" });
-  } catch (err) {
-    next(err);
+    const data = await loginUserService(email, password);
+    return sendSuccess(res, { ...data, message: "Login successful" });
+  } catch (error) {
+    next(error);
   }
 }
 
@@ -26,14 +30,27 @@ export async function registerController(req, res, next) {
   }
 
   try {
-    const token = await registerUser({
+    const token = await registerUserService({
       email,
       password,
       first_name,
       last_name,
     });
     return sendSuccess(res, { token, message: "Registration successful" }, 201);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function refreshTokenController(req, res, next) {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return sendError(res, "Refresh token is required", 400);
+  }
+  try {
+    const { user, accessToken } = await refreshTokenService(refreshToken);
+    return sendSuccess(res, { user, accessToken }, 201);
+  } catch (error) {
+    next(error);
   }
 }

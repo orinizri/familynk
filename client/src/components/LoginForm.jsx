@@ -1,24 +1,33 @@
 // src/components/LoginForm.js
-import { useState } from "react";
-import api from "../api/api";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/authContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default function LoginForm({ onLogin }) {
+export default function LoginForm() {
+  const { login, user, loading } = useAuth(); // from context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
-      const res = await api.post("/auth/login", { email, password });
-      console.log("res", res.data)
-      onLogin(res.data.data.token); // Call parent with token
+      await login({ email, password }); // context handles token logic
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  if (loading) return <p>Checking session...</p>;
+  if (user) return <Navigate to="/" />;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -27,6 +36,7 @@ export default function LoginForm({ onLogin }) {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <label>Password:</label>
@@ -34,6 +44,7 @@ export default function LoginForm({ onLogin }) {
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        required
       />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
