@@ -1,7 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../db/db.js";
-import { JWT_SECRET_REFRESH, JWT_SECRET_ACCESS, JWT_EXPIRES_IN_SHORT, JWT_EXPIRES_IN_LONG } from "../config/env.js";
+import {
+  JWT_SECRET_REFRESH,
+  JWT_SECRET_ACCESS,
+  JWT_EXPIRES_IN_SHORT,
+  JWT_EXPIRES_IN_LONG,
+} from "../config/env.js";
 import AppError from "../utils/appError.js";
 
 export async function loginUserService(email, password) {
@@ -122,7 +127,9 @@ export async function registerUserService({
 
 export async function refreshTokenService(refreshToken) {
   try {
+    console.log("Received refresh token:", refreshToken);
     const payload = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
+    console.log("Decoded payload from refresh token:", payload);
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [
       payload.userId,
     ]);
@@ -136,11 +143,15 @@ export async function refreshTokenService(refreshToken) {
     };
 
     const newAccessToken = jwt.sign(newPayload, JWT_SECRET_ACCESS, {
-      expiresIn: JWT_EXPIRES_IN_SHORT,
+      expiresIn: JWT_EXPIRES_IN_LONG,
     });
+    const newRefreshToken = jwt.sign(newPayload, JWT_SECRET_REFRESH, {
+      expiresIn: JWT_EXPIRES_IN_SHORT,
+    }); // 🆕 rotated
 
     return {
       accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
       user: {
         id: user.id,
         email: user.email,

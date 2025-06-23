@@ -6,8 +6,9 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { setAccessToken } from "../utils/axiosInstance";
+import { getAccessToken, setAccessToken } from "../utils/axiosInstance";
 import api from "../api/api";
+import { getTokenExpiration } from "../utils/jwtUtils";
 
 const AuthContext = createContext();
 
@@ -18,8 +19,16 @@ export function AuthProvider({ children }) {
   // Login
   const login = useCallback(async ({ email, password }) => {
     const res = await api.post("/auth/login", { email, password });
-    const { accessToken, refreshToken, user } = res.data;
-
+    if (!res.data || !res.data.data || !res.data.success) {
+      throw new Error("Login failed");
+    }
+    const { accessToken, refreshToken, user } = res.data.data;
+    console.log(
+      "accessToken, refreshToken, user",
+      accessToken,
+      refreshToken,
+      user
+    );
     setAccessToken(accessToken);
     sessionStorage.setItem("refresh_token", refreshToken);
     setUser(user);
@@ -39,14 +48,25 @@ export function AuthProvider({ children }) {
 
     try {
       const res = await api.post("/auth/refresh", { refreshToken: stored });
-      const { accessToken, user } = res.data;
+      const { accessToken, refreshToken, user } = res.data.data;
       setAccessToken(accessToken);
+      sessionStorage.setItem("refresh_token", refreshToken);
       setUser(user);
     } catch (err) {
       console.warn("Refresh failed:", err.message);
       logout();
     }
   }, [logout]);
+
+  const register = useCallback(async (form) => {
+    const res = await api.post("/auth/register", form);
+    if (!res.data?.success)
+      throw new Error(res.data?.error || "Register failed");
+    const { token, user } = res.data.data;
+    setAccessToken(token);
+    sessionStorage.setItem("refresh_token", token); // or refreshToken if split
+    setUser(user);
+  }, []);
 
   // On app load: try to refresh session
   useEffect(() => {
@@ -58,18 +78,41 @@ export function AuthProvider({ children }) {
   }, [refreshToken]);
 
   // Memoize context value to avoid triggering re-renders
-  const value = useMemo(() => ({
-    user,
-    loading,
-    login,
-    logout,
-  }), [user, loading, login, logout]);
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+      register,
+    }),
+    [user, loading, login, logout, register]
   );
+
+  useEffect(() => {
+    if (!user) return;
+
+    const token = getAccessToken();
+    const expiration = getTokenExpiration(token);
+    if (!expiration) return;
+
+    const now = Date.now();
+    const timeUntilExpiry = expiration - now;
+    const refreshThreshold = 60 * 1000; // 1 minute
+
+    if (timeUntilExpiry < refreshThreshold) {
+      refreshToken(); // preemptive refresh
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      refreshToken(); // or logout()
+    }, timeUntilExpiry - refreshThreshold);
+
+    return () => clearTimeout(timeout);
+  }, [user, refreshToken]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {

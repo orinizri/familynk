@@ -1,54 +1,73 @@
-// src/components/LoginForm.js
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/authContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ValidatedInput from "./ValidatedInput";
+import { validateLogin } from "../utils/validateAuth";
 
 export default function LoginForm() {
   const { login, user, loading } = useAuth(); // from context
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e, field) => {
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setSubmitError("");
+    const newErrors = validateLogin();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     try {
-      await login({ email, password }); // context handles token logic
+      await login(form);
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
+      setSubmitError(err.response?.data?.error || "Login failed");
     }
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
+    if (user) navigate("/");
   }, [user, navigate]);
 
   if (loading) return <p>Checking session...</p>;
-  if (user) return <Navigate to="/" />;
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Email:</label>
-      <input
+      <ValidatedInput
+        label="Email"
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={form.email}
+        onChange={(e) => handleChange(e, "email")}
         required
+        disabled={loading}
+        error={errors.email}
       />
-
-      <label>Password:</label>
-      <input
+      <ValidatedInput
+        label="Password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={form.password}
+        onChange={(e) => handleChange(e, "password")}
         required
+        disabled={loading}
+        error={errors.password}
       />
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <button type="submit">Login</button>
+      {submitError && (
+        <div role="alert" style={{ color: "red", marginBottom: "0.5rem" }}>
+          {submitError}
+        </div>
+      )}
+      <button type="submit" disabled={loading}>
+        {loading ? "Logging in..." : "Login"}
+      </button>{" "}
     </form>
   );
 }
