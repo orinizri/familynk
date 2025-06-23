@@ -127,9 +127,7 @@ export async function registerUserService({
 
 export async function refreshTokenService(refreshToken) {
   try {
-    console.log("Received refresh token:", refreshToken);
     const payload = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
-    console.log("Decoded payload from refresh token:", payload);
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [
       payload.userId,
     ]);
@@ -159,6 +157,7 @@ export async function refreshTokenService(refreshToken) {
         last_name: user.last_name,
         date_of_birth: user.date_of_birth,
         photo_url: user.photo_url,
+        role: user.role || "user",
       },
     };
   } catch (error) {

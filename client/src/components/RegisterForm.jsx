@@ -39,7 +39,7 @@ export default function RegisterForm() {
         password: form.password,
         date_of_birth: form.date_of_birth,
       });
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       setErrors((prev) => ({ ...prev, submit: error.message }));
     }

@@ -23,7 +23,15 @@ export async function loginController(req, res, next) {
 
 // REGISTER
 export async function registerController(req, res, next) {
-  const { email, password, first_name, last_name, date_of_birth, photo_url } = req.body;
+  const {
+    email,
+    password,
+    first_name,
+    last_name,
+    date_of_birth,
+    photo_url,
+    role,
+  } = req.body;
 
   if (!email || !password || !first_name || !last_name) {
     return sendError(res, "Required Fields are missing", 400);
@@ -36,7 +44,8 @@ export async function registerController(req, res, next) {
       first_name,
       last_name,
       date_of_birth,
-      photo_url
+      photo_url,
+      role: "user", // Default role
     });
     return sendSuccess(res, { token, message: "Registration successful" }, 201);
   } catch (error) {
@@ -46,7 +55,6 @@ export async function registerController(req, res, next) {
 
 export async function refreshTokenController(req, res, next) {
   const { refreshToken } = req.body;
-  console.log("refreshTokenController called with:", refreshToken);
   if (!refreshToken) {
     return sendError(res, "Refresh token is required", 400);
   }

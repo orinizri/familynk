@@ -4,7 +4,7 @@ import AppError from "../utils/appError.js";
 export async function getProfile(userId) {
   try {
     const result = await pool.query(
-      `SELECT id, first_name, last_name, email, date_of_birth, photo_url, created_at, last_login
+      `SELECT id, first_name, last_name, email, date_of_birth, photo_url, created_at, last_login, role
        FROM users WHERE id = $1`,
       [userId]
     );

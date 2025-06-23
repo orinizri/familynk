@@ -1,34 +1,33 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { useAuth } from "./contexts/authContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Unauthorized from "./pages/Unauthorized";
+import RoleBasedWrapper from "./components/RoleBasedWrapper";
+import AdminDashboard from "./components/AdminDashboard";
 
 export default function App() {
-  const { user } = useAuth();
-
   return (
     <Routes>
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
       <Route
-        path="/"
+        path="/admin-dashboard"
         element={
-          user ? (
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          ) : (
-            <Navigate to="/login" replace />
-          )
+          <RoleBasedWrapper allowedRoles={["admin"]}>
+            <AdminDashboard />
+          </RoleBasedWrapper>
         }
       />
       <Route
-        path="/login"
-        element={!user ? <LoginPage /> : <Navigate to="/" replace />}
-      />
-      <Route
-        path="/register"
-        element={!user ? <RegisterPage /> : <Navigate to="/" replace />}
+        path="/home"
+        element={
+          <RoleBasedWrapper allowedRoles={["user", "admin"]}>
+            <HomePage />
+          </RoleBasedWrapper>
+        }
       />
     </Routes>
   );

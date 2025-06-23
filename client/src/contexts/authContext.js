@@ -23,12 +23,6 @@ export function AuthProvider({ children }) {
       throw new Error("Login failed");
     }
     const { accessToken, refreshToken, user } = res.data.data;
-    console.log(
-      "accessToken, refreshToken, user",
-      accessToken,
-      refreshToken,
-      user
-    );
     setAccessToken(accessToken);
     sessionStorage.setItem("refresh_token", refreshToken);
     setUser(user);

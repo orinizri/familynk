@@ -21,7 +21,7 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
-    const newErrors = validateLogin();
+    const newErrors = validateLogin(form);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -35,7 +35,7 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    if (user) navigate("/");
+    if (user) navigate("/home");
   }, [user, navigate]);
 
   if (loading) return <p>Checking session...</p>;
