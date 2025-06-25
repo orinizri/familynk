@@ -1,9 +1,13 @@
-import { useAuth } from "../../contexts/authContext";
-import Spinner from "../../components/Spinner/Spinner";
+import { useState } from "react";
+import UsersTable from "../../components/AdminDashboard/UsersTable";
 
 export default function AdminDashboard() {
-  const { user, loading } = useAuth();
+  const [filters, setFilters] = useState({});
 
-  if (loading) return <Spinner />;
-  return <h2>Admin Dashboard</h2>;
+  return (
+    <>
+      <h2 style={{ textAlign: "center" }}>All Users</h2>
+      <UsersTable filters={filters} setFilters={setFilters} />
+    </>
+  );
 }

@@ -1,4 +1,4 @@
-import * as userService from "../services/user.service.js";
+import * as adminService from "../services/admin.service.js";
 import { sendSuccess, sendError } from "../utils/apiResponse.js";
 
 /**
@@ -13,7 +13,7 @@ import { sendSuccess, sendError } from "../utils/apiResponse.js";
  */
 export async function getAllUsers(req, res, next) {
   try {
-    const users = await userService.getFilteredUsers(req.query);
+    const users = await adminService.getFilteredUsers(req.query);
     return sendSuccess(res, users);
   } catch (error) {
     console.error("getAllUsers error:", error);

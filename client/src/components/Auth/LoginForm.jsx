@@ -6,7 +6,7 @@ import { validateLogin } from "../../utils/validateAuth";
 import Spinner from "../Spinner/Spinner";
 
 export default function LoginForm() {
-  const { login, user, loading } = useAuth(); // from context
+  const { login, user, loading } = useAuth();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
