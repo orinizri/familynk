@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/authContext";
+import { useAuth } from "../../contexts/authContext";
 import ValidatedInput from "./ValidatedInput";
-import { validateRegister } from "../utils/validateAuth";
+import { validateRegister } from "../../utils/validateAuth";
+import Spinner from "../Spinner/Spinner";
 
 export default function RegisterForm() {
   const { login, register, loading } = useAuth(); // Will use this after registration
@@ -24,7 +25,7 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // Reset errors
+    setSubmitError("");
     try {
       // Validate form fields
       e.preventDefault();
@@ -41,7 +42,7 @@ export default function RegisterForm() {
       });
       navigate("/home");
     } catch (error) {
-      setErrors((prev) => ({ ...prev, submit: error.message }));
+      setSubmitError(error.response?.data?.error || "Register failed");
     }
   };
 
@@ -56,6 +57,7 @@ export default function RegisterForm() {
         onChange={(e) => handleChange(e)}
         required
         disabled={loading}
+        error={errors.first_name}
       />
       <ValidatedInput
         name="last_name"
@@ -65,6 +67,7 @@ export default function RegisterForm() {
         onChange={(e) => handleChange(e)}
         required
         disabled={loading}
+        error={errors.last_name}
       />
       <ValidatedInput
         name="email"
@@ -74,6 +77,8 @@ export default function RegisterForm() {
         onChange={(e) => handleChange(e, "email")}
         required
         disabled={loading}
+        error={errors.email}
+        autoComplete="email"
       />
       <ValidatedInput
         name="password"
@@ -83,6 +88,8 @@ export default function RegisterForm() {
         onChange={(e) => handleChange(e)}
         required
         disabled={loading}
+        error={errors.password}
+        autoComplete="new-password"
       />
       <ValidatedInput
         name="date_of_birth"
@@ -92,12 +99,15 @@ export default function RegisterForm() {
         onChange={(e) => handleChange(e)}
         disabled={loading}
         max={new Date().toISOString().split("T")[0]} // Prevent future dates
+        error={errors.date_of_birth}
       />
-      {errors && (
-        <p style={{ color: "red" }}>{Object.values(errors).join(", ")}</p>
+      {submitError && (
+        <div role="alert" style={{ color: "red", marginBottom: "0.5rem" }}>
+          {submitError}
+        </div>
       )}
       <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Register"}
+        {loading ? <Spinner message="Registering..." /> : "Register"}
       </button>{" "}
     </form>
   );

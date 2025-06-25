@@ -1,4 +1,3 @@
-// src/pages/HomePage.jsx
 import { useAuth } from "../contexts/authContext";
 
 export default function HomePage() {

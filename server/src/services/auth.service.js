@@ -17,7 +17,7 @@ export async function loginUserService(email, password) {
     const user = result.rows[0];
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new AppError("Invalid email or password", 401);
+      throw new AppError("User not found", 404);
     }
 
     await pool.query("UPDATE users SET last_login = NOW() WHERE id = $1", [
@@ -47,6 +47,7 @@ export async function loginUserService(email, password) {
         last_name: user.last_name,
         date_of_birth: user.date_of_birth,
         photo_url: user.photo_url,
+        role: user.role || "user",
       },
     };
   } catch (error) {

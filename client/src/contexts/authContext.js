@@ -18,10 +18,12 @@ export function AuthProvider({ children }) {
 
   // Login
   const login = useCallback(async ({ email, password }) => {
+    console.log("Attempting login with email:", email);
     const res = await api.post("/auth/login", { email, password });
     if (!res.data || !res.data.data || !res.data.success) {
       throw new Error("Login failed");
     }
+    console.log("Login successful:", res.data);
     const { accessToken, refreshToken, user } = res.data.data;
     setAccessToken(accessToken);
     sessionStorage.setItem("refresh_token", refreshToken);
@@ -46,8 +48,9 @@ export function AuthProvider({ children }) {
       setAccessToken(accessToken);
       sessionStorage.setItem("refresh_token", refreshToken);
       setUser(user);
-    } catch (err) {
-      console.warn("Refresh failed:", err.message);
+    } catch (error) {
+      console.warn("Refresh failed:", error.message);
+      alert("Session expired, please log in again.");
       logout();
     }
   }, [logout]);

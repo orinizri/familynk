@@ -3,32 +3,31 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Unauthorized from "./pages/Unauthorized";
-import RoleBasedWrapper from "./components/RoleBasedWrapper";
-import AdminDashboard from "./components/AdminDashboard";
+import RoleBasedWrapper from "./components/RoleBased/RoleBasedWrapper";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Layout from "./components/Layout/Layout";
+import Profile from "./components/Auth/Profile/Profile";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route element={<Layout />}>
+        {/* Public Routes */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      <Route
-        path="/admin-dashboard"
-        element={
-          <RoleBasedWrapper allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </RoleBasedWrapper>
-        }
-      />
-      <Route
-        path="/home"
-        element={
-          <RoleBasedWrapper allowedRoles={["user", "admin"]}>
-            <HomePage />
-          </RoleBasedWrapper>
-        }
-      />
+        {/* Admin Routes */}
+        <Route element={<RoleBasedWrapper allowedRoles={["admin"]} />}>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        </Route>
+
+        {/* User Routes */}
+        <Route element={<RoleBasedWrapper allowedRoles={["user", "admin"]} />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }
