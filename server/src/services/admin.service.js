@@ -16,6 +16,7 @@ export async function getFilteredUsers(filters = {}, pagination = {}) {
     sortBy = "created_at",
     order = "DESC",
   } = filters;
+
   const { whereSql, values, nextIndex } = build_filter_query(
     filters,
     filterTableAllowedFields

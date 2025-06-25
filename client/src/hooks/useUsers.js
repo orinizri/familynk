@@ -7,8 +7,6 @@ export function useUsers(initialFilters = {}, initialPagination = {}) {
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
-    sortBy: "created_at",
-    order: "desc",
     ...initialPagination,
   });
   const [meta, setMeta] = useState(null);

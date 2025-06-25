@@ -5,7 +5,14 @@ export function build_pagination_clause(
   order,
   paramIndexStart = 1
 ) {
-  const safeSortBy = ["id", "email", "created_at", "role"].includes(sortBy)
+  const safeSortBy = [
+    "id",
+    "email",
+    "created_at",
+    "role",
+    "first_name",
+    "last_name",
+  ].includes(sortBy)
     ? sortBy
     : "created_at";
   const safeOrder = order?.toUpperCase() === "ASC" ? "ASC" : "DESC";

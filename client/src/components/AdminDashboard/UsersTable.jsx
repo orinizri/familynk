@@ -25,9 +25,12 @@ export default function UsersTable() {
         ) : (
           <table className={styles.table}>
             <UsersTableHeader
-              currentSort={pagination.sortBy}
-              currentOrder={pagination.order}
+              sortBy={filters.sortBy}
+              order={filters.order}
               setPagination={setPagination}
+              onSort={(sortBy, order) =>
+                setFilters((p) => ({ ...p, sortBy, order }))
+              }
             />
             <tbody className={styles.tbody}>
               {users.map((user) => (
