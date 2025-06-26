@@ -4,6 +4,7 @@ import UsersTableRow from "./UsersTableRow";
 import UsersTableFilters from "./UsersTableFilters";
 import Spinner from "../Spinner/Spinner";
 import styles from "./users_table.module.css";
+import PaginationControls from "./PaginationControls/PaginationControls";
 
 export default function UsersTable() {
   const {
@@ -42,26 +43,13 @@ export default function UsersTable() {
       </div>
 
       {meta && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "1rem",
-          }}
-        >
-          Page {pagination.page} of {meta.pageCount}
-          <button
-            disabled={pagination.page === 1}
-            onClick={() => setPagination((p) => ({ ...p, page: p.page - 1 }))}
-          >
-            Prev
-          </button>
-          <button
-            disabled={pagination.page === meta.pageCount}
-            onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
-          >
-            Next
-          </button>
-        </div>
+        <PaginationControls
+          page={pagination.page}
+          pageCount={meta.pageCount}
+          onPageChange={(newPage) =>
+            setPagination((prev) => ({ ...prev, page: newPage }))
+          }
+        />
       )}
     </>
   );
