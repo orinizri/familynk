@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function UsersTableFilters({ filters, setFilters }) {
+export default function UsersTableFilters({ filters, updateFilters }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    updateFilters({ [name]: value });
   };
 
   return (

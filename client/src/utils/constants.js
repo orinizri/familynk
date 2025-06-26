@@ -5,3 +5,4 @@ export const adminColumns = [
   { key: "role", label: "Role", sortable: true },
   { key: "created_at", label: "Created At", sortable: true },
 ];
+export const AdminUsersTableLimitOptions = [5, 10, 25, 50, 100];

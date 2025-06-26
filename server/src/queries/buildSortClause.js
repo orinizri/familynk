@@ -1,5 +1,7 @@
-const allowedSorts = ["email", "created_at", "role"];
-const allowedOrders = ["ASC", "DESC"];
+import {
+  AdminUsersTableAllowedSorts as allowedSorts,
+  AdminUsersTableAllowedOrders as allowedOrders,
+} from "../constants/sorts.js";
 
 /**
  * Safely constructs ORDER BY clause parts

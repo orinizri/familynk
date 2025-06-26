@@ -3,48 +3,49 @@ import UsersTableHeader from "./UsersTableHeader";
 import UsersTableRow from "./UsersTableRow";
 import UsersTableFilters from "./UsersTableFilters";
 import Spinner from "../Spinner/Spinner";
-import styles from "./users_table.module.css";
 import PaginationControls from "./PaginationControls/PaginationControls";
 import LimitSelector from "./LimitSelector/LimitSelector";
+import styles from "./users_table.module.css";
 
 export default function UsersTable() {
   const {
-    users,
-    loading,
+    data: users,
     filters,
     pagination,
     meta,
-    setFilters,
-    setPagination,
+    loading,
+    error,
+    updateFilters,
+    setLimit,
+    setPage,
   } = useUsers();
 
+  const handleSort = (field) => {
+    const newOrder =
+      filters.sortBy === field && filters.order === "asc" ? "desc" : "asc";
+    updateFilters({ sortBy: field, order: newOrder });
+  };
+
   return (
-    <>
+    <div className={styles.container}>
+      {/* Filter + Limit */}
       <div className={styles.pagination_controls_container}>
-        <UsersTableFilters filters={filters} setFilters={setFilters} />
-        <LimitSelector
-          limit={pagination.limit}
-          onLimitChange={(newLimit) =>
-            setPagination((prev) => ({
-              ...prev,
-              page: 1,
-              limit: newLimit,
-            }))
-          }
-        />
+        <UsersTableFilters filters={filters} updateFilters={updateFilters} />
+        <LimitSelector limit={pagination.limit} onLimitChange={setLimit} />
       </div>
+
+      {/* Table */}
       <div className={styles.table_container}>
         {loading ? (
-          <Spinner message="Loading users" />
+          <Spinner message="Loading users..." />
+        ) : error ? (
+          <div className={styles.error}>{error}</div>
         ) : (
           <table className={styles.table}>
             <UsersTableHeader
               sortBy={filters.sortBy}
               order={filters.order}
-              setPagination={setPagination}
-              onSort={(sortBy, order) =>
-                setFilters((p) => ({ ...p, sortBy, order }))
-              }
+              onSort={handleSort}
             />
             <tbody className={styles.tbody}>
               {users.map((user) => (
@@ -55,15 +56,14 @@ export default function UsersTable() {
         )}
       </div>
 
+      {/* Pagination */}
       {meta && (
         <PaginationControls
           page={pagination.page}
           pageCount={meta.pageCount}
-          onPageChange={(newPage) =>
-            setPagination((prev) => ({ ...prev, page: newPage }))
-          }
+          onPageChange={setPage}
         />
       )}
-    </>
+    </div>
   );
 }

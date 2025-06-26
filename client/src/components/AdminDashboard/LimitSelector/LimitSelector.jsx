@@ -1,10 +1,11 @@
 import React from "react";
+import { AdminUsersTableLimitOptions } from "../../../utils/constants";
 import "./limit_selector.css";
 
 export default function LimitSelector({
   limit,
   onLimitChange,
-  options = [5, 10, 25, 50, 100],
+  options = AdminUsersTableLimitOptions,
   className = "",
 }) {
   return (

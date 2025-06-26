@@ -5,3 +5,5 @@ export const filterTableAllowedFields = [
   "startDate",
   "endDate",
 ];
+export const AdminUsersTableAllowedSorts = ["email", "created_at", "role"];
+export const AdminUsersTableAllowedOrders = ["ASC", "DESC"];

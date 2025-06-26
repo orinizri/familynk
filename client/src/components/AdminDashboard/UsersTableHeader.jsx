@@ -29,7 +29,7 @@ export default function UsersTableHeader({
               textDecoration: "none",
               fontWeight: "normal",
             }}
-          ></th>
+          >index</th>
         );
         continue;
       }
@@ -43,7 +43,7 @@ export default function UsersTableHeader({
           tabIndex={sortable ? 0 : undefined}
           style={{
             cursor: sortable ? "pointer" : "default",
-            textDecoration: sortBy === key ? "underline" : "none",
+            textDecoration: "none",
             fontWeight: sortBy === key ? "bold" : "normal",
           }}
         >
