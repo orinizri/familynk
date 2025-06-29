@@ -9,14 +9,11 @@ function App() {
   useEffect(() => {
     const fetchMessage = async () => {
       try {
-        const response = await api.get("/api/users");
+        const response = await api.get("/");
         if (!response.data.success) {
           throw new Error(response.data.message || "Failed to fetch users");
         }
-        setMessage(
-          response.data.data.map((user) => user.name).join(", ") ||
-            "No users found"
-        );
+        setMessage("Got response");
       } catch (err) {
         console.error("Backend error:", err.message);
         setError("Failed to load message from server");
