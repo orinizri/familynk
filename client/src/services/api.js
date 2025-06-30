@@ -7,8 +7,10 @@ const api = axios.create({
   },
 });
 
-export function getReservations() {
-  return api.get("/").then((res) => res.data);
+export function getReservations({ cursor = 0, limit = 20 } = {}) {
+  return api
+    .get("/reservations", { params: { cursor, limit } })
+    .then((res) => res.data);
 }
 
 export default api;

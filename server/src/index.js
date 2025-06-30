@@ -5,7 +5,6 @@ import reservationsRouter from "./routes/reservations.router.js";
 import { PORT } from "./config/env.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { checkDbConnection } from "../src/db/pool.js";
-import healthRouter from "./routes/health_check.router.js";
 
 dotenv.config();
 
@@ -17,10 +16,7 @@ app.use(cors({ origin: "*" }));
 
 // Body parser middleware
 app.use(express.json());
-app.use("/", reservationsRouter);
-
-// Health check route
-app.use(healthRouter);
+app.use("/reservations", reservationsRouter);
 
 // Error handling middleware
 app.use(errorHandler);
