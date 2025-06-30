@@ -1,7 +1,6 @@
 // src/services/reservationService.js
 import { getAssignments, getChargesByAssignmentIds } from "../db/helpers.js";
 import { processReservations } from "./reservationLogic.js";
-
 /**
  * Fetches a page of reservations using cursor-based pagination.
  * @param {{cursor?:number,limit?:number}} opts
@@ -19,7 +18,6 @@ export async function fetchReservations({ cursor = 0, limit = 20 } = {}) {
   // 3. Fetch only relevant charges
   const ids = assignments.map((a) => a.id);
   const charges = await getChargesByAssignmentIds(ids);
-
   // 4. Group them
   const reservations = processReservations(assignments, charges);
 
