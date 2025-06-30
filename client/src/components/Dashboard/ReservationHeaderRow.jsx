@@ -13,8 +13,12 @@ export default function ReservationHeaderRow() {
       sx={{
         pl: 2,
         pr: 2,
+        py: 1,
         backgroundColor: theme.palette.grey[200],
         borderBottom: `1px solid ${theme.palette.divider}`,
+        position: 'sticky',
+        top: 0,
+        zIndex: theme.zIndex.appBar, 
       }}
     >
       {RESERVATION_HEADERS.map(({ key, label, flex = 1, align = "left" }) => (
