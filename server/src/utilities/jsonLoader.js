@@ -19,9 +19,9 @@ export async function readJson(filePath, zodValidation = null, options = {}) {
     // If the file is small enough, read it all at once
     try {
       content = await retryAsync(() => fsp.readFile(filePath, encoding));
-    } catch (err) {
+    } catch (error) {
       throw new AppError(
-        `Failed to read file after retries: ${err.message}`,
+        `Failed to read file after retries: ${error.message}`,
         500
       );
     }
@@ -29,29 +29,27 @@ export async function readJson(filePath, zodValidation = null, options = {}) {
     try {
       // 1) Pure JSON syntax check
       data = JSON.parse(content);
-    } catch (err) {
-      throw new AppError(`JSON parse error: ${err.message}`, 400);
+    } catch (error) {
+      throw new AppError(`JSON parse error: ${error.message}`, 400);
     }
-    console.log("JSON data loaded successfully", data.length, "items");
     if (zodValidation === null) return data;
     try {
       // 2) Schema/shape validation
       const zodParsed = zodValidation.parse(data);
-      console.log("zod fine", zodParsed.length, "items");
       return zodParsed;
-    } catch (err) {
-      console.error("Zod validation error:", err);
+    } catch (error) {
+      logger.error(error, "Zod validation error:");
       // ZodIssue[]
-      const messages = err.errors.map(
+      const messages = error.errors.map(
         (e) => `${e.path.join(".")}: ${e.message}`
       );
       throw new AppError(`JSON validation error: ${messages.join("; ")}`, 400);
     }
-  } catch (err) {
+  } catch (error) {
     // Catch stat/readFile failure
-    if (err instanceof AppError) throw err;
+    if (error instanceof AppError) throw error;
     throw new AppError(
-      `Failed to load file: ${filePath} - ${err.message}`,
+      `Failed to load file: ${filePath} - ${error.message}`,
       500
     );
   }

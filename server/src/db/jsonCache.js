@@ -15,19 +15,9 @@ import { readJson } from "../utilities/jsonLoader.js";
 import { logger } from "../utilities/logger.js";
 import { AssignmentsArray } from "../utilities/schemas/assignmentSchema.js";
 import { ChargesArray } from "../utilities/schemas/chargeSchema.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Adjust paths to your JSON files:
-const ASSIGNMENTS_PATH = path.resolve(
-  __dirname,
-  "../../data/product_assignment.json"
-);
-const CHARGES_PATH = path.resolve(__dirname, "../../data/product_charges.json");
+import { ASSIGNMENTS_PATH, CHARGES_PATH } from "../db/constants.js";
 
 let reservations = [];
-
 /**
  * Load raw JSON, enrich products with status+charge, then
  * group into reservation objects.

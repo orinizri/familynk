@@ -1,4 +1,6 @@
 import { NODE_ENV } from "../config/env.js";
+import { logger } from "../utilities/logger.js";
+
 /**
  * Catches all errors passed via next(err) and
  * formats a consistent JSON response.
@@ -17,7 +19,7 @@ export default function errorHandler(err, req, res, _next) {
   }
 
   // Log the error (you can replace this with pino/winston)
-  console.error(`[${req.method} ${req.originalUrl}]`, err);
+  logger.error(err, `[${req.method} ${req.originalUrl}]`);
 
   // Send JSON error response
   res.status(status).json({ error: payload });
