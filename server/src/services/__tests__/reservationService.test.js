@@ -106,7 +106,7 @@ describe("fetchReservations() with real JSON data", () => {
 
   it("when cursor equals last UUID, returns empty & nextCursor null", async () => {
     // page through once to get the very last UUID
-    const { reservations, nextCursor } = await fetchReservations({
+    const { reservations } = await fetchReservations({
       cursor: null,
       limit: 10000,
     });
