@@ -16,7 +16,6 @@ import { fetchReservations } from "../services/reservationService.js";
 export function getReservationsController(req, res, next) {
   try {
     // Passing cursor and limit from req.pagination (validated by middleware)
-    console.log(`Fetching reservations with pagination: ${JSON.stringify(req.pagination)}`);
     const { reservations, nextCursor } = fetchReservations(req.pagination);
     res.json({ reservations, nextCursor });
   } catch (err) {

@@ -29,7 +29,7 @@ let reservations = [];
  * Load raw JSON, enrich products with status+charge, then
  * group into reservation objects.
  */
-async function loadCache() {
+export async function loadCache() {
   try {
     const products = await readJson(ASSIGNMENTS_PATH);
     const charges = await readJson(CHARGES_PATH);
@@ -41,7 +41,6 @@ async function loadCache() {
       arr.push(charge);
       chargesMap.set(charge.special_product_assignment_id, arr);
     }
-    // 62ebe8fb-ad46-4d1d-a603-528d1c5af1c7
     // 2. Group products into reservations
     const map = new Map();
     for (const product of products) {
@@ -91,7 +90,7 @@ async function loadCache() {
 (async function initCache() {
   try {
     await loadCache();
-    console.log("✅ Cache loaded");
+    console.info("✅ Cache loaded");
   } catch (err) {
     console.error("❌ Cache failed to load:", err);
     process.exit(1);
@@ -107,6 +106,10 @@ export function getReservationsAfter(lastUuid = null, limit = 20) {
   let startIndex = 0;
   if (lastUuid !== null) {
     const idx = reservations.findIndex((r) => r.reservationUuid === lastUuid);
+    if (idx === -1) {
+      // If lastUuid not found, return empty array
+      return [];
+    }
     if (idx >= 0) startIndex = idx + 1;
   }
   return reservations.slice(startIndex, startIndex + limit);

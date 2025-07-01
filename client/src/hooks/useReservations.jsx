@@ -42,12 +42,6 @@ export default function useReservations(limit = 20) {
    * Guards against concurrent loads or loading past the end.
    */
   const loadMore = useCallback(async () => {
-    console.log("useReservations loadMore called with:", {
-      cursor,
-      limit,
-      loading,
-      hasMore,
-    });
     // Prevent duplicate or invalid fetches
     if (loading || !hasMore) return;
 
@@ -64,11 +58,9 @@ export default function useReservations(limit = 20) {
     if (cursor !== undefined) {
       params.set("cursor", String(cursor));
     }
-    console.log("useReservations loadMore params:", params.toString());
     try {
       const res = await api.get(`/reservations?${params}`);
       const { reservations: newItems, nextCursor } = res.data;
-      console.log("useReservations loadMore response:", newItems, nextCursor);
       // Append the new page of reservations
       setReservations((prev) => [...prev, ...newItems]);
 

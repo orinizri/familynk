@@ -29,7 +29,6 @@ const paginationSchema = z.object({
  */
 export function validatePagination(req, _res, next) {
   const result = paginationSchema.safeParse(req.query);
-  console.log("result", result);
   if (!result.success) {
     // Zod will give a descriptive error message
     return next(
@@ -39,7 +38,6 @@ export function validatePagination(req, _res, next) {
       )
     );
   }
-  console.log(`Valid pagination parameters: ${JSON.stringify(result.data)}`);
   // Write corrected pagination values back to req.query
   req.pagination = result.data;
   next();
