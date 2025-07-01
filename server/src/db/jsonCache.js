@@ -88,7 +88,15 @@ async function loadCache() {
 }
 
 // load the cache at import time
-await loadCache();
+(async function initCache() {
+  try {
+    await loadCache();
+    console.log("✅ Cache loaded");
+  } catch (err) {
+    console.error("❌ Cache failed to load:", err);
+    process.exit(1);
+  }
+})();
 
 /**
  * Fetch next page of reservations, starting *after* the given reservationUuid.

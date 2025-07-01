@@ -3,7 +3,7 @@ import { NODE_ENV } from "../config/env.js";
  * Catches all errors passed via next(err) and
  * formats a consistent JSON response.
  */
-export default function errorHandler(err, req, res, next) {
+export default function errorHandler(err, req, res, _next) {
   console.error("Error caught by errorHandler:", err);
   // If this is our custom AppError, use its statusCode; otherwise 500
   const status = err.statusCode || 500;
