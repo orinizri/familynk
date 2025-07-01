@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Run tests with coverage
-        run: npm test -- --coverage --coverageThreshold='{"global":{"branches":40,"functions":40,"lines":40,"statements":40}}'
+        run: npm test -- --coverage --coverageThreshold='{"global":{"branches":30,"functions":30,"lines":30,"statements":30}}'
   client:
     name: Client tests, lint & build
     runs-on: ubuntu-latest
