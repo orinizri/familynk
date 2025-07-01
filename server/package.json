@@ -8,7 +8,11 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "lint": "eslint src --ext .js,.mjs,.cjs --max-warnings=0",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --runInBand --coverage"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --runInBand --coverage",
+    "start:dev": "pm2 start ecosystem.config.cjs --env development",
+    "start:prod": "pm2 start ecosystem.config.cjs --env production",
+    "stop": "pm2 stop plusgrade-server",
+    "reload": "pm2 reload plusgrade-server --update-env"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +31,7 @@
     "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",
+    "pm2": "^6.0.8",
     "supertest": "^7.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

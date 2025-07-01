@@ -29,3 +29,26 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}!`);
 });
+
+// Graceful shutdown handler
+function gracefulExit() {
+  console.log("🛑 Received shutdown signal, closing server...");
+  server.close((err) => {
+    if (err) {
+      console.error("Error closing server:", err);
+      process.exit(1);
+    }
+    console.log("✅ Server closed, exiting process");
+    process.exit(0);
+  });
+
+  // Force kill after timeout (in case of stuck connections)
+  setTimeout(() => {
+    console.warn("⏱  Shutdown timeout, forcing exit");
+    process.exit(1);
+  }, 10000).unref(); // 10 seconds
+}
+
+// Listen for PM2 cluster shutdown events
+process.on("SIGINT", gracefulExit);
+process.on("SIGTERM", gracefulExit);
