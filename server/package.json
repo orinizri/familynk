@@ -26,6 +26,7 @@
     "pino": "^9.7.0",
     "pino-http": "^10.5.0",
     "pm2": "^6.0.8",
+    "response-time": "^2.3.3",
     "zod": "^3.25.67"
   },
   "devDependencies": {

@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
+import responseTime from "response-time";
 import pinoHttp from "pino-http";
 import errorHandler from "./middlewares/errorHandler.js";
 import healthRouter from "./routes/health.router.js";
 import reservationsRouter from "./routes/reservations.router.js";
 import { CLIENT_URL, PORT } from "./config/env.js";
-import { logger } from "./utilities/logger.js";
+import { logger, reqSerializer, resSerializer } from "./utilities/logger.js";
 
 // Load environment variables from .env file
 import dotenv from "dotenv";
@@ -23,6 +24,14 @@ app.use(helmet());
 // CORS middleware to allow cross-origin requests
 app.use(cors({ origin: CLIENT_URL }));
 
+// Response time middleware to measure request processing time
+app.use(
+  responseTime((req, res, timeMs) => {
+    // store a string like "12.345ms" on the res object
+    res.responseTime = `${timeMs.toFixed(3)}ms`;
+  })
+);
+
 // Compression middleware to reduce response size
 app.use(compression({ threshold: 0 }));
 
@@ -30,11 +39,17 @@ app.use(compression({ threshold: 0 }));
 app.use(
   pinoHttp({
     logger,
-    serializers: logger.serializers,
+    // override the default req/res serializers
+    serializers: {
+      req: reqSerializer,
+      res: resSerializer,
+    },
     customLogLevel: (res, err) =>
       err ? "error" : res.statusCode >= 400 ? "warn" : "info",
   })
 );
+
+// Nice-to-have: Echo request ID in response headers for tracing (req.id)
 
 // Body parser middleware
 app.use(express.json());
