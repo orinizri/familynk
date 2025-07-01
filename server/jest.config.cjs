@@ -1,7 +1,6 @@
 // server/jest.config.cjs
 module.exports = {
   testEnvironment: "node",
-
   // Treat .js files as ESM
   extensionsToTreatAsEsm: [".jsx"],
 

@@ -90,7 +90,6 @@ export async function loadCache() {
 (async function initCache() {
   try {
     await loadCache();
-    console.info("✅ Cache loaded");
   } catch (err) {
     console.error("❌ Cache failed to load:", err);
     process.exit(1);
