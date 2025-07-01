@@ -7,7 +7,7 @@
  */
 
 import { z } from "zod";
-import AppError from "../utilities/appError.js";
+import AppError from "../utilities/AppError.js";
 
 // Zod schema for pagination parameters
 const paginationSchema = z.object({
