@@ -14,21 +14,34 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+
 /* Middlewares */
+
 // Security headers
 app.use(helmet());
+
 // CORS middleware to allow cross-origin requests
 app.use(cors({ origin: CLIENT_URL }));
-app.use(compression({ threshold: 0 })); // Compress all responses
+
+// Compression middleware to reduce response size
+app.use(compression({ threshold: 0 }));
+
 // Logging middleware
-app.use(pinoHttp({ logger }));
+app.use(
+  pinoHttp({
+    logger,
+    serializers: logger.serializers,
+    customLogLevel: (res, err) =>
+      err ? "error" : res.statusCode >= 400 ? "warn" : "info",
+  })
+);
+
 // Body parser middleware
 app.use(express.json());
 
-// Health-check router
+// Health-check
 app.use("/healthz", healthRouter);
 
-// Reservations router
 app.use("/reservations", reservationsRouter);
 
 // Error handling middleware
