@@ -1,6 +1,6 @@
 import fs from "fs";
 import fsp from "fs/promises";
-import AppError from "./appError.js";
+import AppError from "./AppError.js";
 import { STREAM_THRESHOLD_BYTES, FILE_ENCODING } from "./constants.js";
 
 /**
