@@ -28,7 +28,6 @@ describe("fetchReservations() with real JSON data", () => {
     expect(reservations.length).toBeLessThanOrEqual(3);
     // The nextCursor should equal the last reservationUuid in that slice
     const last = reservations[reservations.length - 1].reservationUuid;
-    console.log("Last UUID in first page:", last);
     expect(nextCursor).toBe(last);
   });
 
@@ -91,7 +90,6 @@ describe("fetchReservations() with real JSON data", () => {
 
     // Deduplicate & compare against total from cache helper
     const totalUuids = new Set(all);
-    console.log("Total unique UUIDs fetched:", totalUuids.size);
     expect(totalUuids.size).toBe(getReservationsAfter(null, Infinity).length);
   });
 
@@ -102,10 +100,6 @@ describe("fetchReservations() with real JSON data", () => {
     });
 
     // we know total < 9999
-    console.log(
-      "last reservations fetched:",
-      reservations[reservations.length - 1].reservationUuid
-    );
     expect(reservations.length).toBeLessThan(9999);
     expect(nextCursor).toBeNull();
   });
