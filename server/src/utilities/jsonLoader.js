@@ -1,60 +1,52 @@
-import fs from "fs";
 import fsp from "fs/promises";
 import AppError from "./AppError.js";
-import { STREAM_THRESHOLD_BYTES, FILE_ENCODING } from "./constants.js";
+import { FILE_ENCODING } from "./constants.js";
+import { retryAsync } from "./retry.js";
 
 /**
- * Reads a JSON file and returns its content.
- * If the file is small enough, it reads the entire content at once.
- * For larger files, it streams the content to avoid memory issues.
- * @param {string} filePath - The path to the JSON file.
- * @param {Object} options - Options for reading the file.
- * @param {number} options.streamThresholdBytes - The size threshold for streaming (default: 5MB).
- * @param {string} options.encoding - The encoding to use when reading the file (default: 'utf8').
- * @return {Promise<Object>} - A promise that resolves to the parsed JSON content.
- * @throws {AppError} - Throws an error if the file cannot be read or parsed.
+ * @param {string} filePath
+ * @param {z.ZodType<T>=} schema   Optional Zod schema for shape validation
+ * @param {Object} options
+ * @param {string=} options.encoding  (default: FILE_ENCODING)
+ * @param {number=} options.retries   (default: 3)
  */
-export async function readJson(filePath, options = {}) {
-  const {
-    streamThresholdBytes = STREAM_THRESHOLD_BYTES || 5 * 1024 * 1024, // Default to 5MB
-    encoding = FILE_ENCODING,
-  } = options;
+export async function readJson(filePath, zodValidation = null, options = {}) {
+  // TODO: For larger files, stream the content
+  const { encoding = FILE_ENCODING } = options;
 
   try {
-    const { size } = await fsp.stat(filePath);
-
+    let content;
     // If the file is small enough, read it all at once
-    if (size <= streamThresholdBytes) {
-      const content = await fsp.readFile(filePath, encoding);
-      if (!content) {
-        throw new AppError(`File is empty: ${filePath}`, 400);
-      }
-      try {
-        return JSON.parse(content);
-      } catch (err) {
-        throw new AppError(`JSON parse error: ${err.message}`, 400);
-      }
+    try {
+      content = await retryAsync(() => fsp.readFile(filePath, encoding));
+    } catch (err) {
+      throw new AppError(
+        `Failed to read file after retries: ${err.message}`,
+        500
+      );
     }
-
-    // Stream for large files
-    return await new Promise((resolve, reject) => {
-      let buffer = "";
-      const stream = fs.createReadStream(filePath, { encoding });
-
-      stream.on("data", (chunk) => (buffer += chunk));
-
-      stream.on("end", () => {
-        try {
-          resolve(JSON.parse(buffer));
-        } catch (err) {
-          reject(new AppError(`Stream parse error: ${err.message}`, 400));
-        }
-      });
-
-      stream.on("error", (err) => {
-        reject(new AppError(`Stream read error: ${err.message}`, 500));
-      });
-    });
+    let data;
+    try {
+      // 1) Pure JSON syntax check
+      data = JSON.parse(content);
+    } catch (err) {
+      throw new AppError(`JSON parse error: ${err.message}`, 400);
+    }
+    console.log("JSON data loaded successfully", data.length, "items");
+    if (zodValidation === null) return data;
+    try {
+      // 2) Schema/shape validation
+      const zodParsed = zodValidation.parse(data);
+      console.log("zod fine", zodParsed.length, "items");
+      return zodParsed;
+    } catch (err) {
+      console.error("Zod validation error:", err);
+      // ZodIssue[]
+      const messages = err.errors.map(
+        (e) => `${e.path.join(".")}: ${e.message}`
+      );
+      throw new AppError(`JSON validation error: ${messages.join("; ")}`, 400);
+    }
   } catch (err) {
     // Catch stat/readFile failure
     if (err instanceof AppError) throw err;

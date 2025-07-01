@@ -2,7 +2,7 @@
 
 # Plusgrade Playground
 
-A full-stack dashboard application that reads static JSON data files, processes product assignments and charges into paginated reservations, and presents them in an infinite-scroll, expandable React + MUI frontend. Production-ready with CI/CD, clustering, zero-downtime reloads, structured logging, and performance optimizations.
+A full-stack dashboard application that reads static JSON data files, processes product assignments and charges into paginated reservations, and presents them in an infinite-scroll, expandable React + MUI frontend. Production-ready with CI/CD, clustering, zero-downtime reloads, structured logging, retry/backoff resilience and performance optimizations.
 
 </div>
 
@@ -18,7 +18,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
    - [Server](#server-serverpackagejson)  
    - [Client](#client-clientpackagejson)  
 5. [🔄 CI/CD](#-cicd)  
-6. [📊 Performance & Caching](#-performance--caching)  
+6. [📊 Performance & Reliability](#-performance--reliability)  
 7. [🧪 Testing](#-testing)  
 8. [🛠️ Future Improvements](#️-future-improvements)  
 
@@ -29,24 +29,24 @@ A full-stack dashboard application that reads static JSON data files, processes 
 ## 🚀 Features
 
 - **Server (Node.js / Express)**  
-  • In-memory JSON loader with streaming fallback  
+  • In-memory JSON loader with retry/backoff logic to withstand transient I/O failures  
+  • Pure-JSON parse followed by optional Zod schema validation for shape enforcement  
   • Cursor-based pagination endpoint (`GET /reservations?cursor=&limit=`)  
   • Health-check endpoint (`GET /healthz`)  
-  • Graceful shutdown & zero-downtime reloads via PM2 clustering  
-  • Basic structured JSON logging with Pino  
+  • Graceful shutdown and zero-downtime reloads via PM2 clustering  
+  • Structured JSON logging with Pino (minimal fields, pretty in development)  
   • CORS restricted to configured front-end origin  
   • Gzip compression for all JSON responses  
 
 - **Client (React + MUI)**  
-  • Infinite-scroll container with throttling & deduplication  
-  • Accordion rows for reservations with product tables  
-  • Responsive layout that stacks cards on mobile  
-  • Sticky header, ellipsis & overflow handling  
-  • Axios client with gzip support  
+  • Infinite-scroll container with throttling, deduplication and “load more” guard  
+  • Accordion rows for each reservation, with integrated product table  
+  • Responsive layout that stacks cards on mobile, sticky header and ellipsis handling  
+  • Axios client configured for gzip support  
 
 - **Quality & Deployment**  
   • CI with lint, unit tests & coverage gates (GitHub Actions)  
-  • Deploy via `pm2-runtime` on Render (API) and Vercel (UI)  
+  • Automatic deployments: API on Render (pm2-runtime) and UI on Vercel  
 
 </div>
 
@@ -58,6 +58,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 - **Backend**: Node.js · Express · PM2 · Pino · compression  
 - **Frontend**: React · MUI · Axios  
+- **Validation**: Zod  
 - **Testing**: Jest  
 - **CI/CD**: GitHub Actions · Render · Vercel  
 - **Linting**: ESLint  
@@ -70,19 +71,19 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ## 🔧 Getting Started
 
-1. **Clone the repository**  
-2. **Install dependencies**  
-   - At the project root: `npm ci` (installs both server and client)  
-   - Or individually:  
-     - Server: `cd server && npm ci`  
-     - Client: `cd client && npm ci`  
-3. **Configure environment variables**  
-   - `server/.env`: set `PORT`, `CLIENT_URL`, `NODE_ENV`  
-   - `client/.env`: set `REACT_APP_API_BASE_URL`  
-4. **Run in development**  
-   - From the root: `npm run dev`  
-5. **Run in production mode locally**  
-   - From the root: `npm run start:prod`  
+1. Clone the repository.  
+2. Install dependencies from the root (installs both server and client):  
+   – `npm ci`  
+   Or install per-folder:  
+   – Server: `cd server && npm ci`  
+   – Client: `cd client && npm ci`  
+3. Configure environment variables:  
+   – `server/.env` (PORT, CLIENT_URL, NODE_ENV)  
+   – `client/.env` (REACT_APP_API_BASE_URL)  
+4. Run in development mode from the root:  
+   – `npm run dev`  
+5. Run production-mode locally:  
+   – `npm run start:prod`  
 
 </div>
 
@@ -94,20 +95,21 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ### Root
 
-- **dev** — simultaneously start server in dev-cluster mode and React app  
+- **dev** — start server in PM2 dev-cluster mode and React app concurrently  
 - **start:dev** — alias for `dev`  
-- **start:prod** — start server cluster and client build together  
+- **start:prod** — build and launch server cluster and client together  
+- **stop** — stop the PM2-managed plusgrade-server process  
 
 ### Server (`server/package.json`)
 
-- **start** — launch single-instance server  
-- **start:dev** — PM2 cluster in development  
-- **start:prod** — PM2 cluster in production via `pm2-runtime`  
-- **stop** — stop PM2 app  
+- **start** — launch a single server instance  
+- **start:dev** — PM2 clustering in development  
+- **start:prod** — PM2 clustering in production with pm2-runtime  
+- **stop** — stop the PM2 app  
 - **reload** — zero-downtime reload via PM2  
 - **test** — run Jest unit tests  
 - **lint** — run ESLint  
-- **seed** — seed JSON data into cache  
+- **seed** — load JSON data into in-memory cache  
 
 ### Client (`client/package.json`)
 
@@ -124,13 +126,13 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ## 🔄 CI/CD
 
-- **GitHub Actions** on `main`:  
-  - **Server**: lint → unit tests (coverage)  
-  - **Client**: lint → tests → build  
-- **Render** (API):  
-  - Build: `cd server && npm ci`  
-  - Start: `cd server && npm run start:prod`  
-- **Vercel** (UI): auto-deploys `client/` on push to `main`
+- GitHub Actions on `main` branch:  
+  – Server job: lint → tests with coverage threshold  
+  – Client job: lint → tests → build  
+- Render for API:  
+  – Build command: `cd server && npm ci`  
+  – Start command: `cd server && npm run start:prod`  
+- Vercel for UI: auto-deploy from `client/` on push to `main`  
 
 </div>
 
@@ -138,10 +140,13 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 <div align="left">
 
-## 📊 Performance & Caching
+## 📊 Performance & Reliability
 
-- Gzip compression via Express `compression`  
+- Gzip compression for all endpoint responses  
 - In-memory JSON indexing for fast cursor queries  
+- Retry with exponential backoff on file reads to handle transient I/O issues  
+- Modular `retryAsync` helper configurable for retries, initial delay, factor and max delay  
+- Pure-JSON parsing separated from Zod validation to distinguish syntax vs schema errors  
 
 </div>
 
@@ -151,7 +156,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ## 🧪 Testing
 
-- **Unit tests** for services & utilities (Jest)  
+- Unit tests for services and utilities using Jest  
 - Coverage thresholds enforced in CI  
 
 </div>
@@ -162,10 +167,10 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ## 🛠️ Future Improvements
 
-- Metrics endpoint (`/metrics`) for Prometheus  
+- Request-ID header propagation for end-to-end tracing  
+- `/metrics` endpoint for Prometheus integration  
 - Error-tracking integration (Sentry)  
-- Security hardening (rate-limit)  
-- Input validation (Zod/Joi) and TypeScript migration  
-- Docker/compose for local dev parity  
+- Advanced input validation and TypeScript migration  
+- Docker-Compose for local development parity  
 
 </div>

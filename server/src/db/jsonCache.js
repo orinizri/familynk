@@ -12,6 +12,9 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { readJson } from "../utilities/jsonLoader.js";
+import { logger } from "../utilities/logger.js";
+import { AssignmentsArray } from "../utilities/schemas/assignmentSchema.js";
+import { ChargesArray } from "../utilities/schemas/chargeSchema.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,9 +34,8 @@ let reservations = [];
  */
 export async function loadCache() {
   try {
-    const products = await readJson(ASSIGNMENTS_PATH);
-    const charges = await readJson(CHARGES_PATH);
-
+    const products = await readJson(ASSIGNMENTS_PATH, AssignmentsArray);
+    const charges = await readJson(CHARGES_PATH, ChargesArray);
     // 1. Index charges by product ID
     const chargesMap = new Map();
     for (const charge of charges) {
@@ -81,7 +83,7 @@ export async function loadCache() {
     // 3. Persist array of reservation objects
     reservations = Array.from(map.values());
   } catch (err) {
-    console.error("❌ Failed to load JSON cache:", err);
+    logger.error("❌ Failed to load JSON cache:", err);
     process.exit(1); // fail-fast on startup error
   }
 }

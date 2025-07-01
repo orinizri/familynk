@@ -5,5 +5,4 @@ export const JSON_DB_PATHS = {
   assignments: ASSIGNMENTS_PATH,
 };
 
-export const STREAM_THRESHOLD_BYTES = 5 * 1024 * 1024; // 5MB
 export const FILE_ENCODING = "utf-8";
