@@ -7,7 +7,14 @@
  */
 
 import React, { useRef } from "react";
-import { Stack, Box, Button, CircularProgress, Alert } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Button,
+  CircularProgress,
+  Alert,
+  Skeleton,
+} from "@mui/material";
 import useReservations from "../../hooks/useReservations";
 import ReservationHeaderRow from "./ReservationHeaderRow";
 import ReservationAccordion from "./ReservationAccordion";
@@ -15,8 +22,7 @@ import useInfiniteScrollContainer from "../../hooks/useInfiniteScrollContainer";
 
 export default function DashboardPage() {
   // Fetch pages of 20 reservations at a time
-  const { reservations, loadMore, loading, error, hasMore } =
-    useReservations();
+  const { reservations, loadMore, loading, error, hasMore } = useReservations();
   // Ref to the scrollable Box; passed to the infinite-scroll hook
   const containerRef = useRef(null);
 
@@ -33,8 +39,10 @@ export default function DashboardPage() {
   // --- Initial loading state (before any data) ---
   if (loading && reservations.length === 0) {
     return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
+      <Box>
+        {[...Array(8)].map((_, i) => (
+          <Skeleton key={i} variant="rectangular" height={60} sx={{ mb: 1 }} />
+        ))}
       </Box>
     );
   }

@@ -1,5 +1,4 @@
-// src/components/ReservationAccordion.jsx
-import React from "react";
+import React, { memo } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -16,7 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReservationRow from "./ReservationRow";
 import ProductRow from "./ProductRow";
 
-export default function ReservationAccordion({ reservation }) {
+function ReservationAccordion({ reservation }) {
   const { reservationUuid, activePurchasesSum, activeChargesSum, products } =
     reservation;
 
@@ -74,3 +73,5 @@ export default function ReservationAccordion({ reservation }) {
     </Accordion>
   );
 }
+
+export default memo(ReservationAccordion);

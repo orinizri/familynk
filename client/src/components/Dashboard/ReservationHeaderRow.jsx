@@ -1,9 +1,8 @@
-// src/components/ReservationHeaderRow.jsx
-import React from "react";
+import React, { memo } from "react";
 import { Stack, Typography, useTheme } from "@mui/material";
 import { RESERVATION_HEADERS } from "../../constants/reservationHeaders";
 
-export default function ReservationHeaderRow() {
+function ReservationHeaderRow() {
   const theme = useTheme();
 
   return (
@@ -16,9 +15,9 @@ export default function ReservationHeaderRow() {
         py: 1,
         backgroundColor: theme.palette.grey[200],
         borderBottom: `1px solid ${theme.palette.divider}`,
-        position: 'sticky',
+        position: "sticky",
         top: 0,
-        zIndex: theme.zIndex.appBar, 
+        zIndex: theme.zIndex.appBar,
       }}
     >
       {RESERVATION_HEADERS.map(({ key, label, flex = 1, align = "left" }) => (
@@ -36,3 +35,4 @@ export default function ReservationHeaderRow() {
     </Stack>
   );
 }
+export default memo(ReservationHeaderRow);

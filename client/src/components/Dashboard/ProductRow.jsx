@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { TableRow, TableCell, useTheme } from "@mui/material";
 
-export default function ProductRow({ name, status, charge }) {
+function ProductRow({ name, status, charge }) {
   const theme = useTheme();
   const bgColor =
     status === "active"
@@ -52,3 +52,5 @@ export default function ProductRow({ name, status, charge }) {
     </TableRow>
   );
 }
+
+export default memo(ProductRow);
