@@ -1,4 +1,3 @@
-// src/hooks/useInfiniteScrollContainer.js
 import { useEffect } from "react";
 
 /**

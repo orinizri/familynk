@@ -35,7 +35,7 @@ export default function ProductRow({ name, status, charge }) {
           textOverflow: "ellipsis",
         }}
       >
-        {status !== "offeredOnly" && status}
+        {status && status}
       </TableCell>
 
       {/* Charge: also */}
@@ -47,7 +47,7 @@ export default function ProductRow({ name, status, charge }) {
           textOverflow: "ellipsis",
         }}
       >
-        {status !== "offeredOnly" && `$${charge}`}
+        {status && `$${charge}`}
       </TableCell>
     </TableRow>
   );

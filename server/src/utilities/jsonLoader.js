@@ -1,7 +1,7 @@
 import fs from "fs";
 import fsp from "fs/promises";
-import AppError from "../utilities/appError.js";
-import { STREAM_THRESHOLD_BYTES, FILE_ENCODING } from "../utilities/constants.js";
+import AppError from "./appError.js";
+import { STREAM_THRESHOLD_BYTES, FILE_ENCODING } from "./constants.js";
 
 /**
  * Reads a JSON file and returns its content.

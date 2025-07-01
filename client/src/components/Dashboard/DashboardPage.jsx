@@ -1,3 +1,11 @@
+/**
+ * DashboardPage
+ *
+ * Renders the paginated reservations inside a scrollable container.
+ * Integrates infinite scrolling via useInfiniteScrollContainer().
+ * Displays loading spinners, retry buttons, and end-of-list messages.
+ */
+
 import React, { useRef } from "react";
 import { Stack, Box, Button, CircularProgress, Alert } from "@mui/material";
 import useReservations from "../../hooks/useReservations";
@@ -6,23 +14,23 @@ import ReservationAccordion from "./ReservationAccordion";
 import useInfiniteScrollContainer from "../../hooks/useInfiniteScrollContainer";
 
 export default function DashboardPage() {
+  // Fetch pages of 20 reservations at a time
   const { reservations, loadMore, loading, error, hasMore } =
-    useReservations(20);
-
-  // Ref for the scrollable container
+    useReservations();
+  // Ref to the scrollable Box; passed to the infinite-scroll hook
   const containerRef = useRef(null);
 
-  // Attach infinite-scroll to that container
+  // Attach the infinite-scroll listener to our container
   useInfiniteScrollContainer({
     containerRef,
     loading,
     hasMore,
     error,
     onLoadMore: loadMore,
-    thresholdPx: 150,
+    thresholdPx: 150, // trigger when 150px from bottom
   });
 
-  // initial loading
+  // --- Initial loading state (before any data) ---
   if (loading && reservations.length === 0) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
@@ -31,50 +39,66 @@ export default function DashboardPage() {
     );
   }
 
-  // error on initial load
+  // --- Initial load error ---
   if (error && reservations.length === 0) {
     return (
       <Alert severity="error">
-        Failed to load reservations. <Button onClick={loadMore}>Retry</Button>
+        Failed to load reservations.{" "}
+        <Button onClick={loadMore} size="small">
+          Retry
+        </Button>
       </Alert>
     );
   }
 
+  // --- No data at all ---
   if (reservations.length === 0) {
     return <Alert severity="info">No reservations found.</Alert>;
   }
 
+  // --- Main scrollable list ---
   return (
-    // Give the container a max-height and enable scrolling
     <Box
+      // Scrollable container
       ref={containerRef}
       sx={{
-        height: "calc(100vh - 64px)", // adjust 64px if you have a top AppBar
-        overflowY: "auto",
+        height: "80vh", // fill most of viewport
+        overflowY: "auto", // enable vertical scroll
       }}
     >
       <Stack spacing={2} sx={{ width: "100%", px: 2, py: 1 }}>
+        {/* Table headers or summary row */}
         <ReservationHeaderRow />
 
-        {reservations.map((r) => (
-          <ReservationAccordion key={r.reservationUuid} reservation={r} />
+        {/* Each reservation accordion */}
+        {reservations.map((reservation) => (
+          <ReservationAccordion
+            key={reservation.reservationUuid}
+            reservation={reservation}
+          />
         ))}
 
+        {/* Loading indicator at bottom during pagination */}
         {loading && (
           <Box display="flex" justifyContent="center" p={2}>
             <CircularProgress size={24} />
           </Box>
         )}
 
+        {/* Error indicator at bottom during pagination */}
         {error && (
           <Alert severity="error">
-            Error loading more. <Button onClick={loadMore}>Try Again</Button>
+            Error loading more.{" "}
+            <Button onClick={loadMore} size="small">
+              Try Again
+            </Button>
           </Alert>
         )}
 
-        {!hasMore && (
+        {/* End‐of‐list message */}
+        {!hasMore && !loading && (
           <Box textAlign="center" p={2}>
-            <em>No more reservations</em>
+            <em>All reservations loaded.</em>
           </Box>
         )}
       </Stack>

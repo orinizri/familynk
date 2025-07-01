@@ -3,8 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import reservationsRouter from "./routes/reservations.router.js";
 import { PORT } from "./config/env.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
-import { checkDbConnection } from "../src/db/pool.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -20,9 +19,7 @@ app.use("/reservations", reservationsRouter);
 
 // Error handling middleware
 app.use(errorHandler);
-checkDbConnection()
-  .then(() => console.log("✅ Database connection established"))
-  .catch((err) => console.error("❌ Database connection failed", err));
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

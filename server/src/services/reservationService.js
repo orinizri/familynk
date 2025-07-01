@@ -1,28 +1,18 @@
-// src/services/reservationService.js
-import { getAssignments, getChargesByAssignmentIds } from "../db/helpers.js";
-import { processReservations } from "./reservationLogic.js";
+import { getReservationsAfter } from "../db/jsonCache.js";
+
 /**
- * Fetches a page of reservations using cursor-based pagination.
- * @param {{cursor?:number,limit?:number}} opts
- * @returns {Promise<{reservations:object[], nextCursor:number|null}>}
+ * Fetches a page of reservations.
+ * @param {{ cursor?: number, limit?: number }} opts
+ * @returns {{ reservations: object[], nextCursor: number|null }}
  */
-export async function fetchReservations({ cursor = 0, limit = 20 } = {}) {
-  // 1. Fetch assignments page
-  const assignments = await getAssignments(cursor, limit);
-
-  // 2. Early exit if none
-  if (assignments.length === 0) {
-    return { reservations: [], nextCursor: null };
-  }
-
-  // 3. Fetch only relevant charges
-  const ids = assignments.map((a) => a.id);
-  const charges = await getChargesByAssignmentIds(ids);
-  // 4. Group them
-  const reservations = processReservations(assignments, charges);
-
-  // 5. Compute nextCursor
-  const nextCursor = assignments[assignments.length - 1].id;
-
-  return { reservations, nextCursor };
+export function fetchReservations({ cursor, limit = 20 } = {}) {
+  // Compute the slice of reservations starting after the cursor
+  const page = getReservationsAfter(cursor, limit);
+  // Cursor is the UUID of the last reservation in the page,
+  const nextCursor =
+    page.length < limit ? null : page[page.length - 1].reservationUuid;
+  return {
+    reservations: page,
+    nextCursor,
+  };
 }
