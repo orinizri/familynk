@@ -20,8 +20,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 6. [📊 Performance & Caching](#-performance--caching)  
 7. [🧪 Testing](#-testing)  
 8. [🤝 Contributing](#-contributing)  
-9. [⚖️ License](#️-license)  
-10. [🛠️ Future Improvements](#️-future-improvements)  
+9. [🛠️ Future Improvements](#️-future-improvements)  
 
 ---
 
@@ -118,8 +117,8 @@ A full-stack dashboard application that reads static JSON data files, processes 
   - **Server**: lint → unit tests (coverage)  
   - **Client**: lint → tests → build  
 - **Render** (API):  
-  - Build: `cd server && npm ci`  
-  - Start: `cd server && npm run start:prod`  
+  - Build: `npm ci`  
+  - Start: `npm run start:prod`  
 - **Vercel** (UI): auto-deploys `client/` on `main`
 
 </div>
@@ -159,17 +158,6 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 </div>
 
----
-
-<div align="left">
-
-## ⚖️ License
-
-MIT © Your Name / YourOrg  
-
-</div>
-
----
 
 <div align="left">
 
