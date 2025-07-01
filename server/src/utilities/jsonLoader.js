@@ -2,7 +2,7 @@ import fsp from "fs/promises";
 import AppError from "./AppError.js";
 import { FILE_ENCODING } from "./constants.js";
 import { retryAsync } from "./retry.js";
-
+import { logger } from "./logger.js";
 /**
  * @param {string} filePath
  * @param {z.ZodType<T>=} schema   Optional Zod schema for shape validation

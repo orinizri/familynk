@@ -8,9 +8,6 @@
  *   - activePurchasesSum: number
  *   - activeChargesSum: number
  */
-
-import path from "path";
-import { fileURLToPath } from "url";
 import { readJson } from "../utilities/jsonLoader.js";
 import { logger } from "../utilities/logger.js";
 import { AssignmentsArray } from "../utilities/schemas/assignmentSchema.js";
