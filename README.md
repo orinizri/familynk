@@ -2,7 +2,7 @@
 
 # Plusgrade Playground
 
-A full-stack dashboard application that reads static JSON data files, processes product assignments and charges into paginated reservations, and presents them in an infinite-scroll, expandable React + MUI frontend. Production-ready with CI/CD, clustering, zero-downtime reloads, structured logging, retry/backoff resilience and performance optimizations.
+A full-stack dashboard application that reads static JSON data files, processes product assignments and charges into paginated reservations, and presents them in an infinite-scroll, expandable React + MUI frontend. Production-ready with CI/CD, clustering, rate-limiting, zero-downtime reloads, structured logging, retry/backoff resilience and performance optimizations.
 
 </div>
 
@@ -33,6 +33,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
   • Pure-JSON parse followed by optional Zod schema validation for shape enforcement  
   • Cursor-based pagination endpoint (`GET /reservations?cursor=&limit=`)  
   • Health-check endpoint (`GET /healthz`)  
+  • **Rate-limiting** middleware to protect against abuse (100 requests per IP per 15 minutes)  
   • Graceful shutdown and zero-downtime reloads via PM2 clustering  
   • Structured JSON logging with Pino (minimal fields, pretty in development)  
   • CORS restricted to configured front-end origin  
@@ -56,7 +57,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 
 ## 📦 Tech Stack
 
-- **Backend**: Node.js · Express · PM2 · Pino · compression  
+- **Backend**: Node.js · Express · PM2 · Pino · compression · express-rate-limit  
 - **Frontend**: React · MUI · Axios  
 - **Validation**: Zod  
 - **Testing**: Jest  
@@ -127,12 +128,12 @@ A full-stack dashboard application that reads static JSON data files, processes 
 ## 🔄 CI/CD
 
 - GitHub Actions on `main` branch:  
-  – Server job: lint → tests with coverage threshold  
-  – Client job: lint → tests → build  
-- Render for API:  
+  – **Server** job: lint → tests with coverage threshold  
+  – **Client** job: lint → tests → build  
+- **Render** for API:  
   – Build command: `cd server && npm ci`  
   – Start command: `cd server && npm run start:prod`  
-- Vercel for UI: auto-deploy from `client/` on push to `main`  
+- **Vercel** for UI: auto-deploy from `client/` on push to `main`  
 
 </div>
 
@@ -146,7 +147,8 @@ A full-stack dashboard application that reads static JSON data files, processes 
 - In-memory JSON indexing for fast cursor queries  
 - Retry with exponential backoff on file reads to handle transient I/O issues  
 - Modular `retryAsync` helper configurable for retries, initial delay, factor and max delay  
-- Pure-JSON parsing separated from Zod validation to distinguish syntax vs schema errors  
+- Distinct JSON syntax vs. schema validation (Zod) for precise error feedback  
+- **Rate-limiting** (100 reqs/IP per 15 min) to prevent abuse  
 
 </div>
 
