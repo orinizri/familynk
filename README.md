@@ -173,6 +173,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 - `/metrics` endpoint for Prometheus integration  
 - Error-tracking integration (Sentry)  
 - Advanced input validation and TypeScript migration  
-- Docker-Compose for local development parity  
+- Docker-Compose for local development parity
+- Automate zero-downtime reloads by adding an SSH-based CI/CD step to run pm2 reload ecosystem.config.cjs --env production.
 
 </div>
