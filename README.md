@@ -1,8 +1,8 @@
 <div align="center">
 
-# Plusgrade Playground
+# Familynk Playground
 
-A full-stack dashboard application that reads static JSON data files, processes product assignments and charges into paginated reservations, and presents them in an infinite-scroll, expandable React + MUI frontend. Production-ready with CI/CD, clustering, rate-limiting, zero-downtime reloads, structured logging, retry/backoff resilience and performance optimizations.
+A full-stack dashboard application. Production-ready with CI/CD, clustering, rate-limiting, zero-downtime reloads, structured logging, retry/backoff resilience and performance optimizations.
 
 </div>
 
@@ -21,35 +21,6 @@ A full-stack dashboard application that reads static JSON data files, processes 
 6. [📊 Performance & Reliability](#-performance--reliability)  
 7. [🧪 Testing](#-testing)  
 8. [🛠️ Future Improvements](#️-future-improvements)  
-
----
-
-<div align="left">
-
-## 🚀 Features
-
-- **Server (Node.js / Express)**  
-  • In-memory JSON loader with retry/backoff logic to withstand transient I/O failures  
-  • Pure-JSON parse followed by optional Zod schema validation for shape enforcement  
-  • Cursor-based pagination endpoint (`GET /reservations?cursor=&limit=`)  
-  • Health-check endpoint (`GET /healthz`)  
-  • **Rate-limiting** middleware to protect against abuse (100 requests per IP per 15 minutes)  
-  • Graceful shutdown and zero-downtime reloads via PM2 clustering  
-  • Structured JSON logging with Pino (minimal fields, pretty in development)  
-  • CORS restricted to configured front-end origin  
-  • Gzip compression for all JSON responses  
-
-- **Client (React + MUI)**  
-  • Infinite-scroll container with throttling, deduplication and “load more” guard  
-  • Accordion rows for each reservation, with integrated product table  
-  • Responsive layout that stacks cards on mobile, sticky header and ellipsis handling  
-  • Axios client configured for gzip support  
-
-- **Quality & Deployment**  
-  • CI with lint, unit tests & coverage gates (GitHub Actions)  
-  • Automatic deployments: API on Render (pm2-runtime) and UI on Vercel  
-
-</div>
 
 ---
 
@@ -99,7 +70,7 @@ A full-stack dashboard application that reads static JSON data files, processes 
 - **dev** — start server in PM2 dev-cluster mode and React app concurrently  
 - **start:dev** — alias for `dev`  
 - **start:prod** — build and launch server cluster and client together  
-- **stop** — stop the PM2-managed plusgrade-server process  
+- **stop** — stop the PM2-managed familynk-server process  
 
 ### Server (`server/package.json`)
 
