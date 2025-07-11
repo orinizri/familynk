@@ -1,5 +1,5 @@
 import { NODE_ENV } from "../config/env.js";
-import { logger } from "../utilities/logger.js";
+import { logger } from "../utils/logger.js";
 
 /**
  * Catches all errors passed via next(err) and

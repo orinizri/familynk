@@ -8,10 +8,10 @@
  *   - activePurchasesSum: number
  *   - activeChargesSum: number
  */
-import { readJson } from "../utilities/jsonLoader.js";
-import { logger } from "../utilities/logger.js";
-import { AssignmentsArray } from "../utilities/schemas/assignmentSchema.js";
-import { ChargesArray } from "../utilities/schemas/chargeSchema.js";
+import { readJson } from "../utils/jsonLoader.js";
+import { logger } from "../utils/logger.js";
+import { AssignmentsArray } from "../utils/schemas/assignmentSchema.js";
+import { ChargesArray } from "../utils/schemas/chargeSchema.js";
 import { ASSIGNMENTS_PATH, CHARGES_PATH } from "../db/constants.js";
 
 let reservations = [];

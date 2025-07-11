@@ -6,9 +6,10 @@ import responseTime from "response-time";
 import pinoHttp from "pino-http";
 import errorHandler from "./middlewares/errorHandler.js";
 import healthRouter from "./routes/health.router.js";
-import reservationsRouter from "./routes/reservations.router.js";
+// import reservationsRouter from "./routes/reservations.router.js";
+import authRouter from "./routes/auth.router.js";
 import { CLIENT_URL, PORT } from "./config/env.js";
-import { logger, reqSerializer, resSerializer } from "./utilities/logger.js";
+import { logger, reqSerializer, resSerializer } from "./utils/logger.js";
 import { limiter } from "./middlewares/rateLimiter.js";
 
 // Load environment variables from .env file
@@ -61,7 +62,9 @@ app.use(express.json());
 // Health-check
 app.use("/healthz", healthRouter);
 
-app.use("/reservations", reservationsRouter);
+// app.use("/reservations", reservationsRouter);
+app.use("/auth", authRouter);
+
 
 // Error handling middleware
 app.use(errorHandler);

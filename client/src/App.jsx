@@ -1,53 +1,47 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import Layout from "./components/Layout/Layout";
+import HomePage from "./pages/HomePage";
+import Profile from "./components/Auth/Profile/Profile";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import Unauthorized from "./pages/Unauthorized";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import RoleBasedWrapper from "./components/RoleBased/RoleBasedWrapper";
 
-// This is the main App component that sets up the router and routes for the application
-function App() {
+/**
+ * Main application component that defines the routes for the application.
+ * It uses React Router to manage navigation and access control based on user roles.
+ * @returns {JSX.Element} The main application routes wrapped in a layout component.
+ * @component
+ * @description
+ * It uses a `RoleBasedWrapper` component to enforce access control based on user roles.
+ */
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="*" element={<NotFound />} />
+        <Route element={<Layout />}>
+          {/* Public Routes */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Admin Routes */}
+          <Route element={<RoleBasedWrapper allowedRoles={["admin"]} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Route>
+
+          {/* User Routes */}
+          <Route
+            element={<RoleBasedWrapper allowedRoles={["user", "admin"]} />}
+          >
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Route>
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;
-
-// function App() {
-//   const [message, setMessage] = useState("Loading...");
-//   const [error, setError] = useState("");
-
-//   useEffect(() => {
-//     const fetchMessage = async () => {
-//       try {
-//         const response = await api.get("/");
-//         if (!response.data.success) {
-//           throw new Error(response.data.message || "Failed to fetch users");
-//         }
-//         setMessage("Got response");
-//       } catch (err) {
-//         console.error("Backend error:", err.message);
-//         setError("Failed to load message from server");
-//       }
-//     };
-
-//     fetchMessage();
-//   }, []);
-
-//   return (
-//     <div className="App">
-//       <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-//         <h1>Backend Message:</h1>
-//         <p>{message}</p>
-//         {error && <p style={{ color: "red" }}>{error}</p>}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default App;

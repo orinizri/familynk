@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 import {
   RATE_LIMITER_MAX,
   RATE_LIMITER_WINDOW_MS,
-} from "../utilities/constants.js";
+} from "../utils/constants.js";
 /**
  * Global rate-limiting middleware.
  *
