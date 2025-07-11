@@ -9,7 +9,7 @@ import pool from "../db/db.js";
  * @param {Object} pagination - page (number), limit (number), sortBy (string), order ('ASC'|'DESC')
  * @returns {Promise<{ data: object[], meta: object }>} - Users and pagination metadata
  */
-export async function getFilteredUsers(filters = {}, pagination = {}) {
+export async function getFilteredUsers(filters = {}, _pagination = {}) {
   const {
     page = 1,
     limit = 10,

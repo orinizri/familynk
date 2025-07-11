@@ -1,6 +1,6 @@
 import AppError from '../utils/appError.js';
 
-export function errorMiddleware(err, req, res, next) {
+export function errorMiddleware(err, _req, res, _next) {
   console.error(err);
 
   const status = err.statusCode || 500;

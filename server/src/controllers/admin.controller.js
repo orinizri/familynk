@@ -11,7 +11,7 @@ import { sendSuccess, sendError } from "../utils/apiResponse.js";
  * @param {Response} res - Express response object
  * @returns {JSON} - { users: [], total: number, page: number, pageSize: number }
  */
-export async function getAllUsers(req, res, next) {
+export async function getAllUsers(req, res, _next) {
   try {
     const users = await adminService.getFilteredUsers(req.query);
     return sendSuccess(res, users);
