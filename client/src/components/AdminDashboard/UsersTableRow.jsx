@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./users_table.module.css";
 
 export default function UsersTableRow({ user }) {

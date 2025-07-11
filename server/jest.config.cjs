@@ -8,7 +8,7 @@ module.exports = {
   transform: {},
 
   // Enable Jest’s ESM support
-  experimentalVMModules: true,
+  // experimentalVMModules: true,
 
   // Match test files as .test.js or .spec.js under __tests__
   testMatch: ["**/__tests__/**/*.test.js", "**/?(*.)+(spec|test).js"],

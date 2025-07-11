@@ -13,7 +13,7 @@ function processQueue(error, token = null) {
   queue = [];
 }
 
-export function getAccessToken(token) {
+export function getAccessToken() {
   return accessToken;
 }
 

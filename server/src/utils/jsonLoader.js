@@ -1,5 +1,5 @@
 import fsp from "fs/promises";
-import AppError from "./AppError.js";
+import AppError from "./appError.js";
 import { FILE_ENCODING } from "./constants.js";
 import { retryAsync } from "./retry.js";
 import { logger } from "./logger.js";

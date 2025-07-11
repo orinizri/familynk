@@ -1,5 +1,3 @@
-// src/components/ReservationRow.jsx
-
 import React from "react";
 import { Stack, Typography, Paper, useTheme } from "@mui/material";
 
