@@ -1,5 +1,5 @@
 {
-  "name": "plusgrade_playground",
+  "name": "familynk_playground",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "dev": "concurrently \"npm run start --prefix server\" \"npm start --prefix client\"",
     "start:dev": "concurrently \"npm run start:dev --prefix server\" \"npm start --prefix client\"",
     "start:prod": "concurrently \"npm run start:prod --prefix server\" \"npm start --prefix client\"",
-    "stop": "cd server && pm2 stop plusgrade-server"
+    "stop": "cd server && pm2 stop familynk-server"
   },
   "keywords": [],
   "author": "",

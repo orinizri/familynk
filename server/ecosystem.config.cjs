@@ -6,7 +6,7 @@
 module.exports = {
   apps: [
     {
-      name: "plusgrade-server",
+      name: "familynk-server",
       script: "./src/index.js",   // your entry point
       instances: 2,               // number of processes
       exec_mode: "cluster",       // cluster mode
