@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1751393150965" clover="3.2.0">
+  <project timestamp="1751393150965" name="All files">
+    <metrics statements="173" coveredstatements="79" conditionals="65" coveredconditionals="26" methods="28" coveredmethods="8" elements="266" coveredelements="113" complexity="0" loc="173" ncloc="173" packages="9" files="22" classes="22"/>
+    <package name="src">
+      <metrics statements="28" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <file name="index.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/index.js">
+        <metrics statements="28" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.config">
+      <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="env.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/config/env.js">
+        <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+    </package>
+    <package name="src.controllers">
+      <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="health.controller.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/controllers/health.controller.js">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+      </file>
+      <file name="reservations.controller.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/controllers/reservations.controller.js">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.db">
+      <metrics statements="51" coveredstatements="47" conditionals="18" coveredconditionals="16" methods="4" coveredmethods="4"/>
+      <file name="constants.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/db/constants.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+      </file>
+      <file name="jsonCache.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/db/jsonCache.js">
+        <metrics statements="47" coveredstatements="43" conditionals="18" coveredconditionals="16" methods="4" coveredmethods="4"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="40" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="600" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="600" type="stmt"/>
+        <line num="44" count="600" type="stmt"/>
+        <line num="47" count="4" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
+        <line num="49" count="95448" type="stmt"/>
+        <line num="51" count="95448" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="95448" type="stmt"/>
+        <line num="53" count="95448" type="stmt"/>
+        <line num="54" count="95448" type="stmt"/>
+        <line num="55" count="600" type="stmt"/>
+        <line num="56" count="600" type="cond" truecount="2" falsecount="0"/>
+        <line num="57" count="560" type="stmt"/>
+        <line num="58" count="560" type="stmt"/>
+        <line num="60" count="40" type="stmt"/>
+        <line num="65" count="95448" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="37944" type="stmt"/>
+        <line num="75" count="95448" type="stmt"/>
+        <line num="76" count="95448" type="stmt"/>
+        <line num="77" count="95448" type="cond" truecount="2" falsecount="0"/>
+        <line num="78" count="560" type="stmt"/>
+        <line num="79" count="560" type="stmt"/>
+        <line num="84" count="4" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="92" count="2" type="stmt"/>
+        <line num="93" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="107" count="204" type="stmt"/>
+        <line num="108" count="204" type="cond" truecount="2" falsecount="0"/>
+        <line num="109" count="926213" type="stmt"/>
+        <line num="110" count="194" type="cond" truecount="2" falsecount="0"/>
+        <line num="112" count="2" type="stmt"/>
+        <line num="114" count="192" type="cond" truecount="1" falsecount="1"/>
+        <line num="116" count="202" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.middlewares">
+      <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="errorHandler.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/middlewares/errorHandler.js">
+        <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+      </file>
+      <file name="rateLimiter.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/middlewares/rateLimiter.js">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+      </file>
+      <file name="validatePagination.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/middlewares/validatePagination.js">
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.routes">
+      <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="health.router.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/routes/health.router.js">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+      </file>
+      <file name="reservations.router.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/routes/reservations.router.js">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.services">
+      <metrics statements="4" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="1"/>
+      <file name="healthService.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/services/healthService.js">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+      <file name="reservationService.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/services/reservationService.js">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="10" count="197" type="stmt"/>
+        <line num="13" count="197" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="197" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utilities">
+      <metrics statements="55" coveredstatements="25" conditionals="23" coveredconditionals="8" methods="11" coveredmethods="3"/>
+      <file name="AppError.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/AppError.js">
+        <metrics statements="4" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+      <file name="apiResponse.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/apiResponse.js">
+        <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+      </file>
+      <file name="constants.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/constants.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+      </file>
+      <file name="jsonLoader.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/jsonLoader.js">
+        <metrics statements="20" coveredstatements="12" conditionals="7" coveredconditionals="3" methods="3" coveredmethods="2"/>
+        <line num="15" count="8" type="cond" truecount="1" falsecount="0"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
+        <line num="21" count="8" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="31" count="8" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="8" type="stmt"/>
+        <line num="36" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="37" count="8" type="stmt"/>
+        <line num="39" count="8" type="stmt"/>
+        <line num="40" count="8" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+      </file>
+      <file name="logger.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/logger.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+      </file>
+      <file name="numberUtils.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/numberUtils.js">
+        <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+      </file>
+      <file name="retry.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/retry.js">
+        <metrics statements="13" coveredstatements="6" conditionals="7" coveredconditionals="5" methods="2" coveredmethods="1"/>
+        <line num="27" count="8" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="33" count="8" type="stmt"/>
+        <line num="35" count="8" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utilities.schemas">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="assignmentSchema.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/schemas/assignmentSchema.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+      </file>
+      <file name="chargeSchema.js" path="/Users/orikanner/Documents/plusgrade_playground/server/src/utilities/schemas/chargeSchema.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
