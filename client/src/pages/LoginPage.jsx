@@ -3,7 +3,15 @@ import LoginForm from "../components/Auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div style={{ padding: "2rem" }}>
+    <div
+      style={{
+        height: "90dvh",
+        padding: "2rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <LoginForm />
     </div>
   );

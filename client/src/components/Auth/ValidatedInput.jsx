@@ -11,9 +11,10 @@ export default function ValidatedInput({
   ...rest
 }) {
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <label style={{ display: "block", marginBottom: "0.25rem" }}>
-        {label}{required && "*"}
+    <div style={{ marginBottom: "1rem", display: "flex" }}>
+      <label style={{ display: "block", width: "100%" }}>
+        {label}
+        {required && " *"}
       </label>
 
       {hint && (
@@ -32,8 +33,8 @@ export default function ValidatedInput({
         {...rest}
         style={{
           width: "100%",
-          padding: "0.5rem",
-          borderRadius: "4px",
+          padding: "0.5rem 2rem",
+          borderRadius: "0.5rem",
           border: error ? "1px solid red" : "1px solid #ccc",
         }}
       />

@@ -3,7 +3,15 @@ import RegisterForm from "../components/Auth/RegisterForm";
 
 export default function RegisterPage() {
   return (
-    <div style={{ padding: "2rem" }}>
+    <div
+      style={{
+        height: "90dvh",
+        padding: "2rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <RegisterForm />
     </div>
   );

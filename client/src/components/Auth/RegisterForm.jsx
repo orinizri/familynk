@@ -7,7 +7,7 @@ import { validateRegister } from "../../utils/validateAuth";
 import Spinner from "../Spinner/Spinner";
 
 export default function RegisterForm() {
-  const { login, register, loading } = useAuth(); // Will use this after registration
+  const { login, register, loading } = useAuth();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
@@ -48,8 +48,11 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", flexDirection: "column" }}
+    >
+      <h2 style={{ textAlign: "center" }}>Register</h2>
       <ValidatedInput
         name="first_name"
         label="First Name"
@@ -107,7 +110,17 @@ export default function RegisterForm() {
           {submitError}
         </div>
       )}
-      <button type="submit" disabled={loading}>
+      <button
+        type="submit"
+        disabled={loading}
+        style={{
+          marginTop: "1rem",
+          padding: "0.5rem 2rem",
+          fontSize: "1rem",
+          borderRadius: "0.5rem",
+          alignSelf: "center",
+        }}
+      >
         {loading ? <Spinner message="Registering..." /> : "Register"}
       </button>{" "}
     </form>
