@@ -1,4 +1,4 @@
-import { loadCache, getReservationsAfter } from "../jsonCache.js";
+import { loadCache, getReservationsAfter } from "../jsonCache.ts";
 import path from "path";
 
 describe("getReservationsAfter()", () => {

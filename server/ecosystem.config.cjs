@@ -7,7 +7,7 @@ module.exports = {
   apps: [
     {
       name: "familynk-server",
-      script: "./src/index.js",   // your entry point
+      script: "./src/index.ts",   // your entry point
       instances: 2,               // number of processes
       exec_mode: "cluster",       // cluster mode
       watch: false,               // set to true only in dev

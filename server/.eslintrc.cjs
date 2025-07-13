@@ -18,7 +18,7 @@ module.exports = {
       files: [
         "**/__tests__/**/*.[jt]s?(x)",
         "**/?(*.)+(spec|test).[jt]s?(x)",
-        "**/?(*.)+(spec|test).js",
+        "**/?(*.)+(spec|test).[jt]s",
       ],
       env: { jest: true },
     },

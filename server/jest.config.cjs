@@ -11,8 +11,8 @@ module.exports = {
   // experimentalVMModules: true,
 
   // Match test files as .test.js or .spec.js under __tests__
-  testMatch: ["**/__tests__/**/*.test.js", "**/?(*.)+(spec|test).js"],
+  testMatch: ["**/__tests__/**/*.test.ts", "**/?(*.)+(spec|test).ts"],
 
   // Collect coverage from your source files
-  collectCoverageFrom: ["src/**/*.js"],
+  collectCoverageFrom: ["src/**/*.ts"],
 };
