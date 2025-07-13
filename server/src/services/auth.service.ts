@@ -32,7 +32,7 @@ export async function loginUserService(email: string, password: string) {
     const user = result.rows[0];
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new AppError("User not found", 404);
+      throw new AppError("Login Failed", 404);
     }
 
     await pool.query("UPDATE users SET last_login = NOW() WHERE id = $1", [
@@ -181,7 +181,7 @@ export async function refreshTokenService(refreshToken: string) {
     ]);
 
     const user = result.rows[0];
-    if (!user) throw new AppError("User not found", 404);
+    if (!user) throw new AppError("Login Failed", 404);
 
     const newPayload = {
       userId: user.id,

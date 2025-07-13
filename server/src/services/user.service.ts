@@ -1,7 +1,8 @@
+import { UpdateProfileBody } from "@server/types/user.types.ts";
 import pool from "../db/db.ts";
 import AppError from "../utils/AppError.ts";
 
-export async function getProfile(userId) {
+export async function getProfile(userId: string) {
   try {
     const result = await pool.query(
       `SELECT id, first_name, last_name, email, date_of_birth, photo_url, created_at, last_login, role
@@ -10,7 +11,7 @@ export async function getProfile(userId) {
     );
 
     if (!result.rows.length) {
-      throw new AppError("User not found", 404);
+      throw new AppError("Get Profile Failed", 404);
     }
 
     return result.rows[0];
@@ -24,7 +25,7 @@ export async function getProfile(userId) {
 }
 
 // PATCH /me
-export async function updateProfile(userId, body) {
+export async function updateProfile(userId: string, body: UpdateProfileBody) {
   const { first_name, last_name, date_of_birth, photo_url } = body;
 
   try {
@@ -37,7 +38,7 @@ export async function updateProfile(userId, body) {
     );
 
     if (!result.rows.length) {
-      throw new AppError("Failed to update profile", 404);
+      throw new AppError("Update Profile Failed", 404);
     }
 
     return result.rows[0];
@@ -50,15 +51,14 @@ export async function updateProfile(userId, body) {
   }
 }
 
-export async function deleteProfile(userId) {
+export async function deleteProfile(userId: string) {
   try {
     const result = await pool.query("DELETE FROM users WHERE id = $1", [
       userId,
     ]);
 
-    // Optional: Check rowCount to confirm deletion
     if (result.rowCount === 0) {
-      throw new AppError("User not found", 404);
+      throw new AppError("Delete Profile Failed", 404);
     }
     return;
   } catch (err) {

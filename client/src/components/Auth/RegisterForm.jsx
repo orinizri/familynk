@@ -41,7 +41,7 @@ export default function RegisterForm() {
         password: form.password,
         date_of_birth: form.date_of_birth,
       });
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setSubmitError(error.response?.data?.error || "Register failed");
     }
