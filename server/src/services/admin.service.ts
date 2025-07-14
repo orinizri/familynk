@@ -9,7 +9,18 @@ import pool from "../db/db.ts";
  * @param {Object} pagination - page (number), limit (number), sortBy (string), order ('ASC'|'DESC')
  * @returns {Promise<{ data: object[], meta: object }>} - Users and pagination metadata
  */
-export async function getFilteredUsers(filters = {}, _pagination = {}) {
+export interface Filters {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  order?: "ASC" | "DESC";
+  email?: string;
+  role?: string;
+  startDate?: string; // ISO date string
+  endDate?: string; // ISO date string
+}
+
+export async function getFilteredUsers(filters: Filters = {}) {
   const {
     page = 1,
     limit = 10,
@@ -49,7 +60,11 @@ export async function getFilteredUsers(filters = {}, _pagination = {}) {
     pool.query(countQuery, countValues),
   ]);
 
-  const total = parseInt(countRes.rows[0].total, 10);
+  interface CountRow {
+    total: string;
+  }
+
+  const total = parseInt(((countRes.rows[0] as CountRow)?.total) || "0", 10);
 
   return {
     data: dataRes.rows,

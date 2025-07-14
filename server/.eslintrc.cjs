@@ -1,26 +1,29 @@
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
-  env: {
-    node: true,
-    es2021: true,
-    jest: true, // Enable Jest globals for testing
-  },
-  extends: "eslint:recommended",
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: "latest",
     sourceType: "module",
+    project: "../tsconfig.json",
+    tsconfigRootDir: __dirname,
   },
-  rules: {
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-  },
-  overrides: [
-    {
-      files: [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s",
-      ],
-      env: { jest: true },
-    },
+  plugins: ["@typescript-eslint"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended", // basic rules
+    "plugin:@typescript-eslint/recommended-requiring-type-checking", // rules that need type info
+    "prettier",
   ],
+  ignorePatterns: [".eslintrc.cjs", "dist", "build", "node_modules"],
+  // rules: {
+  //   "no-unused-vars": "off", // handled by TS
+  //   "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+  // },
+  rules: {
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-unsafe-call": "warn",
+    "@typescript-eslint/no-unsafe-return": "warn",
+    "@typescript-eslint/no-unsafe-argument": "warn",
+  },
 };

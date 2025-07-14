@@ -8,6 +8,7 @@ import {
   JWT_EXPIRES_IN_LONG,
 } from "../config/env.ts";
 import AppError from "../utils/AppError.ts";
+import { RegisterUserInput, User } from "@server/types/user.types.ts";
 
 /**
  * Auth service for user login, registration, and token refresh.
@@ -29,7 +30,7 @@ export async function loginUserService(email: string, password: string) {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
-    const user = result.rows[0];
+    const user = result.rows[0] as User;
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new AppError("Login Failed", 404);
@@ -100,7 +101,7 @@ export async function registerUserService({
   date_of_birth,
   photo_url,
   role,
-}: any) {
+}: RegisterUserInput) {
   try {
     const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
       email,
@@ -125,7 +126,7 @@ export async function registerUserService({
       ]
     );
 
-    const user = result.rows[0];
+    const user = result.rows[0] as User;
 
     const payload = {
       userId: user.id,
@@ -180,7 +181,7 @@ export async function refreshTokenService(refreshToken: string) {
       payload.userId,
     ]);
 
-    const user = result.rows[0];
+    const user = result.rows[0] as User;
     if (!user) throw new AppError("Login Failed", 404);
 
     const newPayload = {

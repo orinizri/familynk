@@ -38,8 +38,8 @@ try {
         err
           ? "error"
           : res?.statusCode && res.statusCode >= 400
-          ? "warn"
-          : "info",
+            ? "warn"
+            : "info",
     })
   );
 
@@ -79,8 +79,8 @@ try {
     console.info(`Server running on port ${PORT}!`);
   });
 
-  // Graceful shutdown handler
-  function gracefulExit(server: Server) {
+  //   // Graceful shutdown handler
+  const gracefulExit = (server: Server) => {
     logger.info("🛑 Received shutdown signal, closing server...");
     server.close((error) => {
       if (error) {
@@ -96,7 +96,7 @@ try {
       logger.warn("⏱  Shutdown timeout, forcing exit");
       process.exit(1);
     }, 10000).unref(); // 10 seconds
-  }
+  };
 
   // Listen for PM2 cluster shutdown events
   process.on("SIGINT", () => gracefulExit(server));

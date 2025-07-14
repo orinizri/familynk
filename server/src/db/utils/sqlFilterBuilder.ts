@@ -1,29 +1,36 @@
-export function build_filter_query(filters, allowedFields, startingIndex = 1) {
-  const whereClauses = [];
-  const values = [];
-  let i = startingIndex;
+// import { Filters } from "@server/services/admin.service";
 
-  for (const key in filters) {
-    if (!allowedFields.includes(key) || !filters[key]) continue;
+// export function build_filter_query(
+//   filters: Filters,
+//   allowedFields: string[],
+//   startingIndex = 1
+// ) {
+//   const whereClauses = [];
+//   const values = [];
+//   let i = startingIndex;
 
-    if (key === "email") {
-      whereClauses.push(`email ILIKE $${i++}`);
-      values.push(`%${filters[key]}%`);
-    } else if (key === "startDate") {
-      whereClauses.push(`created_at >= $${i++}`);
-      values.push(new Date(filters[key]).toISOString());
-    } else if (key === "endDate") {
-      whereClauses.push(`created_at <= $${i++}`);
-      values.push(new Date(filters[key]).toISOString());
-    } else {
-      whereClauses.push(`${key} = $${i++}`);
-      values.push(filters[key]);
-    }
-  }
+//   for (const key in filters) {
+//     if (!allowedFields.includes(key) || !filters[key as keyof Filters])
+//       continue;
 
-  return {
-    whereSql: whereClauses.length ? `WHERE ${whereClauses.join(" AND ")}` : "",
-    values,
-    nextIndex: i,
-  };
-}
+//     if (key === "email") {
+//       whereClauses.push(`email ILIKE $${i++}`);
+//       values.push(`%${filters[key]}%`);
+//     } else if (key === "startDate") {
+//       whereClauses.push(`created_at >= $${i++}`);
+//       values.push(new Date(filters[key] as string).toISOString());
+//     } else if (key === "endDate") {
+//       whereClauses.push(`created_at <= $${i++}`);
+//       values.push(new Date(filters[key] as string).toISOString());
+//     } else {
+//       whereClauses.push(`${key} = $${i++}`);
+//       values.push(filters[key as keyof Filters] as string);
+//     }
+//   }
+
+//   return {
+//     whereSql: whereClauses.length ? `WHERE ${whereClauses.join(" AND ")}` : "",
+//     values,
+//     nextIndex: i,
+//   };
+// }
