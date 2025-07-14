@@ -1,5 +1,5 @@
 // client/.eslintrc.cjs
-module.exports = {
+export default {
   root: true,
 
   // 1) What environments your code runs in
@@ -7,6 +7,7 @@ module.exports = {
     browser: true,
     es2021: true,
     jest: true,
+    node: true, // Add this line to define the Node.js environment
   },
   globals: {
     process: "readonly",
@@ -18,12 +19,16 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:jest/recommended",
+    "prettier"
   ],
-
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   // 3) Parser options for ES modules + JSX
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: "2020",
     sourceType: "module",
+    project: "./tsconfig.json", // or tsconfig.server.json
+
     ecmaFeatures: {
       jsx: true,
     },
@@ -48,4 +53,5 @@ module.exports = {
     // disable PropTypes requirement until you add them or migrate to TS
     "react/prop-types": "off",
   },
+  ignorePatterns: ["dist", "node_modules", "build"],
 };
