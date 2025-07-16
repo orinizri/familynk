@@ -16,5 +16,10 @@ export interface User {
   last_name: string;
   date_of_birth: string; // ISO format string
   photo_url?: string;
-  role?: "user" | "admin";
+  role?: UserRoles;
+}
+
+export enum UserRoles {
+  user = "user",
+  admin = "admin",
 }

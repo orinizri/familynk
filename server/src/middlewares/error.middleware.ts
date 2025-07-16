@@ -1,14 +1,24 @@
-import AppError from '../utils/AppError.js';
+import { sendError } from "@server/utils/apiResponse.js";
+import AppError from "@server/utils/AppError";
+import { isAppError } from "@server/utils/isAppError.js";
+import { logger } from "@server/utils/logger.js";
+import { Request, Response, ErrorRequestHandler } from "express";
 
-export function errorMiddleware(err, _req, res, _next) {
-  console.error(err);
+export const errorMiddleware: ErrorRequestHandler = (
+  err,
+  _req: Request,
+  res: Response
+) => {
+  logger.error(err);
+  const isErrAppError: boolean = isAppError(err);
+  let status = 500;
+  let message = "Internal Server Error";
+  if (isErrAppError) {
+    // If the error is an instance of AppError, use its properties
+    const appError = err as AppError;
+    status = appError.statusCode;
+    message = appError.message;
+  }
 
-  const status = err.statusCode || 500;
-  const message =
-    err instanceof AppError ? err.message : 'Internal server error';
-
-  res.status(status).json({
-    success: false,
-    error: message,
-  });
-}
+  sendError(res, message, status);
+};
