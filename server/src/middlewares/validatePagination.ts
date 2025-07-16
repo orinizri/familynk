@@ -8,6 +8,8 @@
 
 import { z } from "zod";
 import AppError from "../utils/AppError.ts";
+import { RequestHandler } from "express";
+import { FetchTreesOptions } from "@server/types/tree.types.ts";
 
 // Zod schema for pagination parameters
 const paginationSchema = z.object({
@@ -27,7 +29,7 @@ const paginationSchema = z.object({
  * @param {Response} _res  – Express response (unused here)
  * @param {Function} next  – next middleware / error handler
  */
-export function validatePagination(req, _res, next) {
+export const validatePagination: RequestHandler = (req, _res, next) => {
   const result = paginationSchema.safeParse(req.query);
   if (!result.success) {
     // Zod will give a descriptive error message
@@ -39,6 +41,6 @@ export function validatePagination(req, _res, next) {
     );
   }
   // Write corrected pagination values back to req.query
-  req.pagination = result.data;
+  req.pagination = result.data as FetchTreesOptions;
   next();
-}
+};

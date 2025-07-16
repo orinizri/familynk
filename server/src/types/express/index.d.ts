@@ -1,5 +1,6 @@
 import "express";
 import { RegisterUserInput } from "../user.types";
+import { FetchTreesOptions } from "../tree.types";
 
 declare module "express-serve-static-core" {
   interface Response {
@@ -7,5 +8,6 @@ declare module "express-serve-static-core" {
   }
   interface Request {
     user?: RegisterUserInput; // User information from JWT token
+    pagination?: FetchTreesOptions;
   }
 }

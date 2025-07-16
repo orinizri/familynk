@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getHealthStatus } from "../services/healthService.ts";
+import { getHealthStatus } from "../services/health.service.ts";
 
 /**
  * healthController

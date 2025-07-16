@@ -1,4 +1,4 @@
-import { getHealthStatus } from "../services/healthService.ts";
+import { getHealthStatus } from "../services/health.service.ts";
 import { Request, Response, NextFunction } from "express";
 
 /**

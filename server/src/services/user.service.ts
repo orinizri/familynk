@@ -1,6 +1,7 @@
-import { UpdateProfileBody } from "@server/types/user.types.ts";
+import { UpdateProfileBody } from "@server/types/auth.types.ts";
 import pool from "../db/db.ts";
 import AppError from "../utils/AppError.ts";
+import { User } from "@server/types/user.types.ts";
 
 export async function getProfile(userId: string) {
   try {
@@ -14,7 +15,7 @@ export async function getProfile(userId: string) {
       throw new AppError("Get Profile Failed", 404);
     }
 
-    return result.rows[0];
+    return result.rows[0] as User;
   } catch (error) {
     if (!(error instanceof AppError)) {
       console.error("Unexpected error in getProfileService:", error);
@@ -41,7 +42,7 @@ export async function updateProfile(userId: string, body: UpdateProfileBody) {
       throw new AppError("Update Profile Failed", 404);
     }
 
-    return result.rows[0];
+    return result.rows[0] as User;
   } catch (error) {
     if (!(error instanceof AppError)) {
       console.error("Unexpected error in updateProfileService:", error);

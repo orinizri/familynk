@@ -5,8 +5,11 @@ import {
   refreshTokenService,
 } from "../services/auth.service.ts";
 import { sendSuccess, sendError } from "../utils/apiResponse.ts";
-import { JWT_SECRET_REFRESH } from "../config/env.ts";
-console.log("refreshTokenController called", JWT_SECRET_REFRESH);
+import {
+  LoginRequestBody,
+  RefreshRequestBody,
+} from "@server/types/auth.types.ts";
+import { User } from "@server/types/user.types.ts";
 
 // LOG IN
 export const loginController: RequestHandler = async function (
@@ -14,7 +17,7 @@ export const loginController: RequestHandler = async function (
   res,
   next
 ): Promise<void> {
-  const { email, password } = req.body;
+  const { email, password } = req.body as LoginRequestBody;
 
   if (!email || !password) {
     sendError(res, "Email and password are required", 400);
@@ -43,7 +46,7 @@ export const registerController: RequestHandler = async function (
     date_of_birth,
     photo_url,
     role,
-  } = req.body;
+  }: User = req.body as User;
 
   if (!email || !password || !first_name || !last_name) {
     sendError(res, "Required Fields are missing", 400);
@@ -71,7 +74,7 @@ export const refreshTokenController: RequestHandler = async function (
   res,
   next
 ): Promise<void> {
-  const { refreshToken } = req.body;
+  const { refreshToken } = req.body as RefreshRequestBody;
   if (!refreshToken) {
     sendError(res, "Refresh token is required", 400);
     return;

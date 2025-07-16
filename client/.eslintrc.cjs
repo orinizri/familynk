@@ -1,5 +1,5 @@
 // client/.eslintrc.cjs
-export default {
+module.exports = {
   root: true,
 
   // 1) What environments your code runs in
