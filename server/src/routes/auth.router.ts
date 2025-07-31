@@ -3,7 +3,7 @@ import {
   loginController,
   refreshTokenController,
   registerController,
-} from "../controllers/auth.controller.ts";
+} from "../controllers/auth.controller";
 
 const authRouter = express.Router();
 

@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   createTreesController,
   getTreesController,
-} from "../controllers/tree.controller.ts";
-import { validatePagination } from "../middlewares/validatePagination.ts";
+} from "../controllers/tree.controller";
+import { validatePagination } from "../middlewares/validatePagination";
 
 const treeRouter = Router();
 

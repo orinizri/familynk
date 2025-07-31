@@ -3,8 +3,8 @@ import {
   getProfileController,
   updateProfileController,
   deleteProfileController,
-} from "../controllers/user.controller.ts";
-import authMiddleware from "../middlewares/auth.middleware.ts";
+} from "../controllers/user.controller";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const userRouter = express.Router();
 

@@ -7,9 +7,9 @@
  */
 
 import { z } from "zod";
-import AppError from "../utils/AppError.ts";
+import AppError from "../utils/AppError";
 import { RequestHandler } from "express";
-import { FetchTreesOptions } from "@server/types/tree.types.ts";
+import { FetchTreesOptions } from "@server/types/tree.types";
 
 // Zod schema for pagination parameters
 const paginationSchema = z.object({

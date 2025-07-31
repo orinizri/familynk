@@ -5,9 +5,9 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { createTree, fetchTrees } from "../services/tree.service.ts";
-import { FetchTreesOptions, Tree } from "../types/tree.types.ts";
-import { sendSuccess } from "../utils/apiResponse.ts";
+import { createTree, fetchTrees } from "../services/tree.service";
+import { FetchTreesOptions, Tree } from "../types/tree.types";
+import { sendSuccess } from "../utils/apiResponse";
 
 /**
  * GET /trees?cursor=&limit=
@@ -30,7 +30,6 @@ export const getTreesController = async (
     next(err);
   }
 };
-
 
 /**
  * POST /trees

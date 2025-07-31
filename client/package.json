@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "echo \"Skipping tests in frontend for now\"",
     "eject": "react-scripts eject",
-    "lint": "eslint src --ext .js,.jsx --max-warnings=0"
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",

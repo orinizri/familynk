@@ -7,16 +7,16 @@ import compression from "compression";
 import helmet from "helmet";
 import responseTime from "response-time";
 import pinoHttp from "pino-http";
-import errorHandler from "./middlewares/errorHandler.ts";
-import healthRouter from "./routes/health.router.ts";
-// import reservationsRouter from "./routes/reservations.router.ts";
-import authRouter from "./routes/auth.router.ts";
-import { CLIENT_URL, PORT } from "./config/env.ts";
-import { logger, reqSerializer, resSerializer } from "./utils/logger.ts";
+import healthRouter from "./routes/health.router";
+// import reservationsRouter from "./routes/reservations.router";
+import authRouter from "./routes/auth.router";
+import { CLIENT_URL, PORT } from "./config/env";
+import { logger, reqSerializer, resSerializer } from "./utils/logger";
 import { Request, Response } from "express";
-import { limiter } from "./middlewares/rateLimiter.ts";
+import { limiter } from "./middlewares/rateLimiter";
 import { Server } from "http";
-import treeRouter from "./routes/tree.router.ts";
+import errorHandler from "./middlewares/errorHandler";
+import treeRouter from "./routes/tree.router";
 
 try {
   const app = express();

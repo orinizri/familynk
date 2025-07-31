@@ -3,13 +3,13 @@ import {
   loginUserService,
   registerUserService,
   refreshTokenService,
-} from "../services/auth.service.ts";
-import { sendSuccess, sendError } from "../utils/apiResponse.ts";
+} from "../services/auth.service";
+import { sendSuccess, sendError } from "../utils/apiResponse";
 import {
   LoginRequestBody,
   RefreshRequestBody,
-} from "@server/types/auth.types.ts";
-import { User } from "@server/types/user.types.ts";
+} from "@server/types/auth.types";
+import { User } from "@server/types/user.types";
 
 // LOG IN
 export const loginController: RequestHandler = async function (

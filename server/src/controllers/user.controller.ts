@@ -1,22 +1,33 @@
-import { sendSuccess } from "../utils/apiResponse.ts";
+import { sendSuccess } from "../utils/apiResponse";
 import {
   deleteProfile,
   getProfile,
   updateProfile,
-} from "../services/user.service.ts";
+} from "../services/user.service";
+import { Request, Response, NextFunction } from "express";
+import { UpdateProfileBody } from "@server/types/auth.types";
 
-export async function getProfileController(req, res, next) {
-  const { userId } = req.user;
+export async function getProfileController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.user;
   try {
-    const result = await getProfile(userId);
-    return sendSuccess(res, result);
+    const result = await getProfile(id);
+    sendSuccess(res, result);
   } catch (error) {
     next(error);
   }
 }
 
-export async function updateProfileController(req, res, next) {
-  const { first_name, last_name, date_of_birth, photo_url } = req.body;
+export async function updateProfileController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { first_name, last_name, date_of_birth, photo_url } =
+    req.body as UpdateProfileBody;
   const { id } = req.user;
 
   try {
@@ -26,18 +37,22 @@ export async function updateProfileController(req, res, next) {
       date_of_birth,
       photo_url,
     });
-    return sendSuccess(res, result.rows[0], "Profile updated");
+    sendSuccess(res, result);
   } catch (error) {
     next(error);
   }
 }
 
-export async function deleteProfileController(req, res, next) {
+export async function deleteProfileController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { id } = req.user;
 
   try {
     await deleteProfile(id);
-    return sendSuccess(res, null, "Account deleted");
+    sendSuccess(res, null);
   } catch (error) {
     next(error);
   }

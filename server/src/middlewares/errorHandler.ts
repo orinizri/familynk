@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { isAppError } from "../utils/isAppError.ts";
+import { isAppError } from "../utils/isAppError";
 
 export default function errorHandler(
   err: unknown,
   _req: Request,
-  res: Response,
+  res: Response
 ) {
   if (isAppError(err)) {
     res.status(err.statusCode).json({
@@ -19,7 +19,7 @@ export default function errorHandler(
       success: false,
       message: "Internal Server Error",
       ...(process.env.NODE_ENV !== "production" && {
-        error: String(err),
+        error: JSON.stringify(err),
       }),
     });
   }

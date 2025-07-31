@@ -1,6 +1,3 @@
-const path = require("path");
-
-/** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
   env: {
@@ -11,13 +8,13 @@ module.exports = {
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: "latest",
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
-    project: path.resolve(__dirname, "./tsconfig.json"),
-    tsconfigRootDir: path.resolve(__dirname, "../"),
+    project: "./tsconfig.json",
+    tsconfigRootDir: __dirname,
   },
   extends: [
     "eslint:recommended",

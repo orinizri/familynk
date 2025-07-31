@@ -4,13 +4,13 @@
  * @returns {{ reservations: object[], nextCursor: number|null }}
  */
 
-import pool from "../db/db.ts";
+import pool from "../db/db";
 import {
   FetchTreesOptions,
   FetchTreesResponse,
   Tree,
-} from "../types/tree.types.ts";
-import AppError from "../utils/AppError.ts";
+} from "../types/tree.types";
+import AppError from "../utils/AppError";
 
 export async function fetchTrees({
   cursor,

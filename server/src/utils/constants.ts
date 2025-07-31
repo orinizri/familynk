@@ -6,7 +6,6 @@ export const filterTableAllowedFields = [
   "endDate",
 ];
 export const AdminUsersTableAllowedSorts = ["email", "created_at", "role"];
-export const AdminUsersTableAllowedOrders = ["ASC", "DESC"];
 
 // constants.js
 export const RATE_LIMITER_WINDOW_MS = 15 * 60 * 1000; // 15 minutes

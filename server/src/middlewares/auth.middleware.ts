@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
-import { sendError } from "../utils/apiResponse.ts";
-import { JWT_SECRET_REFRESH } from "../config/env.ts";
+import { sendError } from "../utils/apiResponse";
+import { JWT_SECRET_REFRESH } from "../config/env";
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { User } from "@server/types/user.types.ts";
+import { User } from "shared/types/user.types";
 
-const authMiddleware: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+const authMiddleware: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     sendError(res, "Missing or invalid Authorization header", 401);
@@ -14,8 +18,9 @@ const authMiddleware: RequestHandler = (req: Request, res: Response, next: NextF
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET_REFRESH);
-    req.user = decoded as User;
+    const decoded = jwt.verify(token, JWT_SECRET_REFRESH) as User;
+    console.log("decoded token:", decoded);
+    req.user = decoded;
     next();
   } catch (error) {
     sendError(res, "Invalid or expired token", 403);

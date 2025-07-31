@@ -1,4 +1,4 @@
-import AppError from "./AppError.ts";
+import AppError from "./AppError";
 
 export function isAppError(err: unknown): err is AppError {
   return (

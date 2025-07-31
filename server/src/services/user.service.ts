@@ -1,7 +1,7 @@
-import { UpdateProfileBody } from "@server/types/auth.types.ts";
-import pool from "../db/db.ts";
-import AppError from "../utils/AppError.ts";
-import { User } from "@server/types/user.types.ts";
+import { UpdateProfileBody } from "@server/types/auth.types";
+import pool from "../db/db";
+import AppError from "../utils/AppError";
+import { User } from "@server/types/user.types";
 
 export async function getProfile(userId: string) {
   try {

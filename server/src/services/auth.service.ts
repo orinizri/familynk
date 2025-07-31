@@ -1,14 +1,14 @@
 import bcrypt from "bcrypt";
 import jwt, { SignOptions } from "jsonwebtoken";
-import pool from "../db/db.ts";
+import pool from "../db/db";
 import {
   JWT_SECRET_REFRESH,
   JWT_SECRET_ACCESS,
   JWT_EXPIRES_IN_SHORT,
   JWT_EXPIRES_IN_LONG,
-} from "../config/env.ts";
-import AppError from "../utils/AppError.ts";
-import { RegisterUserInput, User } from "@server/types/user.types.ts";
+} from "../config/env";
+import AppError from "../utils/AppError";
+import { RegisterUserInput, User } from "@server/types/user.types";
 
 /**
  * Auth service for user login, registration, and token refresh.
