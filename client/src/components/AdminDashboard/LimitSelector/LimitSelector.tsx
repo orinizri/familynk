@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { AdminUsersTableLimitOptions } from "../../../utils/constants";
+import { TableLimitOptions } from "../../../utils/constants";
 import "./limit_selector.css";
 
 interface LimitSelectorProps {
@@ -12,7 +12,7 @@ interface LimitSelectorProps {
 export default function LimitSelector({
   limit,
   onLimitChange,
-  options = AdminUsersTableLimitOptions,
+  options = TableLimitOptions,
   className = "",
 }: LimitSelectorProps) {
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {

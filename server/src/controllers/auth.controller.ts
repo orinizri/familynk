@@ -5,11 +5,8 @@ import {
   refreshTokenService,
 } from "../services/auth.service";
 import { sendSuccess, sendError } from "../utils/apiResponse";
-import {
-  LoginRequestBody,
-  RefreshRequestBody,
-} from "@server/types/auth.types";
 import { User } from "@server/types/user.types";
+import { LoginFormData, RefreshRequestBody } from "@server/types/auth.types";
 
 // LOG IN
 export const loginController: RequestHandler = async function (
@@ -17,7 +14,7 @@ export const loginController: RequestHandler = async function (
   res,
   next
 ): Promise<void> {
-  const { email, password } = req.body as LoginRequestBody;
+  const { email, password } = req.body as LoginFormData;
 
   if (!email || !password) {
     sendError(res, "Email and password are required", 400);

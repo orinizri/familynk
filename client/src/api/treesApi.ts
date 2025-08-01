@@ -1,14 +1,19 @@
 import api from "./api";
 import { PaginationType } from "../types/pagination.types";
-import { User } from "shared/types/user.types";
+import { Tree } from "@client/types/tree.types";
 
-export async function fetchUsers({
+export type fetchTreesHookResponse = {
+  success: boolean;
+  data: { data: Tree[]; meta: { pageCount: number } };
+};
+
+export async function fetchTrees({
   filters = {},
   pagination = {},
 }: {
   filters?: Partial<PaginationType>;
   pagination?: Partial<PaginationType>;
-}): Promise<{ data: User[]; meta: { pageCount: number } }> {
+}): Promise<fetchTreesHookResponse> {
   const params = {
     ...filters,
     page: pagination.page || 1,
@@ -16,6 +21,7 @@ export async function fetchUsers({
     sortBy: filters.sortBy || "created_at",
     order: filters.order || "asc",
   } as PaginationType;
-  const res = await api.get("/admin/users", { params });
-  return res.data as { data: User[]; meta: { pageCount: number } };
+  const res = await api.get("/trees", { params });
+  console.log("fetchTrees response:", res);
+  return res.data as fetchTreesHookResponse;
 }

@@ -3,10 +3,17 @@ export type PaginationType = {
   limit: number;
   sortBy: string;
   order: SortOrder;
-  email?: string;
-  role?: string;
   startDate?: string;
   endDate?: string;
 };
+
+export type PaginationTypeQueryParams = {
+  page: string;
+  limit: string;
+  sortBy: string;
+  order: SortOrder;
+  startDate?: string;
+  endDate?: string;
+}
 
 export type SortOrder = "asc" | "desc";

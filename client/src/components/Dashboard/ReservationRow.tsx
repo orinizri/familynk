@@ -1,8 +1,6 @@
 import React, { JSX } from "react";
 import { Stack, Typography, Paper, useTheme } from "@mui/material";
-import { reservationRowProps } from "@client/types/reservation.types";
-
-
+import { reservationRowProps } from "@client/types/tree.types";
 
 export default function ReservationRow({
   id,

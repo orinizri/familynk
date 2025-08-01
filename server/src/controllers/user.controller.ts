@@ -2,10 +2,10 @@ import { sendSuccess } from "../utils/apiResponse";
 import {
   deleteProfile,
   getProfile,
-  updateProfile,
+  updateUserService,
 } from "../services/user.service";
 import { Request, Response, NextFunction } from "express";
-import { UpdateProfileBody } from "@server/types/auth.types";
+import { updateUserSchema } from "@server/schemas/user.schema";
 
 export async function getProfileController(
   req: Request,
@@ -17,7 +17,7 @@ export async function getProfileController(
     const result = await getProfile(id);
     sendSuccess(res, result);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -26,20 +26,19 @@ export async function updateProfileController(
   res: Response,
   next: NextFunction
 ) {
-  const { first_name, last_name, date_of_birth, photo_url } =
-    req.body as UpdateProfileBody;
+  console.log("entered updateProfileController");
   const { id } = req.user;
-
+  console.log("Request body:", req.user);
   try {
-    const result = await updateProfile(id, {
-      first_name,
-      last_name,
-      date_of_birth,
-      photo_url,
+    const parsed = updateUserSchema.parse(req.body);
+    const result = await updateUserService({
+      id,
+      ...parsed,
     });
+    console.log("Updated user profile:", result);
     sendSuccess(res, result);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -54,6 +53,6 @@ export async function deleteProfileController(
     await deleteProfile(id);
     sendSuccess(res, null);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }

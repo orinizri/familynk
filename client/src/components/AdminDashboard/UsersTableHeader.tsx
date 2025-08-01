@@ -1,9 +1,8 @@
 import React from "react";
-import { adminColumns } from "../../utils/constants";
+import { treeColumns } from "../../utils/constants";
 import styles from "./users_table.module.css";
 import { PaginationType, SortOrder } from "../../types/pagination.types";
 
-// 🔠 Column definition type (can be shared)
 export interface TableColumn {
   key: string;
   label: string;
@@ -17,7 +16,7 @@ interface UsersTableHeaderProps extends Partial<PaginationType> {
 }
 
 export default function UsersTableHeader({
-  columns = adminColumns,
+  columns = treeColumns,
   sortBy,
   order,
   onSort,
@@ -31,23 +30,7 @@ export default function UsersTableHeader({
   function createHeaders(): React.ReactElement[] {
     const headers: React.ReactElement[] = [];
 
-    for (let i = -1; i < columns.length; i++) {
-      if (i === -1) {
-        headers.push(
-          <th
-            className={styles.th}
-            key="select"
-            style={{
-              cursor: "default",
-              textDecoration: "none",
-              fontWeight: "normal",
-            }}
-          >
-            index
-          </th>
-        );
-        continue;
-      }
+    for (let i = 0; i < columns.length; i++) {
 
       const { key, label, sortable } = columns[i];
 

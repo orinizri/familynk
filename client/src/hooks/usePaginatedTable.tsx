@@ -1,6 +1,6 @@
+import { fetchTreesHookResponse } from "@client/api/treesApi";
+import { PaginationType } from "@client/types/pagination.types";
 import { useState, useEffect, useCallback } from "react";
-import { PaginationType } from "shared/types/pagination.types";
-import { User } from "shared/types/user.types";
 
 /**
  * usePaginatedTable - General hook for paginated, filterable table data.
@@ -17,7 +17,7 @@ export default function usePaginatedTable(
   resourceFn: (params: {
     filters: Partial<PaginationType>;
     pagination: Partial<PaginationType>;
-  }) => Promise<{ data: User[]; meta: { pageCount: null | number } }>,
+  }) => Promise<fetchTreesHookResponse>,
   options: OptionsType = {}
 ) {
   const { initialFilters = {}, initialPagination = { page: 1, limit: 10 } } =
@@ -37,8 +37,12 @@ export default function usePaginatedTable(
     setError(null);
     try {
       const res = await resourceFn({ filters, pagination });
-      setData(res.data);
-      setMeta(res.meta);
+      console.log("Resource function response:", res);
+      if (!res || !res.data || !res.success) {
+        throw new Error("Invalid response from resource function");
+      }
+      setData(res.data.data);
+      setMeta(res.data.meta || { pageCount: null });
     } catch (err) {
       console.error("Failed to fetch data:", err);
       setError("Unknown error");
@@ -59,8 +63,8 @@ export default function usePaginatedTable(
     setPagination((prev) => ({ ...prev, page: 1, limit }));
 
   const updateFilters = (newFilters: Partial<PaginationType>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters }));
-    setPagination((prev) => ({ ...prev, page: 1 })); // reset page
+    console.log("Updating filters:", newFilters);
+    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
   };
 
   return {

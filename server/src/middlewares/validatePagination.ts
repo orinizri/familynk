@@ -9,17 +9,29 @@
 import { z } from "zod";
 import AppError from "../utils/AppError";
 import { RequestHandler } from "express";
-import { FetchTreesOptions } from "@server/types/tree.types";
+import { PaginationType } from "@client/types/pagination.types";
 
 // Zod schema for pagination parameters
 const paginationSchema = z.object({
-  cursor: z.coerce.string().optional(), // cursor is optional
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1) // Greater than 1
-    .max(100) // Less than 100
-    .default(20), // default page size
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  sortBy: z
+    .enum(["id", "name", "created_at", "privacy", "updated_at"])
+    .optional()
+    .default("created_at"),
+  order: z.enum(["asc", "desc"]).optional().default("desc"),
+  startDate: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid start date",
+    }),
+  endDate: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid end date",
+    }),
 });
 
 /**
@@ -30,7 +42,9 @@ const paginationSchema = z.object({
  * @param {Function} next  – next middleware / error handler
  */
 export const validatePagination: RequestHandler = (req, _res, next) => {
+  console.log("validatePagination middleware called");
   const result = paginationSchema.safeParse(req.query);
+  console.log("Pagination validation:", result);
   if (!result.success) {
     // Zod will give a descriptive error message
     return next(
@@ -41,6 +55,6 @@ export const validatePagination: RequestHandler = (req, _res, next) => {
     );
   }
   // Write corrected pagination values back to req.query
-  req.pagination = result.data as FetchTreesOptions;
+  req.pagination = result.data as Partial<PaginationType>;
   next();
 };

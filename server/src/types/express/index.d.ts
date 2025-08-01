@@ -1,13 +1,13 @@
 import "express";
-import { FetchTreesOptions } from "../tree.types";
-import { User } from "shared/types/user.types";
+import { ReqUser } from "../user.types";
+import { PaginationType } from "@client/types/pagination.types";
 
 declare module "express-serve-static-core" {
   interface Response {
     responseTime?: string;
   }
   interface Request {
-    user?: User; // User information from JWT token
-    pagination?: FetchTreesOptions;
+    user?: ReqUser; // User information from JWT token
+    pagination?: Partial<PaginationType>;
   }
 }

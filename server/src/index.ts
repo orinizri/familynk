@@ -15,8 +15,9 @@ import { logger, reqSerializer, resSerializer } from "./utils/logger";
 import { Request, Response } from "express";
 import { limiter } from "./middlewares/rateLimiter";
 import { Server } from "http";
-import errorHandler from "./middlewares/errorHandler";
 import treeRouter from "./routes/tree.router";
+import userRouter from "./routes/user.router";
+import errorHandler from "./middlewares/errorHandler";
 
 try {
   const app = express();
@@ -71,8 +72,9 @@ try {
   app.use("/healthz", healthRouter);
 
   app.use("/auth", authRouter);
-  
-  
+
+  app.use("/users", userRouter);
+
   app.use("/trees", treeRouter);
 
   // Error handling middleware

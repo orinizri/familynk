@@ -1,5 +1,5 @@
 import React from "react";
-import { useUsers } from "../../hooks/useUsers";
+import { useTrees } from "../../hooks/useTrees";
 import UsersTableHeader from "./UsersTableHeader";
 import UsersTableRow, { UserRowData } from "./UsersTableRow";
 import UsersTableFilters from "./UsersTableFilters";
@@ -7,11 +7,11 @@ import Spinner from "../Spinner/Spinner";
 import PaginationControls from "./PaginationControls/PaginationControls";
 import LimitSelector from "./LimitSelector/LimitSelector";
 import styles from "./users_table.module.css";
-import { SortOrder } from "shared/types/pagination.types";
+import { SortOrder } from "@client/types/pagination.types";
 
 export default function UsersTable() {
   const {
-    data: users,
+    data,
     filters,
     pagination,
     meta,
@@ -20,7 +20,7 @@ export default function UsersTable() {
     updateFilters,
     setLimit,
     setPage,
-  } = useUsers();
+  } = useTrees();
   
   const handleSort = (field: keyof UserRowData, order: SortOrder): void => {
     updateFilters({ sortBy: field, order });
@@ -48,8 +48,8 @@ export default function UsersTable() {
               onSort={handleSort}
             />
             <tbody className={styles.tbody}>
-              {users.map((user: UserRowData) => (
-                <UsersTableRow key={user.id} user={user} />
+              {data.map((tree: UserRowData) => (
+                <UsersTableRow key={tree.id} tree={tree} />
               ))}
             </tbody>
           </table>

@@ -14,10 +14,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReservationRow from "./ReservationRow";
 import ProductRow from "./ProductRow";
-import {
-  productsProps,
-  reservationRowProps,
-} from "@client/types/reservation.types";
+import { productsProps, reservationRowProps } from "@client/types/tree.types";
 
 interface Props {
   reservation: reservationRowProps;

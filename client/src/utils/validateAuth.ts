@@ -1,4 +1,4 @@
-import { LoginFormData, RegisterFormData } from "shared/types/auth/auth.types";
+import { LoginFormData, RegisterFormData } from "@client/types/auth.types";
 
 interface ErrorsType {
   email?: string;

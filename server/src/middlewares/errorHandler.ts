@@ -1,11 +1,25 @@
-import { Request, Response } from "express";
+import { ErrorRequestHandler } from "express";
 import { isAppError } from "../utils/isAppError";
+import { ZodError } from "zod";
 
-export default function errorHandler(
-  err: unknown,
-  _req: Request,
-  res: Response
-) {
+const errorHandler: ErrorRequestHandler = (
+  err,
+  _req,
+  res,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next
+) => {
+  if (res.headersSent) {
+    return;
+  }
+  if (err instanceof ZodError) {
+    res.status(400).json({
+      success: false,
+      message: "Validation Error",
+      errors: err.flatten().fieldErrors, // ✅ Friendly shape
+    });
+    return;
+  }
   if (isAppError(err)) {
     res.status(err.statusCode).json({
       success: false,
@@ -23,4 +37,6 @@ export default function errorHandler(
       }),
     });
   }
-}
+};
+
+export default errorHandler;

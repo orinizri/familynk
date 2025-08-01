@@ -10,12 +10,13 @@ import React, {
 import { getAccessToken, setAccessToken } from "../utils/axiosInstance";
 import api from "../api/api";
 import { getTokenExpiration } from "../utils/jwtUtils";
-import { User } from "shared/types/user.types";
 import {
   ApiResponse,
   AuthResponse,
-} from "shared/types/auth/auth-response.types";
-import { RegisterFormData } from "@client/types/auth.types";
+  RegisterFormData,
+} from "@client/types/auth.types";
+import { User } from "@client/types/user.types";
+
 type LoginArgs = {
   email: string;
   password: string;
@@ -27,6 +28,7 @@ type AuthContextType = {
   login: (args: LoginArgs) => Promise<void>;
   logout: () => void;
   register: (form: RegisterFormData) => Promise<void>;
+  updateUser: (form: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -126,15 +128,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timeout);
   }, [user, refreshToken]);
 
+  const updateUser = useCallback(
+    (newData: Partial<User>) => {
+      setUser((prev) => (prev ? { ...prev, ...newData } : prev));
+    },
+    [setUser]
+  );
+
   const value = useMemo<AuthContextType>(
     () => ({
+      updateUser,
       user,
       loading,
       login,
       logout,
       register,
     }),
-    [user, loading, login, logout, register]
+    [user, loading, login, logout, register, updateUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -13,30 +13,59 @@ import {
 import AppError from "../utils/AppError";
 
 export async function fetchTrees({
-  cursor,
-  limit = 20,
-}: FetchTreesOptions = {}): Promise<FetchTreesResponse> {
+  user_id,
+  filters,
+}: FetchTreesOptions): Promise<FetchTreesResponse> {
+  console.log("filters", filters);
+  const { page, limit, sortBy, order, startDate, endDate } = filters;
+
+  const offset = (page - 1) * limit;
+
+  const values: string[] = [user_id];
+  let idx = 2; // Start from 2 because $1 is user_id
+  let whereClause = `WHERE user_id = $1`;
+
+  if (startDate) {
+    whereClause += ` AND created_at >= $${idx++}`;
+    values.push(startDate);
+  }
+  if (endDate) {
+    whereClause += ` AND created_at <= $${idx++}`;
+    values.push(endDate);
+  }
+
+  const orderByClause = `ORDER BY ${sortBy} ${order.toUpperCase()}`;
+  const limitOffsetClause = `LIMIT $${idx++} OFFSET $${idx++}`;
+  values.push(limit.toString(), offset.toString());
+
+  const query = `
+    SELECT * FROM trees
+    ${whereClause}
+    ${orderByClause}
+    ${limitOffsetClause}
+  `;
+  console.log("query", query);
+  const countQuery = `
+    SELECT COUNT(*) FROM trees
+    ${whereClause}
+  `;
   try {
-    const result = await pool.query(`SELECT * from trees WHERE user_id = $1`, [
-      cursor,
+    const [result, countResult] = await Promise.all([
+      pool.query(query, values),
+      pool.query(countQuery, values.slice(0, idx - 3)), // Only the WHERE params
     ]);
 
-    if (!result.rows.length) {
-      throw new AppError("Get Trees Failed", 404);
-    }
-    const page = result.rows as Tree[];
-    // Cursor is the UUID of the last reservation in the page,
-    const nextCursor = page.length < limit ? null : page[page.length - 1].id;
+    const trees = result.rows as Tree[];
+    const countRow = countResult.rows[0] as { count: string };
+    const totalCount = parseInt(countRow.count, 10);
+
     return {
-      trees: page,
-      nextCursor,
+      data: trees,
+      meta: { pageCount: totalCount ? Math.ceil(totalCount / limit) : 0 },
     };
   } catch (error) {
-    if (!(error instanceof AppError)) {
-      console.error("Unexpected error in getProfileService:", error);
-      throw new AppError("Failed to fetch profile", 500);
-    }
-    throw error;
+    console.error("Failed to fetch trees:", error);
+    throw new AppError("Failed to fetch trees", 500);
   }
 }
 export async function createTree({

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "../services/api";
-import { reservationRowProps } from "@client/types/reservation.types";
+import { reservationRowProps } from "@client/types/tree.types";
 
 
 // ✨ API response structure

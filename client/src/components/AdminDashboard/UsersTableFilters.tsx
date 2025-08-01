@@ -1,5 +1,5 @@
+import { PaginationType } from "@client/types/pagination.types";
 import React, { ChangeEvent } from "react";
-import { PaginationType } from "shared/types/pagination.types";
 
 // 2️⃣ Define the props
 interface UsersTableFiltersProps {
@@ -28,15 +28,15 @@ export default function UsersTableFilters({
         justifyContent: "center",
       }}
     >
-      <input
+      {/* <input
         type="text"
         name="email"
         placeholder="Search email"
         value={String(filters?.email) || ""}
         onChange={handleChange}
-      />
+      /> */}
 
-      <select
+      {/* <select
         name="role"
         value={String(filters?.role) || ""}
         onChange={handleChange}
@@ -44,7 +44,7 @@ export default function UsersTableFilters({
         <option value="">All Roles</option>
         <option value="user">User</option>
         <option value="admin">Admin</option>
-      </select>
+      </select> */}
 
       <div>
         <label>
@@ -53,7 +53,6 @@ export default function UsersTableFilters({
             type="date"
             name="startDate"
             onChange={handleChange}
-            min={filters?.startDate ? String(filters.startDate) : undefined}
             value={filters?.endDate ? String(filters.startDate) : ""}
           />
         </label>
@@ -66,7 +65,6 @@ export default function UsersTableFilters({
             type="date"
             name="endDate"
             onChange={handleChange}
-            min={filters?.startDate ? String(filters.startDate) : undefined}
             value={filters?.endDate ? String(filters.startDate) : ""}
           />
         </label>

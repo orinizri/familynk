@@ -8,7 +8,8 @@ import {
   JWT_EXPIRES_IN_LONG,
 } from "../config/env";
 import AppError from "../utils/AppError";
-import { RegisterUserInput, User } from "@server/types/user.types";
+import { User } from "@server/types/user.types";
+import { RegisterFormData } from "@server/types/auth.types";
 
 /**
  * Auth service for user login, registration, and token refresh.
@@ -41,7 +42,7 @@ export async function loginUserService(email: string, password: string) {
     ]);
 
     const payload = {
-      userId: user.id,
+      id: user.id,
       email: user.email,
       role: user.role || "user",
     };
@@ -101,7 +102,7 @@ export async function registerUserService({
   date_of_birth,
   photo_url,
   role,
-}: RegisterUserInput) {
+}: RegisterFormData) {
   try {
     const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
       email,
@@ -129,7 +130,7 @@ export async function registerUserService({
     const user = result.rows[0] as User;
 
     const payload = {
-      userId: user.id,
+      id: user.id,
       email,
       role,
     };
@@ -178,14 +179,14 @@ export async function refreshTokenService(refreshToken: string) {
     ) as jwt.JwtPayload;
     console.log("Payload from refresh token:", payload);
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [
-      payload.userId,
+      payload.id,
     ]);
 
     const user = result.rows[0] as User;
     if (!user) throw new AppError("Login Failed", 404);
 
     const newPayload = {
-      userId: user.id,
+      id: user.id,
       email: user.email,
       role: user.role || "user",
     };

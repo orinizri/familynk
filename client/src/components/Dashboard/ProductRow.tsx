@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { TableRow, TableCell, useTheme } from "@mui/material";
-import { productsProps } from "@client/types/reservation.types";
+import { productsProps } from "@client/types/tree.types";
 
 function ProductRow({ name, status, charge }: productsProps) {
   const theme = useTheme();

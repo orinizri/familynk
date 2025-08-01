@@ -20,6 +20,7 @@ export default function Navbar() {
   const userLinks = [
     { to: "/", label: "Home" },
     { to: "/profile", label: "Profile" },
+    { to: "/trees", label: "My Trees" },
   ];
 
   const adminLinks = [{ to: "/admin-dashboard", label: "Admin" }];

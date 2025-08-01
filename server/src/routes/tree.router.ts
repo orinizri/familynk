@@ -4,10 +4,11 @@ import {
   getTreesController,
 } from "../controllers/tree.controller";
 import { validatePagination } from "../middlewares/validatePagination";
+import authMiddleware from "@server/middlewares/auth.middleware";
 
 const treeRouter = Router();
 
-treeRouter.get("/", validatePagination, getTreesController);
-treeRouter.post("/", createTreesController);
+treeRouter.get("/", authMiddleware, validatePagination, getTreesController);
+treeRouter.post("/", authMiddleware, createTreesController);
 
 export default treeRouter;

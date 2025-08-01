@@ -1,7 +1,4 @@
-import {
-  ApiResponse,
-  AuthResponse,
-} from "shared/types/auth/auth-response.types";
+import { ApiResponse, AuthResponse } from "@client/types/auth.types";
 import api from "../api/api";
 
 export async function refreshAccessToken(): Promise<string> {

@@ -9,6 +9,7 @@ import RegisterPage from "./pages/RegisterPage";
 import Unauthorized from "./pages/Unauthorized";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import RoleBasedWrapper from "./components/RoleBased/RoleBasedWrapper";
+import TreesDashboard from "./pages/trees/TreeDashboard";
 
 // Main application component that sets up routing and layout
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
           >
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/trees" element={<TreesDashboard />} />
           </Route>
         </Route>
       </Routes>
