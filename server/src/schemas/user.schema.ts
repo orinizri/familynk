@@ -12,22 +12,26 @@ export const registerUserSchema = z.object({
 
 export type RegisterUserSchema = z.infer<typeof registerUserSchema>;
 
-
 export const updateUserSchema = z.object({
-  first_name: z.string().min(1, "Minimum number of characters is 1").optional(),
-  last_name: z.string().min(1, "Minimum number of characters is 1").optional(),
+  first_name: z
+    .string()
+    .min(1, "First name must be at least 1 character long")
+    .optional(),
+  last_name: z
+    .string()
+    .min(1, "Last name must be at least 1 character long")
+    .optional(),
   date_of_birth: z
     .string()
     .optional()
     .refine(
-      (val) => !val || !isNaN(Date.parse(val)) || new Date(val).getTime() > new Date().getTime(),
+      (val) =>
+        !val ||
+        !isNaN(Date.parse(val)) ||
+        new Date(val).getTime() > new Date().getTime(),
       "Must be a valid past date"
     ),
-  photo_url: z
-    .string()
-    .url("Must be a valid URL")
-    .nullable()
-    .optional(),
+  photo_url: z.string().url("Must be a valid URL").nullable().optional(),
 });
 
 export type UpdateUserDTO = z.infer<typeof updateUserSchema>;

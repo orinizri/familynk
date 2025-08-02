@@ -1,7 +1,8 @@
+import { useDebounce } from "../../hooks/useDebounce";
 import { PaginationType } from "@client/types/pagination.types";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { TextField } from "@mui/material";
 
-// 2️⃣ Define the props
 interface UsersTableFiltersProps {
   filters: Partial<PaginationType>;
   updateFilters: (newFilters: Partial<PaginationType>) => void;
@@ -11,64 +12,64 @@ export default function UsersTableFilters({
   filters,
   updateFilters,
 }: UsersTableFiltersProps) {
+  const [nameInput, setNameInput] = useState("");
+  const debouncedName = useDebounce<string>(nameInput, 400);
+  const nameRef = useRef(filters.name);
+
+  useEffect(() => {
+    const trimmedName = debouncedName.trim();
+    if (trimmedName !== nameRef.current) {
+      updateFilters({ name: trimmedName });
+      nameRef.current = trimmedName;
+    }
+  }, [debouncedName, updateFilters]);
+
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | { name?: string; value: string }
+    >
   ) => {
     const { name, value } = e.target;
-    updateFilters({ [name]: value });
+    if (name === "name") {
+      setNameInput(String(value));
+    } else {
+      updateFilters({ [name]: value });
+    }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        flexWrap: "wrap",
-        marginBottom: "1rem",
-        justifyContent: "center",
-      }}
-    >
-      {/* <input
-        type="text"
-        name="email"
-        placeholder="Search email"
-        value={String(filters?.email) || ""}
+    <>
+      {/* Name Search */}
+      <TextField
+        name="name"
+        label="Search by Name"
+        value={nameInput}
         onChange={handleChange}
-      /> */}
+        slotProps={{ inputLabel: { shrink: true } }}
+        size="small"
+      />
 
-      {/* <select
-        name="role"
-        value={String(filters?.role) || ""}
+      {/* Start Date */}
+      <TextField
+        name="startDate"
+        label="From"
+        type="date"
+        size="small"
+        slotProps={{ inputLabel: { shrink: true } }}
+        value={filters.startDate || ""}
         onChange={handleChange}
-      >
-        <option value="">All Roles</option>
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-      </select> */}
+      />
 
-      <div>
-        <label>
-          From:
-          <input
-            type="date"
-            name="startDate"
-            onChange={handleChange}
-            value={filters?.endDate ? String(filters.startDate) : ""}
-          />
-        </label>
-      </div>
-
-      <div>
-        <label>
-          To:
-          <input
-            type="date"
-            name="endDate"
-            onChange={handleChange}
-            value={filters?.endDate ? String(filters.startDate) : ""}
-          />
-        </label>
-      </div>
-    </div>
+      {/* End Date */}
+      <TextField
+        name="endDate"
+        label="To"
+        type="date"
+        size="small"
+        slotProps={{ inputLabel: { shrink: true } }}
+        value={filters.endDate || ""}
+        onChange={handleChange}
+      />
+    </>
   );
 }

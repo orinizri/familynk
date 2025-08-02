@@ -64,7 +64,13 @@ export default function usePaginatedTable(
 
   const updateFilters = (newFilters: Partial<PaginationType>) => {
     console.log("Updating filters:", newFilters);
-    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
+    setFilters((prev) => {
+      const updated = { ...prev, ...newFilters };
+      // Avoid unnecessary updates
+      if (JSON.stringify(updated) === JSON.stringify(prev)) return prev;
+      return updated;
+    });
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   return {

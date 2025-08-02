@@ -9,7 +9,7 @@
 import { z } from "zod";
 import AppError from "../utils/AppError";
 import { RequestHandler } from "express";
-import { PaginationType } from "@client/types/pagination.types";
+import { PaginationType } from "../types/pagination.types";
 
 // Zod schema for pagination parameters
 const paginationSchema = z.object({
@@ -31,6 +31,13 @@ const paginationSchema = z.object({
     .optional()
     .refine((val) => !val || !isNaN(Date.parse(val)), {
       message: "Invalid end date",
+    }),
+  name: z
+    .string()
+    .trim()
+    .optional()
+    .refine((val) => !val || val.trim().length > 0, {
+      message: "Name cannot be empty",
     }),
 });
 

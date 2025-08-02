@@ -1,6 +1,6 @@
 import React from "react";
+import { TableHead, TableRow, TableCell, TableSortLabel } from "@mui/material";
 import { treeColumns } from "../../utils/constants";
-import styles from "./users_table.module.css";
 import { PaginationType, SortOrder } from "../../types/pagination.types";
 
 export interface TableColumn {
@@ -21,44 +21,40 @@ export default function UsersTableHeader({
   order,
   onSort,
 }: UsersTableHeaderProps) {
-  const handleSort = (field: string): void => {
+  const handleSort = (key: string) => {
     const nextOrder: SortOrder =
-      field === sortBy && order === "asc" ? "desc" : "asc";
-    onSort(field, nextOrder);
+      sortBy === key && order === "asc" ? "desc" : "asc";
+    onSort(key, nextOrder);
   };
 
-  function createHeaders(): React.ReactElement[] {
-    const headers: React.ReactElement[] = [];
-
-    for (let i = 0; i < columns.length; i++) {
-
-      const { key, label, sortable } = columns[i];
-
-      headers.push(
-        <th
-          className={styles.th}
-          key={key}
-          onClick={sortable ? () => handleSort(key) : undefined}
-          role={sortable ? "button" : undefined}
-          tabIndex={sortable ? 0 : undefined}
-          style={{
-            cursor: sortable ? "pointer" : "default",
-            textDecoration: "none",
-            fontWeight: sortBy === key ? "bold" : "normal",
-          }}
-        >
-          {label}
-          {sortable && sortBy === key && (order === "asc" ? " 🔼" : " 🔽")}
-        </th>
-      );
-    }
-
-    return headers;
-  }
-
   return (
-    <thead>
-      <tr className={styles.tr}>{createHeaders()}</tr>
-    </thead>
+    <TableHead>
+      <TableRow>
+        {columns.map(({ key, label, sortable }) => (
+          <TableCell
+            key={key}
+            sortDirection={sortBy === key ? order : false}
+            sx={{
+              fontWeight: "bold",
+              backgroundColor: "#f3f4f6",
+            }}
+          >
+            {sortable ? (
+              <TableSortLabel
+
+                active={sortBy === key}
+                direction={sortBy === key ? order : "asc"}
+                onClick={() => handleSort(key)}
+                sx={{ display: "flex", justifyContent: "flex-start" }}
+              >
+                {label}
+              </TableSortLabel>
+            ) : (
+              label
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
   );
 }

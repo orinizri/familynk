@@ -8,6 +8,7 @@ import PaginationControls from "./PaginationControls/PaginationControls";
 import LimitSelector from "./LimitSelector/LimitSelector";
 import styles from "./users_table.module.css";
 import { SortOrder } from "@client/types/pagination.types";
+import { Box, Paper, TableContainer, Table, TableBody } from "@mui/material";
 
 export default function UsersTable() {
   const {
@@ -21,7 +22,7 @@ export default function UsersTable() {
     setLimit,
     setPage,
   } = useTrees();
-  
+
   const handleSort = (field: keyof UserRowData, order: SortOrder): void => {
     updateFilters({ sortBy: field, order });
   };
@@ -29,10 +30,17 @@ export default function UsersTable() {
   return (
     <div className={styles.container}>
       {/* Filter + Limit */}
-      <div className={styles.pagination_controls_container}>
+      <Box
+        display="flex"
+        justifyContent="space-around"
+        flexWrap="wrap"
+        alignItems="center"
+        mt={2}
+        gap={2}
+      >
         <UsersTableFilters filters={filters} updateFilters={updateFilters} />
         <LimitSelector limit={pagination.limit} onLimitChange={setLimit} />
-      </div>
+      </Box>
 
       {/* Table */}
       <div className={styles.table_container}>
@@ -41,18 +49,22 @@ export default function UsersTable() {
         ) : error ? (
           <div className={styles.error}>{error}</div>
         ) : (
-          <table className={styles.table}>
-            <UsersTableHeader
-              sortBy={filters.sortBy}
-              order={filters.order}
-              onSort={handleSort}
-            />
-            <tbody className={styles.tbody}>
-              {data.map((tree: UserRowData) => (
-                <UsersTableRow key={tree.id} tree={tree} />
-              ))}
-            </tbody>
-          </table>
+          <Box sx={{ maxWidth: 960, margin: "2rem auto", px: 2 }}>
+          <TableContainer component={Paper} elevation={3}>
+            <Table className={styles.table}>
+              <UsersTableHeader
+                sortBy={filters.sortBy}
+                order={filters.order}
+                onSort={handleSort}
+              />
+              <TableBody className={styles.tbody}>
+                {data.map((tree: UserRowData) => (
+                  <UsersTableRow key={tree.id} tree={tree} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          </Box>
         )}
       </div>
 

@@ -17,7 +17,7 @@ export async function fetchTrees({
   filters,
 }: FetchTreesOptions): Promise<FetchTreesResponse> {
   console.log("filters", filters);
-  const { page, limit, sortBy, order, startDate, endDate } = filters;
+  const { page, limit, sortBy, order, startDate, endDate, name } = filters;
 
   const offset = (page - 1) * limit;
 
@@ -32,6 +32,10 @@ export async function fetchTrees({
   if (endDate) {
     whereClause += ` AND created_at <= $${idx++}`;
     values.push(endDate);
+  }
+  if (name) {
+    whereClause += ` AND name ILIKE $${idx++}`;
+    values.push(`%${name}%`);
   }
 
   const orderByClause = `ORDER BY ${sortBy} ${order.toUpperCase()}`;

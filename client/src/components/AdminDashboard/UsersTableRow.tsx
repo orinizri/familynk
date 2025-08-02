@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./users_table.module.css";
-
+import { TableRow, TableCell } from "@mui/material";
 export interface UserRowData {
   id: string;
   name: string;
@@ -15,20 +15,27 @@ interface UsersTableRowProps {
 
 export default function UsersTableRow({ tree }: UsersTableRowProps) {
   return (
-    <tr className={styles.tr}>
-      <td className={styles.td}>{tree.id}</td>
-      <td className={styles.td}>{tree.name}</td>
-      <td className={styles.td}>{tree.privacy}</td>
-      <td className={styles.td}>
+    <TableRow className={styles.tr}>
+      <TableCell className={styles.td}>
+        {tree.id}
+      </TableCell>
+      <TableCell className={styles.td}>
+        {tree.name}
+      </TableCell>
+      <TableCell className={styles.td}>
+        {tree.privacy}
+      </TableCell>
+      <TableCell className={styles.td}>
         {typeof tree.created_at === "string"
           ? new Date(tree.created_at).toLocaleDateString()
           : "-"}
-      </td>
-      <td className={styles.td}>
-        {typeof tree.updated_at === "string" && (new Date(tree.updated_at).getTime() !== 0)
+      </TableCell>
+      <TableCell className={styles.td}>
+        {typeof tree.updated_at === "string" &&
+        new Date(tree.updated_at).getTime() !== 0
           ? new Date(tree.updated_at).toLocaleDateString()
           : "-"}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }

@@ -1,6 +1,12 @@
 import React, { ChangeEvent } from "react";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 import { TableLimitOptions } from "../../../utils/constants";
-import "./limit_selector.css";
 
 interface LimitSelectorProps {
   limit: number;
@@ -15,22 +21,32 @@ export default function LimitSelector({
   options = TableLimitOptions,
   className = "",
 }: LimitSelectorProps) {
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    onLimitChange(Number(e.target.value));
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    const value = parseInt(e.target.value, 10);
+    onLimitChange(value);
   };
 
   return (
-    <div className={`limit-selector ${className}`}>
-      <label htmlFor="limit" style={{ marginRight: "0.5rem" }}>
-        Results per page:
-      </label>
-      <select id="limit" value={limit} onChange={handleChange}>
+    <FormControl
+      variant="outlined"
+      size="small"
+      className={className}
+      sx={{ minWidth: 160 }}
+    >
+      <InputLabel id="limit-label">Results per page</InputLabel>
+      <Select
+        labelId="limit-label"
+        id="limit"
+        value={limit.toString()}
+        label="Results per page"
+        onChange={handleChange}
+      >
         {options.map((opt) => (
-          <option key={opt} value={opt}>
+          <MenuItem key={opt} value={opt}>
             {opt}
-          </option>
+          </MenuItem>
         ))}
-      </select>
-    </div>
+      </Select>
+    </FormControl>
   );
 }
