@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ValidatedInput from "./ValidatedInput";
 import { validateLogin } from "../../utils/validateAuth";
 import DelayedFallback from "../Layout/DelayedFallback";
+import { toast } from "react-toastify";
 
 // ✅ Form structure and validation error types
 interface LoginFormData {
@@ -44,6 +45,10 @@ export default function LoginForm() {
     try {
       await login(form);
     } catch (error) {
+      toast.error(
+        "Login error: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
       console.error("Login error:", error);
       setSubmitError("Login failed");
     }

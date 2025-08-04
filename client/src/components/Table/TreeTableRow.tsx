@@ -13,7 +13,7 @@ interface UsersTableRowProps {
   tree: UserRowData;
 }
 
-export default function UsersTableRow({ tree }: UsersTableRowProps) {
+export default function TreesTableRow({ tree }: UsersTableRowProps) {
   return (
     <TableRow className={styles.tr}>
       <TableCell className={styles.td}>

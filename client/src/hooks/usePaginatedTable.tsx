@@ -68,7 +68,11 @@ export default function usePaginatedTable(
       } else {
         toast.info("Error fetching data");
       }
-      console.error("Failed to fetch data:", err);
+      toast.error(
+        "Failed to fetch data:" +
+          (err instanceof Error ? err.message : "Unknown error")
+      );
+      console.error("Error in usePaginatedTable load:", err);
       setTableStatus(apiStatus.ERROR);
     }
   }, [filters, pagination, resourceFn, setTableStatus]);

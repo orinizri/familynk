@@ -9,6 +9,7 @@ import { ApiResponse } from "@client/types/auth.types";
 import { ZodError } from "zod";
 import EditFormIcons from "../EditFormIcons/EditFormIcons";
 import { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
@@ -40,13 +41,13 @@ export default function Profile() {
       }
       const updated = await api.put("/users/me", formToUpdate);
       if (!updated.data) {
-        console.error("No response from server");
+        toast.error("No response from server");
         return;
       }
       const { data } = updated as AxiosResponse<ApiResponse>;
       if (data.success === false) {
         console.error("Update failed:", data.message);
-        // toast.error(updated.data.message);
+        toast.error(data.message);
         return;
       }
       updateUser(data.data as User);
@@ -55,7 +56,7 @@ export default function Profile() {
       // toast.success("Profile updated");
     } catch (err) {
       if (err instanceof ZodError) {
-        console.error("Validation error:", err.issues[0].message);
+        toast.error("Validation error: " + err.issues[0].message);
       }
       // toast.error("Update failed");
     }

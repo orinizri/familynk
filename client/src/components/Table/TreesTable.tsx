@@ -1,7 +1,7 @@
 import React from "react";
 import { useTrees } from "../../hooks/useTrees";
 import TableHeaders from "./TableHeaders";
-import UsersTableRow, { UserRowData } from "./UsersTableRow";
+import TreesTableRow, { UserRowData } from "./TreeTableRow";
 import TableFilters from "./TableFilters";
 import Spinner from "../Spinner/Spinner";
 import PaginationControls from "./PaginationControls/PaginationControls";
@@ -62,7 +62,7 @@ export default function TreesTable() {
                 />
                 <TableBody className={styles.tbody}>
                   {data.map((tree: UserRowData) => (
-                    <UsersTableRow key={tree.id} tree={tree} />
+                    <TreesTableRow key={tree.id} tree={tree} />
                   ))}
                 </TableBody>
               </Table>

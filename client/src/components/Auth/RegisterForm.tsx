@@ -5,6 +5,7 @@ import ValidatedInput from "./ValidatedInput";
 import { validateRegister } from "../../utils/validateAuth";
 import Spinner from "../Spinner/Spinner";
 import { RegisterFormData } from "../../types/auth.types";
+import { toast } from "react-toastify";
 
 type FormErrors = Partial<Record<keyof RegisterFormData, string>>;
 
@@ -50,6 +51,7 @@ export default function RegisterForm() {
       const errorMessage =
         (error as { response?: { data?: { error?: string } } })?.response?.data
           ?.error || "Register failed";
+      toast.error(errorMessage);
       setSubmitError(errorMessage);
     }
   };
