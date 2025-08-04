@@ -56,7 +56,6 @@ try {
   // Response time middleware to measure request processing time
   app.use(
     responseTime((_req: Request, res: Response, timeMs: number) => {
-      console.log("Response time middleware called", timeMs);
       // store a string like "12.345ms" on the res object
       res.responseTime = `${timeMs.toFixed(3)}ms`;
     })

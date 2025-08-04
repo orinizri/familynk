@@ -2,27 +2,25 @@ import React, { useState } from "react";
 import { useAuth } from "../../../contexts/authContext";
 import "./profile.css";
 import ProfileField from "./ProfileField";
-import Spinner from "../../Spinner/Spinner";
 import { User } from "../../../types/user.types";
-import api from "../../../api/api";
+import { api } from "../../../api/api";
 import { updateUserSchema } from "../../../schemas/user.schema";
 import { ApiResponse } from "@client/types/auth.types";
 import { ZodError } from "zod";
 import EditFormIcons from "../EditFormIcons/EditFormIcons";
+import { AxiosResponse } from "axios";
 
 export default function Profile() {
-  const { user, loading, updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState<Partial<User>>(user);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Input changed:", e.target.name, e.target.value);
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSave = async (): Promise<void> => {
     try {
-      console.log("Saving profile with form data:", form);
       form.date_of_birth = form.date_of_birth.toString().trim();
       const validated = updateUserSchema.parse(form);
       const formToUpdate = {};
@@ -31,9 +29,7 @@ export default function Profile() {
         if (validated[field] && validated[field] !== user[field]) {
           if (field === "date_of_birth") {
             // Convert date_of_birth to ISO string if it's a Date object
-            console.log("b4", validated[field]);
             formToUpdate[field] = new Date(validated[field]).toISOString();
-            console.log("after", validated[field]);
           }
           formToUpdate[field] = validated[field] as keyof User;
         }
@@ -42,16 +38,20 @@ export default function Profile() {
         setIsEditing(false);
         return;
       }
-      const updated = await api.put<ApiResponse>("/users/me", formToUpdate);
-      if (updated.data.success === false) {
-        console.error("Update failed:", updated.data.message);
+      const updated = await api.put("/users/me", formToUpdate);
+      if (!updated.data) {
+        console.error("No response from server");
+        return;
+      }
+      const { data } = updated as AxiosResponse<ApiResponse>;
+      if (data.success === false) {
+        console.error("Update failed:", data.message);
         // toast.error(updated.data.message);
         return;
       }
-      console.log("Profile updated:", updated.data);
-      updateUser(updated.data.data as User);
+      updateUser(data.data as User);
       setIsEditing(false);
-      setForm(updated.data.data as User);
+      setForm(data.data as User);
       // toast.success("Profile updated");
     } catch (err) {
       if (err instanceof ZodError) {
@@ -60,7 +60,6 @@ export default function Profile() {
       // toast.error("Update failed");
     }
   };
-  if (loading) return <Spinner />;
 
   return (
     <>

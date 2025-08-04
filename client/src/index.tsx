@@ -5,6 +5,7 @@ import App from "./App";
 import "./index.css";
 import { AuthProvider } from "./contexts/authContext";
 import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary";
+import { ToastContainer } from "react-toastify";
 
 const theme = createTheme({
   palette: {
@@ -23,6 +24,17 @@ root.render(
         <CssBaseline />
         <AuthProvider>
           <App />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

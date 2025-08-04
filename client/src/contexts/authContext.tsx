@@ -8,7 +8,7 @@ import React, {
   ReactNode,
 } from "react";
 import { getAccessToken, setAccessToken } from "../utils/axiosInstance";
-import api from "../api/api";
+import { api } from "../api/api";
 import { getTokenExpiration } from "../utils/jwtUtils";
 import {
   ApiResponse,
@@ -16,6 +16,7 @@ import {
   RegisterFormData,
 } from "@client/types/auth.types";
 import { User } from "@client/types/user.types";
+import { AxiosResponse } from "axios";
 
 type LoginArgs = {
   email: string;
@@ -38,16 +39,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   const login = useCallback(async ({ email, password }: LoginArgs) => {
-    const res = await api.post<ApiResponse>("/auth/login", { email, password });
+    const res = await api.post("/auth/login", { email, password });
     if (!res.data) {
       throw new Error("No response from server");
     }
+    const { data } = res.data as AxiosResponse<AuthResponse>;
+    console.log("Login response:", data);
 
-    if (!res.data?.success) {
-      throw new Error("Login failed");
-    }
-
-    const { accessToken, refreshToken, user } = res.data.data as AuthResponse;
+    const { accessToken, refreshToken, user } = data;
     setAccessToken(accessToken);
     sessionStorage.setItem("access_token", refreshToken);
     setUser(user);
@@ -64,10 +63,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!stored) return;
 
     try {
-      const res = await api.post<ApiResponse>("/auth/refresh", {
+      const res = await api.post("/auth/refresh", {
         refreshToken: stored,
       });
-      const { accessToken, refreshToken, user } = res.data.data as AuthResponse;
+      const { data } = res as AxiosResponse<ApiResponse>;
+      const { accessToken, refreshToken, user } = data.data as AuthResponse;
       setAccessToken(accessToken);
       sessionStorage.setItem("access_token", refreshToken);
       setUser(user);
@@ -80,15 +80,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(async (form: RegisterFormData) => {
     try {
-      const res = await api.post<ApiResponse<AuthResponse>>(
-        "/auth/register",
-        form
-      );
-      if (!res.data?.success) {
+      const res = await api.post("/auth/register", form);
+      const { data } = res as AxiosResponse<ApiResponse<AuthResponse>>;
+      if (!data?.success) {
         throw new Error("Register failed");
       }
-      console.log("Register response:", res.data);
-      const { accessToken, user } = res.data.data;
+      console.log("Register response:", data);
+      const { accessToken, user } = data.data;
       setAccessToken(accessToken);
       sessionStorage.setItem("access_token", accessToken);
       setUser(user);

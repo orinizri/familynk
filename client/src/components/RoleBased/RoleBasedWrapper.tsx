@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
-import Spinner from "../Spinner/Spinner";
+import DelayedFallback from "../Layout/DelayedFallback";
 
 interface RoleBasedWrapperProps {
   fallback?: React.ReactNode;
@@ -14,7 +14,7 @@ export default function RoleBasedWrapper({
 }: RoleBasedWrapperProps): ReactElement | null {
   const { user, loading } = useAuth();
 
-  if (loading) return <Spinner />;
+  if (loading) return <DelayedFallback />;
   if (!user) return <Navigate to="/login" replace />;
 
   const userRole =

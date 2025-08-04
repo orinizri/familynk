@@ -26,4 +26,9 @@ module.exports = {
     "prettier",
   ],
   plugins: ["@typescript-eslint"],
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
 };

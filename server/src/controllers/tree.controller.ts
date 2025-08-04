@@ -17,11 +17,10 @@ export const getTreesController = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("getTreesController called with pagination:", req.pagination);
   try {
-    console.log("arrived at getTreesController");
     // Passing cursor and limit from req.body.pagination (validated by middleware)
     const userIdFromToken = req.user.id;
-    console.log("1 req.pagination", req.pagination);
     const response = await fetchTrees({
       filters: req.pagination,
       user_id: userIdFromToken,

@@ -1,6 +1,10 @@
 import { fetchTreesHookResponse } from "@client/api/treesApi";
+import { apiStatus } from "../constants/apiStatus";
 import { PaginationType } from "@client/types/pagination.types";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import useApiStatus from "../api/hooks/useApiStatus";
+import { didAbort } from "../api/api";
+import { toast } from "react-toastify";
 
 /**
  * usePaginatedTable - General hook for paginated, filterable table data.
@@ -17,6 +21,7 @@ export default function usePaginatedTable(
   resourceFn: (params: {
     filters: Partial<PaginationType>;
     pagination: Partial<PaginationType>;
+    abort: (abort: () => void) => void;
   }) => Promise<fetchTreesHookResponse>,
   options: OptionsType = {}
 ) {
@@ -29,27 +34,44 @@ export default function usePaginatedTable(
   const [pagination, setPagination] =
     useState<Partial<PaginationType>>(initialPagination);
   const [meta, setMeta] = useState<{ pageCount: null | number }>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    status: tableStatus,
+    setStatus: setTableStatus,
+    statuses: {
+      isIdle: isTableIdle,
+      isSuccess: isTableSuccess,
+      isError: isTableError,
+      isPending: isTablePending,
+    },
+  } = useApiStatus(apiStatus.IDLE);
+  // Abort controller reference to cancel ongoing requests
+  const abortRef = useRef<(() => void) | null>(null);
 
+  // Load data function
   const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    setTableStatus(apiStatus.LOADING);
     try {
-      const res = await resourceFn({ filters, pagination });
-      console.log("Resource function response:", res);
+      const res = await resourceFn({
+        filters,
+        pagination,
+        abort: (abort) => (abortRef.current = abort),
+      });
       if (!res || !res.data || !res.success) {
         throw new Error("Invalid response from resource function");
       }
       setData(res.data.data);
       setMeta(res.data.meta || { pageCount: null });
+      setTableStatus(apiStatus.SUCCESS);
     } catch (err) {
+      if (didAbort(err)) {
+        toast.info("Request aborted");
+      } else {
+        toast.info("Error fetching data");
+      }
       console.error("Failed to fetch data:", err);
-      setError("Unknown error");
-    } finally {
-      setLoading(false);
+      setTableStatus(apiStatus.ERROR);
     }
-  }, [filters, pagination, resourceFn]);
+  }, [filters, pagination, resourceFn, setTableStatus]);
 
   useEffect(() => {
     void load();
@@ -63,7 +85,6 @@ export default function usePaginatedTable(
     setPagination((prev) => ({ ...prev, page: 1, limit }));
 
   const updateFilters = (newFilters: Partial<PaginationType>) => {
-    console.log("Updating filters:", newFilters);
     setFilters((prev) => {
       const updated = { ...prev, ...newFilters };
       // Avoid unnecessary updates
@@ -78,8 +99,12 @@ export default function usePaginatedTable(
     filters,
     pagination,
     meta,
-    loading,
-    error,
+    tableStatus,
+    setTableStatus,
+    isTableIdle,
+    isTableSuccess,
+    isTableError,
+    isTablePending,
     setFilters,
     setPagination,
     updateFilters,

@@ -1,4 +1,4 @@
-import api from "./api";
+import { api } from "./api";
 import { PaginationType } from "../types/pagination.types";
 import { Tree } from "@client/types/tree.types";
 
@@ -10,10 +10,13 @@ export type fetchTreesHookResponse = {
 export async function fetchTrees({
   filters = {},
   pagination = {},
+  abort,
 }: {
   filters?: Partial<PaginationType>;
   pagination?: Partial<PaginationType>;
+  abort: (abort: () => void) => void;
 }): Promise<fetchTreesHookResponse> {
+  console.log("fetchTrees called with filters:", filters, "pagination:", pagination);
   const params = {
     ...filters,
     page: pagination.page || 1,
@@ -21,7 +24,7 @@ export async function fetchTrees({
     sortBy: filters.sortBy || "created_at",
     order: filters.order || "asc",
   } as PaginationType;
-  const res = await api.get("/trees", { params });
+  const res = await api.get("/trees", { params, abort });
   console.log("fetchTrees response:", res);
   return res.data as fetchTreesHookResponse;
 }

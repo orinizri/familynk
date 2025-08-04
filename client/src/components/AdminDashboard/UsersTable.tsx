@@ -16,8 +16,8 @@ export default function UsersTable() {
     filters,
     pagination,
     meta,
-    loading,
-    error,
+    isTablePending,
+    isTableError,
     updateFilters,
     setLimit,
     setPage,
@@ -44,26 +44,29 @@ export default function UsersTable() {
 
       {/* Table */}
       <div className={styles.table_container}>
-        {loading ? (
+        {isTablePending ? (
+          // Show spinner while loading
           <Spinner message="Loading users..." />
-        ) : error ? (
-          <div className={styles.error}>{error}</div>
+        ) : isTableError ? (
+          // Show error message if loading failed
+          <div className={styles.error}>Loading user failed</div>
         ) : (
+          // Show table if data is successfully loaded
           <Box sx={{ maxWidth: 960, margin: "2rem auto", px: 2 }}>
-          <TableContainer component={Paper} elevation={3}>
-            <Table className={styles.table}>
-              <UsersTableHeader
-                sortBy={filters.sortBy}
-                order={filters.order}
-                onSort={handleSort}
-              />
-              <TableBody className={styles.tbody}>
-                {data.map((tree: UserRowData) => (
-                  <UsersTableRow key={tree.id} tree={tree} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+            <TableContainer component={Paper} elevation={3}>
+              <Table className={styles.table}>
+                <UsersTableHeader
+                  sortBy={filters.sortBy}
+                  order={filters.order}
+                  onSort={handleSort}
+                />
+                <TableBody className={styles.tbody}>
+                  {data.map((tree: UserRowData) => (
+                    <UsersTableRow key={tree.id} tree={tree} />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
         )}
       </div>

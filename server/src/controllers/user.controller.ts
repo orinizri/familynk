@@ -26,16 +26,13 @@ export async function updateProfileController(
   res: Response,
   next: NextFunction
 ) {
-  console.log("entered updateProfileController");
   const { id } = req.user;
-  console.log("Request body:", req.user);
   try {
     const parsed = updateUserSchema.parse(req.body);
     const result = await updateUserService({
       id,
       ...parsed,
     });
-    console.log("Updated user profile:", result);
     sendSuccess(res, result);
   } catch (error) {
     return next(error);

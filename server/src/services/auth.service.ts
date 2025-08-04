@@ -71,9 +71,8 @@ export async function loginUserService(email: string, password: string) {
       },
     };
   } catch (error) {
-    console.log("Error in refreshTokenService:", error);
+    console.error("Unexpected error in login user:", error);
     if (!(error instanceof AppError)) {
-      console.error("Unexpected error in login user:", error);
       throw new AppError("Failed to log in user", 500);
     }
     throw error;

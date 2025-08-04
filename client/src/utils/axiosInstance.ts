@@ -1,4 +1,4 @@
-import api from "../api/api";
+import { axiosInstance } from "../api/api";
 import { refreshAccessToken } from "./utils";
 import { AxiosError } from "axios";
 
@@ -50,7 +50,7 @@ function processQueue(error: unknown, token: AccessToken | null) {
 
 // ---- INTERCEPTOR ---- //
 
-api.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res) => res,
   async (err: AxiosError) => {
     const originalRequest = err.config;
@@ -66,7 +66,7 @@ api.interceptors.response.use(
           if (originalRequest.headers) {
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
           }
-          return api(originalRequest);
+          return axiosInstance(originalRequest);
         });
       }
 
@@ -82,7 +82,7 @@ api.interceptors.response.use(
           originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
         }
 
-        return api(originalRequest);
+        return axiosInstance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         return Promise.reject(refreshError);

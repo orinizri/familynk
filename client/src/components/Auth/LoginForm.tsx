@@ -3,7 +3,7 @@ import { useAuth } from "../../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import ValidatedInput from "./ValidatedInput";
 import { validateLogin } from "../../utils/validateAuth";
-import Spinner from "../Spinner/Spinner";
+import DelayedFallback from "../Layout/DelayedFallback";
 
 // ✅ Form structure and validation error types
 interface LoginFormData {
@@ -53,8 +53,6 @@ export default function LoginForm() {
     if (user) navigate("/");
   }, [user, navigate]);
 
-  if (loading) return <Spinner />;
-
   return (
     <form onSubmit={(e) => void handleSubmit(e)}>
       <ValidatedInput
@@ -85,7 +83,7 @@ export default function LoginForm() {
         </div>
       )}
       <button type="submit" disabled={loading}>
-        {loading ? <Spinner message="Logging in..." /> : "Login"}
+        {loading ? <DelayedFallback message="Logging in..." /> : "Login"}
       </button>
     </form>
   );

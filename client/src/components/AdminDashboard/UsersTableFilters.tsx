@@ -13,7 +13,7 @@ export default function UsersTableFilters({
   updateFilters,
 }: UsersTableFiltersProps) {
   const [nameInput, setNameInput] = useState("");
-  const debouncedName = useDebounce<string>(nameInput, 400);
+  const debouncedName = useDebounce<string>(nameInput, 300);
   const nameRef = useRef(filters.name);
 
   useEffect(() => {

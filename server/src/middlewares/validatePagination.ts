@@ -49,9 +49,7 @@ const paginationSchema = z.object({
  * @param {Function} next  – next middleware / error handler
  */
 export const validatePagination: RequestHandler = (req, _res, next) => {
-  console.log("validatePagination middleware called");
   const result = paginationSchema.safeParse(req.query);
-  console.log("Pagination validation:", result);
   if (!result.success) {
     // Zod will give a descriptive error message
     return next(
