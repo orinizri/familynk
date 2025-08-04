@@ -1,8 +1,8 @@
 import React from "react";
 import { useTrees } from "../../hooks/useTrees";
-import UsersTableHeader from "./UsersTableHeader";
+import TableHeaders from "./TableHeaders";
 import UsersTableRow, { UserRowData } from "./UsersTableRow";
-import UsersTableFilters from "./UsersTableFilters";
+import TableFilters from "./TableFilters";
 import Spinner from "../Spinner/Spinner";
 import PaginationControls from "./PaginationControls/PaginationControls";
 import LimitSelector from "./LimitSelector/LimitSelector";
@@ -10,7 +10,7 @@ import styles from "./users_table.module.css";
 import { SortOrder } from "@client/types/pagination.types";
 import { Box, Paper, TableContainer, Table, TableBody } from "@mui/material";
 
-export default function UsersTable() {
+export default function TreesTable() {
   const {
     data,
     filters,
@@ -38,7 +38,7 @@ export default function UsersTable() {
         mt={2}
         gap={2}
       >
-        <UsersTableFilters filters={filters} updateFilters={updateFilters} />
+        <TableFilters filters={filters} updateFilters={updateFilters} />
         <LimitSelector limit={pagination.limit} onLimitChange={setLimit} />
       </Box>
 
@@ -55,7 +55,7 @@ export default function UsersTable() {
           <Box sx={{ maxWidth: 960, margin: "2rem auto", px: 2 }}>
             <TableContainer component={Paper} elevation={3}>
               <Table className={styles.table}>
-                <UsersTableHeader
+                <TableHeaders
                   sortBy={filters.sortBy}
                   order={filters.order}
                   onSort={handleSort}

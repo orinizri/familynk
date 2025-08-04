@@ -3,15 +3,15 @@ import { PaginationType } from "@client/types/pagination.types";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 
-interface UsersTableFiltersProps {
+interface TableFiltersProps {
   filters: Partial<PaginationType>;
   updateFilters: (newFilters: Partial<PaginationType>) => void;
 }
 
-export default function UsersTableFilters({
+export default function TableFilters({
   filters,
   updateFilters,
-}: UsersTableFiltersProps) {
+}: TableFiltersProps) {
   const [nameInput, setNameInput] = useState("");
   const debouncedName = useDebounce<string>(nameInput, 300);
   const nameRef = useRef(filters.name);

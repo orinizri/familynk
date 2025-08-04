@@ -15,7 +15,7 @@ interface UsersTableHeaderProps extends Partial<PaginationType> {
   order: SortOrder;
 }
 
-export default function UsersTableHeader({
+export default function TableHeaders({
   columns = treeColumns,
   sortBy,
   order,
