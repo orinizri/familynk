@@ -1,5 +1,5 @@
 import React from "react";
-import TreesTable from "../../components/Table/UsersTable";
+import TreesTable from "../../components/Table/TreesTable";
 
 export default function TreesDashboard() {
   return (
