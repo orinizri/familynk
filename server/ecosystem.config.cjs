@@ -1,5 +1,3 @@
-// server/ecosystem.config.cjs
-
 /**
  * PM2 Ecosystem Configuration (CommonJS)
  */
@@ -7,7 +5,8 @@ module.exports = {
   apps: [
     {
       name: "familynk-server",
-      script: "./src/index.ts",   // your entry point
+      // script: "./src/index.ts",   // your entry point
+      script: "./build/index.js",
       instances: 2,               // number of processes
       exec_mode: "cluster",       // cluster mode
       watch: false,               // set to true only in dev

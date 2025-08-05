@@ -1,6 +1,6 @@
 import "express";
 import { ReqUser } from "../user.types";
-import { PaginationType } from "@client/types/pagination.types";
+import { PaginationType } from "../pagination.types";
 
 declare module "express-serve-static-core" {
   interface Response {

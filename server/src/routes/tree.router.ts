@@ -4,7 +4,7 @@ import {
   getTreesController,
 } from "../controllers/tree.controller";
 import { validatePagination } from "../middlewares/validatePagination";
-import authMiddleware from "@server/middlewares/auth.middleware";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const treeRouter = Router();
 

@@ -1,5 +1,5 @@
 import pkg from "pg";
-import { FAMILYNK_DATABASE_URL } from "../config/env.ts";
+import { FAMILYNK_DATABASE_URL } from "../config/env";
 const { Pool } = pkg;
 
 const pool = new Pool({

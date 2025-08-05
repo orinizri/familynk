@@ -5,12 +5,13 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node build/index.js",
+    "start:prod": "npm run build && pm2-runtime start ecosystem.config.cjs --env production",
     "dev": "tsx src/index.ts",
     "lint": "eslint src --ext .js,.mjs,.cjs,.ts --max-warnings=0",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --runInBand --coverage",
     "start:dev": "pm2 start ecosystem.config.cjs --env development",
-    "start:prod": "pm2-runtime start ecosystem.config.cjs --env production",
     "stop": "pm2 stop familynk-server",
     "reload": "pm2 reload familynk-server --update-env"
   },

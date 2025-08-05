@@ -1,4 +1,4 @@
-import { PaginationType } from "@client/types/pagination.types";
+import { PaginationType } from "./pagination.types";
 
 export interface Tree {
   id: string;
