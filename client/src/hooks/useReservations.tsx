@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { api } from "../api/api";
 import { reservationRowProps } from "@client/types/tree.types";
-import { ApiResponse } from "@client/types/auth.types";
 
 // ✨ API response structure
 interface ReservationApiResponse {

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Canceler } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:8000",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -64,8 +64,10 @@ const apiFactory = (axiosInstance: AxiosInstance) => ({
     axiosInstance.get(url, config)
   ),
   post: withAbort(
-    (url: string, data: unknown, config: AxiosRequestConfig = {}) =>
-      axiosInstance.post(url, data, config)
+    (url: string, data: unknown, config: AxiosRequestConfig = {}) =>{
+      console.log("POST request to:", url, "with data:", data);
+      console.log("axiosInstance", axiosInstance.getUri())
+      return axiosInstance.post(url, data, config)}
   ),
   put: withAbort(
     (url: string, data: unknown, config: AxiosRequestConfig = {}) =>
