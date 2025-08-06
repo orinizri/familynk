@@ -4,9 +4,10 @@
     "outDir": "build",
     "rootDir": "src",
     "typeRoots": ["./node_modules/@types"],
+    "moduleResolution": "node"
   },
   "include": ["src"],
   "paths": {
-    "@server/*": ["server/src/*"],
+    "@server/*": ["server/src/*"]
   }
 }

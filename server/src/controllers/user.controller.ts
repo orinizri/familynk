@@ -5,7 +5,7 @@ import {
   updateUserService,
 } from "../services/user.service";
 import { Request, Response, NextFunction } from "express";
-import { updateUserSchema } from "@server/schemas/user.schema";
+import { updateUserSchema } from "../schemas/user.schema";
 
 export async function getProfileController(
   req: Request,

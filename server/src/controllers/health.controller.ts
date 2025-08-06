@@ -1,23 +1,20 @@
 import { getHealthStatus } from "../services/health.service";
-import { Request, Response, NextFunction } from "express";
+import { RequestHandler } from "express";
 
 /**
  * healthController
  * ----------------
  * Express controller that wraps the healthService and
  * sends an HTTP response.
- *
- * @param {import('express').Request}  req  – incoming request (unused)
- * @param {import('express').Response} res  – response helper
- * @param {import('express').NextFunction} next – next middleware
+  * It handles the GET /health endpoint.
  */
-export function healthController(_req: Request, res: Response, next: NextFunction) {
+export const healthController: RequestHandler = (_req, res, next) => {
   try {
     const payload = getHealthStatus();
     // 200 OK + JSON body
-    return res.status(200).json(payload);
+    res.status(200).json(payload);
   } catch (err) {
     // Unexpected errors bubble to your global error handler
-    return next(err);
+    next(err);
   }
-}
+};
