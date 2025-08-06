@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import api from "../services/api";
+import { api } from "../api/api";
 import { reservationRowProps } from "@client/types/tree.types";
-
+import { ApiResponse } from "@client/types/auth.types";
 
 // ✨ API response structure
 interface ReservationApiResponse {
@@ -45,10 +45,9 @@ export default function useReservations(limit = 20): UseReservationsResult {
       }
 
       try {
-        const res = await api.get<ReservationApiResponse>(
-          `/reservations?${params.toString()}`
-        );
-        const { reservations: newItems, nextCursor } = res.data;
+        const res = await api.get(`/reservations?${params.toString()}`);
+        const { reservations: newItems, nextCursor } =
+          res.data as ReservationApiResponse;
 
         setReservations((prev) => [...prev, ...newItems]);
 
