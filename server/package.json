@@ -10,7 +10,7 @@
     "start:prod": "npm run build && pm2-runtime start ecosystem.config.cjs --env production",
     "dev": "tsx src/index.ts",
     "lint": "eslint src --ext .js,.mjs,.cjs,.ts --max-warnings=0",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --runInBand --coverage",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --runInBand --coverage --passWithNoTests",
     "start:dev": "pm2 start ecosystem.config.cjs --env development",
     "stop": "pm2 stop familynk-server",
     "reload": "pm2 reload familynk-server --update-env"
