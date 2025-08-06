@@ -14,6 +14,7 @@ export const loginController: RequestHandler = async function (
   res,
   next
 ): Promise<void> {
+  console.log(req.body);
   const { email, password } = req.body as LoginFormData;
 
   if (!email || !password) {
@@ -25,6 +26,7 @@ export const loginController: RequestHandler = async function (
     const data = await loginUserService(email, password);
     sendSuccess(res, { ...data, message: "Login successful" });
   } catch (error) {
+    console.error("Login failed:", error);
     next(error);
   }
 };
