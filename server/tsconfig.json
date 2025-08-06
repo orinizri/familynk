@@ -2,7 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "build",
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["node", "express"],
+    "typeRoots": ["node_modules/@types"],
   },
   "include": ["src"],
   "paths": {
