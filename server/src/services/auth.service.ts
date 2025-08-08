@@ -106,7 +106,6 @@ export async function registerUserService({
     const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
       email,
     ]);
-    console.log("Checking existing user:", existing.rows);
     if (existing.rows.length > 0)
       throw new AppError("Email already registered", 409);
 
@@ -154,7 +153,7 @@ export async function registerUserService({
       },
     };
   } catch (error) {
-    console.log("Error in refreshTokenService:", error);
+    console.error("Error in refreshTokenService:", error);
     if (!(error instanceof AppError)) {
       console.error("Unexpected error in register user:", error);
       throw new AppError("Failed to register user", 500);
@@ -176,7 +175,6 @@ export async function refreshTokenService(refreshToken: string) {
       refreshToken,
       JWT_SECRET_REFRESH
     ) as jwt.JwtPayload;
-    console.log("Payload from refresh token:", payload);
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [
       payload.id,
     ]);
@@ -210,7 +208,7 @@ export async function refreshTokenService(refreshToken: string) {
       },
     };
   } catch (error) {
-    console.log("Error in refreshTokenService:", error);
+    console.error("Error in refreshTokenService:", error);
     if (!(error instanceof AppError)) {
       console.error("Unexpected error in refresh token:", error);
       throw new AppError("Failed to refresh token", 500);

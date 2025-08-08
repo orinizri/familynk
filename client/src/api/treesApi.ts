@@ -16,7 +16,6 @@ export async function fetchTrees({
   pagination?: Partial<PaginationType>;
   abort: (abort: () => void) => void;
 }): Promise<fetchTreesHookResponse> {
-  console.log("fetchTrees called with filters:", filters, "pagination:", pagination);
   const params = {
     ...filters,
     page: pagination.page || 1,
@@ -25,6 +24,5 @@ export async function fetchTrees({
     order: filters.order || "asc",
   } as PaginationType;
   const res = await api.get("/trees", { params, abort });
-  console.log("fetchTrees response:", res);
   return res.data as fetchTreesHookResponse;
 }

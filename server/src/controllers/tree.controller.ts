@@ -17,7 +17,6 @@ export const getTreesController = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("getTreesController called with pagination:", req.pagination);
   try {
     // Passing cursor and limit from req.body.pagination (validated by middleware)
     const userIdFromToken = req.user.id;

@@ -22,7 +22,6 @@ export default function TreesTableRow({ tree }: UsersTableRowProps) {
         },
       }}
     >
-      {" "}
       <TableCell sx={cellSx}>{tree.id}</TableCell>
       <TableCell sx={cellSx}>{tree.name}</TableCell>
       <TableCell sx={cellSx}>{tree.privacy}</TableCell>

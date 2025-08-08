@@ -74,7 +74,6 @@ axiosInstance.interceptors.response.use(
 
       try {
         const access_token = await refreshAccessToken();
-        console.log("New access token:", access_token);
         setAccessToken(access_token);
         processQueue(null, access_token);
 

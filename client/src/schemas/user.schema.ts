@@ -1,14 +1,12 @@
 import { z } from "zod";
 
-
 export const registerUserSchema = z.object({
   email: z.email(),
   password: z.string().min(6),
   first_name: z.string(),
   last_name: z.string(),
   date_of_birth: z.string(), // ISO format
-  photo_url: z.url().optional(),
-  role: z.string().default("user"),
+  photo_url: z.url().optional().nullable(),
 });
 
 export type RegisterUserSchema = z.infer<typeof registerUserSchema>;
@@ -19,6 +17,7 @@ export const updateUserSchema = z.object({
   date_of_birth: z
     .string()
     .optional()
+    .nullable()
     .refine(
       (val) => !val || !isNaN(Date.parse(val)),
       "Must be a valid ISO date string"

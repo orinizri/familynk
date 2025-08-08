@@ -22,7 +22,6 @@ export const isApiError = (error) =>
 type RequestFn<R> = (...args: unknown[]) => Promise<R>;
 
 export function withAbort<R>(fn: RequestFn<R>) {
-  console.log("withAbort called for function:", fn.name);
   return async (...args: unknown[]): Promise<R> => {
     let config: AbortableAxiosConfig = {};
     const lastArg = args[args.length - 1];
@@ -65,8 +64,6 @@ const apiFactory = (axiosInstance: AxiosInstance) => ({
   ),
   post: withAbort(
     (url: string, data: unknown, config: AxiosRequestConfig = {}) =>{
-      console.log("POST request to:", url, "with data:", data);
-      console.log("axiosInstance", axiosInstance.getUri())
       return axiosInstance.post(url, data, config)}
   ),
   put: withAbort(

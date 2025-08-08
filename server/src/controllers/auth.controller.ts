@@ -14,7 +14,6 @@ export const loginController: RequestHandler = async function (
   res,
   next
 ): Promise<void> {
-  console.log(req.body);
   const { email, password } = req.body as LoginFormData;
 
   if (!email || !password) {

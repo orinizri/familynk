@@ -128,6 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateUser = useCallback(
     (newData: Partial<User>) => {
+      delete newData.role; // Prevent role changes
       setUser((prev) => (prev ? { ...prev, ...newData } : prev));
     },
     [setUser]

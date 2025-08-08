@@ -39,7 +39,7 @@ const EditFormIcons: FunctionComponent<EditFormIconsProps> = ({
           <IconButton
             onClick={() => setIsEditing(true)}
             color="default"
-            size="small"
+            size="large"
             aria-label="Edit profile"
           >
             <EditIcon />

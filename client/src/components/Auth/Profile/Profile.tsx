@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../contexts/authContext";
 import "./profile.css";
-import ProfileField from "./ProfileField";
+import InputField from "../../shared/InputField";
 import { User } from "../../../types/user.types";
 import { api } from "../../../api/api";
 import { updateUserSchema } from "../../../schemas/user.schema";
@@ -10,6 +10,9 @@ import { ZodError } from "zod";
 import EditFormIcons from "../EditFormIcons/EditFormIcons";
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { Paper, Typography } from "@mui/material";
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
@@ -20,12 +23,25 @@ export default function Profile() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleDateChange = (date: dayjs.Dayjs | null) => {
+    setForm((prev) => ({
+      ...prev,
+      date_of_birth: date.toISOString(),
+    }));
+  };
+
   const handleSave = async (): Promise<void> => {
     try {
-      form.date_of_birth = form.date_of_birth.toString().trim();
+      console.log(
+        "Saving profile with data:",
+        typeof form.date_of_birth,
+        form.date_of_birth
+      );
+      if (form.date_of_birth && typeof form.date_of_birth === "string") {
+        form.date_of_birth = form.date_of_birth.toString().trim();
+      }
       const validated = updateUserSchema.parse(form);
       const formToUpdate = {};
-
       for (const field of Object.keys(validated) as (keyof User)[]) {
         if (validated[field] && validated[field] !== user[field]) {
           if (field === "date_of_birth") {
@@ -53,72 +69,78 @@ export default function Profile() {
       updateUser(data.data as User);
       setIsEditing(false);
       setForm(data.data as User);
-      // toast.success("Profile updated");
+      toast.success("Profile updated");
     } catch (err) {
+      console.error("Error updating profile:", err);
       if (err instanceof ZodError) {
         toast.error("Validation error: " + err.issues[0].message);
       }
-      // toast.error("Update failed");
     }
   };
 
   return (
-    <>
-      <EditFormIcons
-        onSave={() => void handleSave()}
-        setIsEditing={setIsEditing}
-        isEditing={isEditing}
-      />
+    <Paper elevation={0} sx={{ display: "flex", flexDirection: "column" }}>
+      <Paper elevation={0} sx={{ width: "fit-content", alignSelf: "flex-end" }}>
+        <EditFormIcons
+          onSave={() => void handleSave()}
+          setIsEditing={setIsEditing}
+          isEditing={isEditing}
+        />
+      </Paper>
       <div className="profile-container">
-        <h2>User Profile</h2>
-        <ProfileField
+        <Typography variant="h2" sx={{ fontWeight: "500" }}>
+          User Profile
+        </Typography>
+        <InputField
           editing={isEditing}
           label="First Name"
           value={form.first_name || ""}
-          className="profile-field"
           name="first_name"
           onChange={handleChange}
         />
 
-        <ProfileField
+        <InputField
           editing={isEditing}
           label="Last Name"
           value={form.last_name || ""}
-          className="profile-field"
           name="last_name"
           onChange={handleChange}
         />
 
-        <ProfileField
+        <InputField
           editing={isEditing}
           label="Email"
           value={form.email || ""}
-          className="profile-field"
           name="email"
           onChange={handleChange}
         />
 
-        <ProfileField
-          editing={isEditing}
-          label="Date of Birth"
-          value={
-            form.date_of_birth && typeof form.date_of_birth === "string"
-              ? new Date(form.date_of_birth).toLocaleDateString()
-              : ""
-          }
-          className="profile-field"
-          name="date_of_birth"
-          onChange={handleChange}
-        />
-
-        {user.role === "admin" && (
-          <ProfileField
-            className="profile-field"
-            label="Role"
-            value={(user.role as string) || ""}
+        {
+          <InputField
+            editing={false}
+            label="Date of Birth"
+            value={
+              isEditing ? (
+                <DatePicker
+                  sx={{ width: "100%" }}
+                  value={dayjs(form.date_of_birth || "")}
+                  onChange={handleDateChange}
+                />
+              ) : form.date_of_birth &&
+                typeof form.date_of_birth === "string" ? (
+                new Date(form.date_of_birth).toLocaleDateString()
+              ) : (
+                ""
+              )
+            }
+            name="date_of_birth"
+            onChange={handleChange}
           />
+        }
+        {user.role === "admin" && (
+          <InputField label="Role" value={(user.role as string) || ""} />
         )}
       </div>
-    </>
+    </Paper>
   );
 }

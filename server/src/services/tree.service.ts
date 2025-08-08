@@ -16,7 +16,6 @@ export async function fetchTrees({
   user_id,
   filters,
 }: FetchTreesOptions): Promise<FetchTreesResponse> {
-  console.log("filters", filters);
   const { page, limit, sortBy, order, startDate, endDate, name } = filters;
 
   const offset = (page - 1) * limit;
@@ -48,7 +47,6 @@ export async function fetchTrees({
     ${orderByClause}
     ${limitOffsetClause}
   `;
-  console.log("query", query);
   const countQuery = `
     SELECT COUNT(*) FROM trees
     ${whereClause}
