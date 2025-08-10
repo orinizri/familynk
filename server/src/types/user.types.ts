@@ -7,6 +7,8 @@ export interface User {
   date_of_birth: string; // ISO format string
   photo_url?: string;
   role?: UserRoles;
+  email_verified?: boolean;
+  email_verified_at?: string; // ISO format string
 }
 export interface ReqUser {
   id: string;

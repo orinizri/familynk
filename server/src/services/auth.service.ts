@@ -10,6 +10,9 @@ import {
 import AppError from "../utils/AppError";
 import { User } from "@server/types/user.types";
 import { RegisterFormData } from "@server/types/auth.types";
+import { issueVerificationToken } from "./token.service";
+import { sendMail } from "@server/utils/mailer";
+import { emailVerifyTemplate } from "@server/email/templates";
 
 /**
  * Auth service for user login, registration, and token refresh.
@@ -93,16 +96,16 @@ export async function loginUserService(email: string, password: string) {
  * @return {Promise<Object>} An object containing access token, refresh token, and user details.
  * @throws {AppError} If email already registered or registration fails.
  */
-export async function registerUserService({
-  email,
-  password,
-  first_name,
-  last_name,
-  date_of_birth,
-  photo_url,
-  role,
-}: RegisterFormData) {
+export async function registerUserService(
+  data: RegisterFormData,
+  meta?: { ip?: string | null; ua?: string | null }
+) {
+  const client = await pool.connect();
+  const { email, password, first_name, last_name, date_of_birth, photo_url } =
+    data;
   try {
+    await client.query("BEGIN");
+
     const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
       email,
     ]);
@@ -111,7 +114,7 @@ export async function registerUserService({
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await pool.query(
+    const { rows } = await pool.query(
       `INSERT INTO users (email, password, first_name, last_name, date_of_birth, photo_url)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
@@ -125,31 +128,49 @@ export async function registerUserService({
       ]
     );
 
-    const user = result.rows[0] as User;
+    const user = rows[0] as User;
 
-    const payload = {
-      id: user.id,
-      email,
-      role,
-    };
+    // const payload = {
+    //   id: user.id,
+    //   email,
+    //   role,
+    // };
 
-    const accessToken = jwt.sign(payload, JWT_SECRET_ACCESS, {
-      expiresIn: JWT_EXPIRES_IN_SHORT,
-    } as SignOptions);
-    const refreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, {
-      expiresIn: JWT_EXPIRES_IN_LONG,
-    } as SignOptions);
+    // const accessToken = jwt.sign(payload, JWT_SECRET_ACCESS, {
+    //   expiresIn: JWT_EXPIRES_IN_SHORT,
+    // } as SignOptions);
+    // const refreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, {
+    //   expiresIn: JWT_EXPIRES_IN_LONG,
+    // } as SignOptions);
+
+    const { link } = await issueVerificationToken({
+      userId: user.id,
+      purpose: "email_verify",
+      ip: meta?.ip ?? null,
+      ua: meta?.ua ?? null,
+      tx: client,
+    });
+    console.log("Verification link:", link);
+
+    await sendMail({
+      to: email,
+      subject: "Verify your email",
+      html: emailVerifyTemplate(link),
+    });
+    console.log("sent verification email to:", email);
+
+    await client.query("COMMIT");
 
     return {
-      accessToken,
-      refreshToken,
+      message: "User registered successfully. Please verify your email.",
       user: {
         id: user.id,
-        email,
-        first_name,
-        last_name,
-        date_of_birth,
-        photo_url,
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        date_of_birth: date_of_birth,
+        photo_url: photo_url,
+        email_verified: false, // Initially false until verified
       },
     };
   } catch (error) {
