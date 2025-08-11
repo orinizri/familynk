@@ -35,8 +35,10 @@ export default function InputField({
               onChange={onChange}
               fullWidth
             />
-          ) : (
+          ) : typeof value === "string" && value.trim() !== "" ? (
             <Typography variant="body1">{value || "—"}</Typography>
+          ) : (
+            value
           )}
         </Stack>
       </CardContent>

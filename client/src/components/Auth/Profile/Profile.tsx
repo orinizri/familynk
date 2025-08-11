@@ -18,7 +18,6 @@ export default function Profile() {
   const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState<Partial<User>>(user);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -32,11 +31,6 @@ export default function Profile() {
 
   const handleSave = async (): Promise<void> => {
     try {
-      console.log(
-        "Saving profile with data:",
-        typeof form.date_of_birth,
-        form.date_of_birth
-      );
       if (form.date_of_birth && typeof form.date_of_birth === "string") {
         form.date_of_birth = form.date_of_birth.toString().trim();
       }
@@ -87,7 +81,7 @@ export default function Profile() {
           isEditing={isEditing}
         />
       </Paper>
-      <div className="profile-container">
+      <Paper className="profile-container">
         <Typography variant="h2" sx={{ fontWeight: "500" }}>
           User Profile
         </Typography>
@@ -137,10 +131,20 @@ export default function Profile() {
             onChange={handleChange}
           />
         }
+
+        {!isEditing && (
+          <InputField
+            editing={false}
+            label="Email Verified"
+            value={user.email_verified ? "Yes" : "No"}
+            name="email_verified"
+            onChange={handleChange}
+          />
+        )}
         {user.role === "admin" && (
           <InputField label="Role" value={(user.role as string) || ""} />
         )}
-      </div>
+      </Paper>
     </Paper>
   );
 }

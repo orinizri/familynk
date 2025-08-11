@@ -35,7 +35,7 @@ export async function loginUserService(email: string, password: string) {
       email,
     ]);
     const user = result.rows[0] as User;
-
+    console.log("User found:", user);
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new AppError("Login Failed", 404);
     }
@@ -49,6 +49,7 @@ export async function loginUserService(email: string, password: string) {
       email: user.email,
       role: user.role || "user",
     };
+
     if (!JWT_SECRET_ACCESS) {
       throw new Error("JWT_SECRET_ACCESS is not defined");
     }
@@ -71,6 +72,7 @@ export async function loginUserService(email: string, password: string) {
         date_of_birth: user.date_of_birth,
         photo_url: user.photo_url,
         role: user.role || "user",
+        email_verified: user.email_verified || false, 
       },
     };
   } catch (error) {

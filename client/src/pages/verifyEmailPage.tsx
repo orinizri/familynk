@@ -24,8 +24,8 @@ export default function VerifyEmailPage() {
   const token = search.get("token") ?? "";
   const [state, setState] = useState<State>({ kind: "idle" });
   const navigate = useNavigate();
-  const { verifyEmail } = useAuth();
-
+  const { verifyEmail, user } = useAuth();
+  console.log("user", user)
   useEffect(() => {
     if (!token) {
       setState({ kind: "error", message: "Missing verification token." });
@@ -60,7 +60,7 @@ export default function VerifyEmailPage() {
   // Actions shared across states
   const goHome = () => navigate("/");
   const goLogin = () => navigate("/login");
-  const goResend = () => navigate("/auth/resend-verification"); // if you add this route
+  const goResend = () => navigate("/resend-verification"); // if you add this route
 
   return (
     <Box
