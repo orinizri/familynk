@@ -1,10 +1,9 @@
 import { apiStatus } from "../constants/apiStatus";
-import { statusesType } from "@client/types/api.types";
+import { apiStatesType, statusesType } from "@client/types/api.types";
 
 export const capitalize = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1);
 
-export type apiStatesType = keyof typeof apiStatus;
 
 export function prepareStatuses(currentStatus: apiStatesType): statusesType {
   const statuses = {};

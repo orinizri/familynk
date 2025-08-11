@@ -12,43 +12,47 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { ResultCard } from "../components/Feedback/ResultCard";
 import { useAuth } from "../contexts/authContext";
+import { apiStatus } from "@client/constants/apiStatus";
+import { apiStatusFieldType } from "@client/types/api.types";
 
-type State =
-  | { kind: "idle" }
-  | { kind: "loading" }
-  | { kind: "success", message: string }
-  | { kind: "error"; message: string };
+type State = {
+  kind: apiStatusFieldType;
+  message?: string;
+};
 
 export default function VerifyEmailPage() {
   const [search] = useSearchParams();
   const token = search.get("token") ?? "";
-  const [state, setState] = useState<State>({ kind: "idle" });
+  const [state, setState] = useState<State>({ kind: apiStatus.IDLE });
   const navigate = useNavigate();
   const { verifyEmail, user } = useAuth();
-  console.log("user", user)
+  
+  
   useEffect(() => {
     if (!token) {
-      setState({ kind: "error", message: "Missing verification token." });
+      setState({
+        kind: apiStatus.ERROR,
+        message: "Missing verification token.",
+      });
       return;
     }
 
     const ac = new AbortController();
     void (async () => {
       try {
-        setState({ kind: "loading" });
+        setState({ kind: apiStatus.LOADING });
         const { success, data, error } = await verifyEmail(token, ac.signal);
         console.log("verify email page", success, data, error);
         if (success) {
-          setState({ kind: "success", message: data });
+          setState({ kind: apiStatus.SUCCESS, message: data });
         } else {
           // Map server statuses to friendly messages
-          console.log("****** Error:", error);
-          setState({ kind: "error", message: error });
+          setState({ kind: apiStatus.ERROR, message: error });
         }
       } catch (error) {
         console.error("!@#", error);
         setState({
-          kind: "error",
+          kind: apiStatus.ERROR,
           message: "Network error. Please try again.",
         });
       }
@@ -66,7 +70,7 @@ export default function VerifyEmailPage() {
     <Box
       sx={{ minHeight: "100dvh", display: "grid", placeItems: "center", px: 2 }}
     >
-      {state.kind === "loading" && (
+      {state.kind === apiStatus.LOADING && (
         <ResultCard title="Verifying your email…" subtitle="One moment please">
           <CircularProgress />
           <Typography variant="body2" color="text.secondary">
@@ -75,7 +79,7 @@ export default function VerifyEmailPage() {
         </ResultCard>
       )}
 
-      {state.kind === "success" && (
+      {state.kind === apiStatus.SUCCESS && (
         <ResultCard
           title="Your email is verified!"
           subtitle="You can now sign in."
@@ -97,7 +101,7 @@ export default function VerifyEmailPage() {
         </ResultCard>
       )}
 
-      {state.kind === "error" && (
+      {state.kind === apiStatus.ERROR && (
         <ResultCard
           title="Verification problem"
           subtitle="We couldn’t verify your email"
