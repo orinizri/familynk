@@ -2,7 +2,11 @@
 import { PoolClient } from "pg";
 import pool from "../db/db";
 import { genRandomToken, sha256Hex } from "../utils/crypto";
-import { CRYPTO_RANDOM_BITS, EMAIL_VERIFY_TTL_HOURS, VERIFY_BASE_URL } from "../config/env";
+import {
+  CRYPTO_RANDOM_BITS,
+  EMAIL_VERIFY_TTL_HOURS,
+  VERIFY_BASE_URL,
+} from "../config/env";
 
 type Purpose = "email_verify" | "password_reset" | "email_change";
 
@@ -13,7 +17,6 @@ export async function issueVerificationToken(opts: {
   ua?: string | null;
   tx?: PoolClient; // optional transaction
 }) {
-    console.log("Issuing verification token for user:", opts.userId, "for purpose:", opts.purpose);
   const raw = genRandomToken(CRYPTO_RANDOM_BITS);
   const hash = sha256Hex(raw);
 
@@ -36,7 +39,7 @@ export async function issueVerificationToken(opts: {
     );
 
     // This is the link you email (raw token in query string)
-    const link = `${VERIFY_BASE_URL}/auth/verify-email?token=${raw}`;
+    const link = `${VERIFY_BASE_URL}/verify-email?token=${raw}`;
     return { rawToken: raw, link };
   } finally {
     release();

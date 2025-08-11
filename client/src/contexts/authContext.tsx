@@ -30,6 +30,10 @@ type AuthContextType = {
   logout: () => void;
   register: (form: RegisterFormData) => Promise<void>;
   updateUser: (form: Partial<User>) => void;
+  verifyEmail: (
+    token: string,
+    signal: AbortSignal
+  ) => Promise<ApiResponse<null>>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -96,6 +100,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const verifyEmail = useCallback(
+    async (token: string, signal: AbortSignal): Promise<ApiResponse<null>> => {
+      console.log("Verifying email with token:", token);
+      const res = await api.post("/auth/verify-email", { token }, { signal });
+      const { data } = res as AxiosResponse<ApiResponse<null>>;
+      console.log("Verify email response auth context:", data);
+      return data;
+    },
+    []
+  );
+
   useEffect(() => {
     void (async () => {
       await refreshToken();
@@ -142,8 +157,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       register,
+      verifyEmail,
     }),
-    [user, loading, login, logout, register, updateUser]
+    [user, loading, login, logout, register, updateUser, verifyEmail]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

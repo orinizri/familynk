@@ -1,5 +1,5 @@
 // src/utils/crypto.ts
-import { CRYPTO_HASH_TYPE, CRYPTO_RANDOM_BITS } from "@server/config/env";
+import { CRYPTO_HASH_TYPE, CRYPTO_RANDOM_BITS } from "../config/env";
 import crypto from "crypto";
 
 export function genRandomToken(bytes = CRYPTO_RANDOM_BITS): string {

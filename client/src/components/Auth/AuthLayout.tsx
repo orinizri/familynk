@@ -14,9 +14,9 @@ interface AuthLayoutProps {
   subtitle?: string;
   children: React.ReactNode; // your form fields/buttons
   footer?: React.ReactNode; // links or extra actions (e.g., “Have an account? Login”)
-  maxWidth?: number; // px; default 480
-  center?: boolean; // center the whole page; default true
-  dense?: boolean; // slightly tighter spacing; default false
+  maxWidth?: number; // px; default 700
+  center?: boolean;
+  dense?: boolean;
 }
 
 export function AuthLayout({

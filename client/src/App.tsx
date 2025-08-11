@@ -12,6 +12,7 @@ const Lazy = {
   RegisterPage: lazy(() => import("./pages/RegisterPage")),
   Unauthorized: lazy(() => import("./pages/Unauthorized")),
   TreesDashboard: lazy(() => import("./pages/trees/TreeDashboard")),
+  verifyEmailPage: lazy(() => import("./pages/verifyEmailPage")),
 };
 
 // Main App component with routing
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/unauthorized" element={<Lazy.Unauthorized />} />
             <Route path="/login" element={<Lazy.LoginPage />} />
             <Route path="/register" element={<Lazy.RegisterPage />} />
+            <Route path="/verify-email" element={<Lazy.verifyEmailPage />} />
 
             {/* Protected Routes */}
             <Route

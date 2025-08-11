@@ -5,12 +5,10 @@ import {
   refreshTokenService,
 } from "../services/auth.service";
 import { sendSuccess, sendError } from "../utils/apiResponse";
-import { User } from "@server/types/user.types";
-import { LoginFormData, RefreshRequestBody } from "@server/types/auth.types";
-import { CLIENT_URL } from "@server/config/env";
-import { z } from "zod";
-import { verifyEmailToken } from "@server/services/token.service";
-import { TokenSchema } from "@server/schemas/token.schema";
+import { User } from "../types/user.types";
+import { LoginFormData, RefreshRequestBody } from "../types/auth.types";
+import { verifyEmailToken } from "../services/token.service";
+import { TokenSchema } from "../schemas/token.schema";
 
 // LOG IN
 export const loginController: RequestHandler = async function (
@@ -91,24 +89,26 @@ export const refreshTokenController: RequestHandler = async function (
 // VERIFY EMAIL
 export const verifyEmailController: RequestHandler = async (req, res, next) => {
   try {
-    console.log("verifyEmailController called with query:", req.query);
-    const parse = TokenSchema.safeParse(req.query);
+    console.log("verifyEmailController called with query:", req.body);
+    const parse = TokenSchema.safeParse(req.body);
     if (!parse.success) {
       sendError(res, parse.error.flatten().toString(), 400);
+      return;
     }
-
-    const { token } = parse.data;
-    const result = await verifyEmailToken(token);
+    const result = await verifyEmailToken(parse.data?.token);
     console.log("verifyEmailToken result:", result);
 
     if (!result.ok) {
       switch (result.reason) {
         case "expired":
           sendError(res, "Verification link expired", 400);
+          return;
         case "used":
-          sendError(res, "Verification link used", 400);
+          sendSuccess(res, "Account already verified");
+          return;
         default:
           sendError(res, "Invalid verification link", 400);
+          return
       }
     }
 

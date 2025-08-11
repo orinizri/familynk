@@ -8,11 +8,11 @@ import {
   JWT_EXPIRES_IN_LONG,
 } from "../config/env";
 import AppError from "../utils/AppError";
-import { User } from "@server/types/user.types";
-import { RegisterFormData } from "@server/types/auth.types";
+import { User } from "../types/user.types";
+import { RegisterFormData } from "../types/auth.types";
 import { issueVerificationToken } from "./token.service";
-import { sendMail } from "@server/utils/mailer";
-import { emailVerifyTemplate } from "@server/email/templates";
+import { sendMail } from "../utils/mailer";
+import { emailVerifyTemplate } from "../email/templates";
 
 /**
  * Auth service for user login, registration, and token refresh.
