@@ -12,8 +12,8 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { ResultCard } from "../components/Feedback/ResultCard";
 import { useAuth } from "../contexts/authContext";
-import { apiStatus } from "@client/constants/apiStatus";
-import { apiStatusFieldType } from "@client/types/api.types";
+import { apiStatus } from "../constants/apiStatus";
+import { apiStatusFieldType } from "../types/api.types";
 
 type State = {
   kind: apiStatusFieldType;

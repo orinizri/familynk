@@ -1,4 +1,4 @@
-import { apiStatus } from "@client/constants/apiStatus";
+import { apiStatus } from "../constants/apiStatus";
 
 export type statusesType = {
   isIdle: boolean;

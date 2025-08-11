@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { apiStatus } from "../../constants/apiStatus";
-import { apiStatesType, prepareStatuses } from "../../utils/apiUtils";
-import { statusesType } from "@client/types/api.types";
+import { prepareStatuses } from "../../utils/apiUtils";
+import { apiStatesType, statusesType } from "../../types/api.types";
 
 function useApiStatus(currentStatus = apiStatus.IDLE): {
   status: apiStatesType;

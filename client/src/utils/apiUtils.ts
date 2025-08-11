@@ -1,5 +1,5 @@
 import { apiStatus } from "../constants/apiStatus";
-import { apiStatesType, statusesType } from "@client/types/api.types";
+import { apiStatesType, statusesType } from "../types/api.types";
 
 export const capitalize = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1);
