@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     const { data } = res.data as AxiosResponse<AuthResponse>;
     const { accessToken, refreshToken, user } = data;
-    if (!accessToken && !refreshToken) {
+    if (accessToken && refreshToken) {
       setAccessToken(accessToken);
       localStorage.setItem("access_token", refreshToken);
     }
@@ -97,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { accessToken, user } = data.data;
       setAccessToken(accessToken);
       localStorage.setItem("access_token", accessToken);
+      console.log("set localStorage", localStorage.getItem("access_token"));
       setUser(user);
     } catch (err) {
       console.error(err);

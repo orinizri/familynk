@@ -127,9 +127,9 @@ export async function registerUserService(
     const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
       email,
     ]);
-    if (existing.rows.length > 0)
-      throw new AppError("Email already registered", 409);
-
+    if (existing.rows.length > 0) {
+      return { message: "Email already registered" };
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { rows } = await pool.query(
