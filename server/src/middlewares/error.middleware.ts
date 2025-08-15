@@ -1,7 +1,7 @@
-import { sendError } from "@server/utils/apiResponse";
-import AppError from "@server/utils/AppError";
-import { isAppError } from "@server/utils/isAppError";
-import { logger } from "@server/utils/logger";
+import { sendError } from "../utils/apiResponse";
+import AppError from "../utils/AppError";
+import { isAppError } from "../utils/isAppError";
+import { logger } from "../utils/logger";
 import { Request, Response, ErrorRequestHandler } from "express";
 
 export const errorMiddleware: ErrorRequestHandler = (

@@ -7,7 +7,7 @@ import {
   CRYPTO_RANDOM_BITS,
   EMAIL_VERIFY_TTL_HOURS,
 } from "../config/env";
-import { sendVerificationEmail } from "@server/utils/mailer";
+import { sendVerificationEmail } from "../utils/mailer";
 
 type Purpose = "email_verify" | "password_reset" | "email_change";
 type ResendMeta = { ip?: string | null; ua?: string | null };
