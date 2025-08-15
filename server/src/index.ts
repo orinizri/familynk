@@ -18,6 +18,7 @@ import { Server } from "http";
 import treeRouter from "./routes/tree.router";
 import userRouter from "./routes/user.router";
 import errorHandler from "./middlewares/errorHandler";
+import emailRouter from "./routes/email.router";
 
 try {
   const app = express();
@@ -71,6 +72,8 @@ try {
   app.use("/healthz", healthRouter);
 
   app.use("/auth", authRouter);
+  
+  app.use("/email", emailRouter);
 
   app.use("/users", userRouter);
 

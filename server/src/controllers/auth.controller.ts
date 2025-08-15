@@ -7,10 +7,8 @@ import {
 import { sendSuccess, sendError } from "../utils/apiResponse";
 import { User } from "../types/user.types";
 import { LoginFormData, RefreshRequestBody } from "../types/auth.types";
-import { verifyEmailToken } from "../services/token.service";
-import { TokenSchema } from "../schemas/token.schema";
 
-// LOG IN
+// GET /login
 export const loginController: RequestHandler = async function (
   req,
   res,
@@ -82,39 +80,6 @@ export const refreshTokenController: RequestHandler = async function (
     const data = await refreshTokenService(refreshToken);
     sendSuccess(res, { ...data }, 201);
   } catch (error) {
-    next(error);
-  }
-};
-
-// VERIFY EMAIL
-export const verifyEmailController: RequestHandler = async (req, res, next) => {
-  try {
-    console.log("verifyEmailController called with query:", req.body);
-    const parse = TokenSchema.safeParse(req.body);
-    if (!parse.success) {
-      sendError(res, parse.error.flatten().toString(), 400);
-      return;
-    }
-    const result = await verifyEmailToken(parse.data?.token);
-    console.log("verifyEmailToken result:", result);
-
-    if (!result.ok) {
-      switch (result.reason) {
-        case "expired":
-          sendError(res, "Verification link expired", 400);
-          return;
-        case "used":
-          sendSuccess(res, "Account already verified");
-          return;
-        default:
-          sendError(res, "Invalid verification link", 400);
-          return
-      }
-    }
-
-    sendSuccess(res, { message: "Email verified successfully" }, 200);
-  } catch (error) {
-    console.error("Error in verifyEmailHandler:", error);
     next(error);
   }
 };

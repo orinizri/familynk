@@ -34,6 +34,10 @@ type AuthContextType = {
     token: string,
     signal: AbortSignal
   ) => Promise<ApiResponse<null>>;
+  resendVerificationEmail: (
+    email: string,
+    signal: AbortSignal
+  ) => Promise<ApiResponse<null>>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,22 +52,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error("No response from server");
     }
     const { data } = res.data as AxiosResponse<AuthResponse>;
-    console.log("Login response:", data);
-
     const { accessToken, refreshToken, user } = data;
-    setAccessToken(accessToken);
-    sessionStorage.setItem("access_token", refreshToken);
+    if (!accessToken && !refreshToken) {
+      setAccessToken(accessToken);
+      localStorage.setItem("access_token", refreshToken);
+    }
     setUser(user);
   }, []);
 
   const logout = useCallback(() => {
     setAccessToken(null);
-    sessionStorage.removeItem("access_token");
+    localStorage.removeItem("access_token");
     setUser(null);
   }, []);
 
   const refreshToken = useCallback(async () => {
-    const stored = sessionStorage.getItem("access_token");
+    const stored = localStorage.getItem("access_token");
     if (!stored) return;
 
     try {
@@ -73,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = res as AxiosResponse<ApiResponse>;
       const { accessToken, refreshToken, user } = data.data as AuthResponse;
       setAccessToken(accessToken);
-      sessionStorage.setItem("access_token", refreshToken);
+      localStorage.setItem("access_token", refreshToken);
       setUser(user);
     } catch (error) {
       console.error("Refresh failed:", error);
@@ -92,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Register response:", data);
       const { accessToken, user } = data.data;
       setAccessToken(accessToken);
-      sessionStorage.setItem("access_token", accessToken);
+      localStorage.setItem("access_token", accessToken);
       setUser(user);
     } catch (err) {
       console.error(err);
@@ -103,9 +107,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const verifyEmail = useCallback(
     async (token: string, signal: AbortSignal): Promise<ApiResponse<null>> => {
       console.log("Verifying email with token:", token);
-      const res = await api.post("/auth/verify-email", { token }, { signal });
+      const res = await api.post("/email/verify-email", { token }, { signal });
       const { data } = res as AxiosResponse<ApiResponse<null>>;
       console.log("Verify email response auth context:", data);
+      return data;
+    },
+    []
+  );
+
+  const resendVerificationEmail = useCallback(
+    async (email: string, signal: AbortSignal): Promise<ApiResponse<null>> => {
+      console.log("Verifying email with token:", email);
+      const res = await api.post(
+        "/email/resend-token-by-email",
+        { email },
+        { signal }
+      );
+      const { data } = res as AxiosResponse<ApiResponse<null>>;
+      console.log("resendVerificationEmail:", data);
       return data;
     },
     []
@@ -158,8 +177,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       register,
       verifyEmail,
+      resendVerificationEmail,
     }),
-    [user, loading, login, logout, register, updateUser, verifyEmail]
+    [
+      user,
+      loading,
+      login,
+      logout,
+      register,
+      updateUser,
+      verifyEmail,
+      resendVerificationEmail,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

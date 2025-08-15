@@ -27,6 +27,7 @@ export default function Navbar() {
 
   const navLinks = () => {
     if (!user) return guestLinks;
+    if (user && !user.email_verified) return [];
     const links = [...userLinks];
     if (user.role === "admin") links.push(...adminLinks);
     return links;

@@ -58,7 +58,9 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    if (user) navigate("/");
+    if (user && user.email_verified) navigate("/");
+    if (user && !user.email_verified) navigate("/verify-email")
+    
   }, [user, navigate]);
 
   return (

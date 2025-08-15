@@ -1,4 +1,3 @@
-// src/utils/reqMeta.ts
 import { Request } from "express";
 
 export function getClientIp(req: Request): string | null {
@@ -8,5 +7,5 @@ export function getClientIp(req: Request): string | null {
 }
 
 export function getUserAgent(req: Request): string | null {
-  return (req.headers["user-agent"] as string) || null;
+  return req.headers["user-agent"] || null;
 }

@@ -16,6 +16,7 @@ export default function RoleBasedWrapper({
 
   if (loading) return <DelayedFallback />;
   if (!user) return <Navigate to="/login" replace />;
+  if (user && !user.email_verified) return <Navigate to="/verify-email" />;
 
   const userRole =
     typeof user?.role === "string" ? user.role.toLowerCase() : "user";

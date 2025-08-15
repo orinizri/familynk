@@ -3,10 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Server configuration
-export const PORT: string = process.env.PORT || "8000";
-export const NODE_ENV: string = process.env.NODE_ENV || "development";
-export const CLIENT_URL: string =
-  process.env.CLIENT_URL || "http://localhost:3000";
+export const PORT: string = process.env.PORT;
+export const NODE_ENV: string = process.env.NODE_ENV;
+export const CLIENT_URL: string = process.env.CLIENT_URL;
 
 // Database configuration
 export const DATABASE_URL: string = process.env.DATABASE_URL;
@@ -33,4 +32,6 @@ export const MAIL_FROM: string = process.env.MAIL_FROM;
 export const EMAIL_VERIFY_TTL_HOURS: number =
   parseInt(process.env.EMAIL_VERIFY_TTL_HOURS) || 24;
 export const VERIFY_BASE_URL: string =
-  process.env.VERIFY_BASE_URL || "http://localhost:8000";
+  NODE_ENV === "production"
+    ? process.env.VERIFY_PROD_BASE_URL
+    : process.env.VERIFY_DEV_BASE_URL;

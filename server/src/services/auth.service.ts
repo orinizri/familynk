@@ -10,7 +10,7 @@ import {
 import AppError from "../utils/AppError";
 import { User } from "../types/user.types";
 import { RegisterFormData } from "../types/auth.types";
-import { issueVerificationToken } from "./token.service";
+import { issueVerificationToken } from "./email.service";
 import { sendMail } from "../utils/mailer";
 import { emailVerifyTemplate } from "../email/templates";
 
@@ -44,6 +44,22 @@ export async function loginUserService(email: string, password: string) {
       user.id,
     ]);
 
+    // If user not verified, return only user
+    if (user && !user.email_verified) {
+      return {
+        user: {
+          id: user.id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          date_of_birth: user.date_of_birth,
+          photo_url: user.photo_url,
+          role: user.role || "user",
+          email_verified: user.email_verified || false,
+        },
+      };
+    }
+
     const payload = {
       id: user.id,
       email: user.email,
@@ -72,7 +88,7 @@ export async function loginUserService(email: string, password: string) {
         date_of_birth: user.date_of_birth,
         photo_url: user.photo_url,
         role: user.role || "user",
-        email_verified: user.email_verified || false, 
+        email_verified: user.email_verified || false,
       },
     };
   } catch (error) {

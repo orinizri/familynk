@@ -34,8 +34,6 @@ export function AuthLayout({
         minHeight: center ? "100dvh" : undefined,
         display: center ? "grid" : "block",
         placeItems: center ? "center" : undefined,
-        px: 2,
-        py: center ? 0 : 6,
       }}
     >
       <Card
@@ -45,8 +43,6 @@ export function AuthLayout({
           maxWidth,
           borderRadius: 5,
           boxShadow: { md: 3 },
-          paddingX: 10,
-          paddingY: 3
         }}
       >
         <CardHeader

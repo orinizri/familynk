@@ -16,7 +16,7 @@ const errorHandler: ErrorRequestHandler = (
     res.status(400).json({
       success: false,
       message: "Validation Error",
-      errors: err.flatten().fieldErrors, // ✅ Friendly shape
+      errors: err.flatten().fieldErrors,
     });
     return;
   }

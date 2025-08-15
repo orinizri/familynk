@@ -3,7 +3,7 @@ import { api } from "../api/api";
 import { ZodError } from "zod";
 
 export async function refreshAccessToken(): Promise<string> {
-  const refreshToken = sessionStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("access_token");
   if (!refreshToken) throw new Error("No refresh token");
 
   const res = await api.post("/auth/refresh", {

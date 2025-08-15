@@ -127,7 +127,6 @@ export default function RegisterForm() {
           slotProps={{
             textField: {
               fullWidth: true,
-              required: true,
               error: Boolean(errors.date_of_birth),
               helperText: errors.date_of_birth || " ",
             },

@@ -1,7 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Canceler } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL,
+  baseURL:
+    process.env.REACT_APP_NODE_ENV === "production"
+      ? process.env.REACT_APP_API_PROD_BASE_URL
+      : process.env.REACT_APP_API_DEV_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -64,8 +67,9 @@ const apiFactory = (axiosInstance: AxiosInstance) => ({
     axiosInstance.get(url, config)
   ),
   post: withAbort(
-    (url: string, data: unknown, config: AxiosRequestConfig = {}) =>{
-      return axiosInstance.post(url, data, config)}
+    (url: string, data: unknown, config: AxiosRequestConfig = {}) => {
+      return axiosInstance.post(url, data, config);
+    }
   ),
   put: withAbort(
     (url: string, data: unknown, config: AxiosRequestConfig = {}) =>
@@ -78,7 +82,7 @@ const apiFactory = (axiosInstance: AxiosInstance) => ({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

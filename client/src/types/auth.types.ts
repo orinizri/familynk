@@ -21,11 +21,12 @@ export interface UserOutput {
   last_name: string;
   date_of_birth: string;
   photo_url?: string;
+  email_verified: boolean;
 }
 
 export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
+  accessToken?: string;
+  refreshToken?: string;
   user: User;
 }
 
