@@ -244,6 +244,7 @@ export async function refreshTokenService(refreshToken: string) {
         date_of_birth: user.date_of_birth,
         photo_url: user.photo_url,
         role: user.role || "user",
+        email_verified: user.email_verified,
       },
     };
   } catch (error) {

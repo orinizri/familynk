@@ -11,7 +11,7 @@ import EditFormIcons from "../EditFormIcons/EditFormIcons";
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import dayjs from "../../../utils/dayjs";
 import { Paper, Typography } from "@mui/material";
 
 export default function Profile() {
@@ -21,11 +21,11 @@ export default function Profile() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
   const handleDateChange = (date: dayjs.Dayjs | null) => {
+    const newDate = date.toISOString();
     setForm((prev) => ({
       ...prev,
-      date_of_birth: date.toISOString(),
+      date_of_birth: newDate,
     }));
   };
 
@@ -122,7 +122,7 @@ export default function Profile() {
                 />
               ) : form.date_of_birth &&
                 typeof form.date_of_birth === "string" ? (
-                new Date(form.date_of_birth).toLocaleDateString()
+                dayjs.utc(form.date_of_birth).tz('Asia/Jerusalem').format('DD.MM.YY')
               ) : (
                 ""
               )
