@@ -50,7 +50,7 @@ export function withAbort<R>(fn: RequestFn<R>) {
     try {
       return await fn(...args, restConfig);
     } catch (err) {
-      console.log("Error in request:", err);
+      console.error("Error in request:", err);
       if (axios.isCancel(err)) {
         const tagged = Object.assign(new Error("Request aborted"), err, {
           abort: true,

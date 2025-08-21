@@ -13,6 +13,7 @@ import { RegisterFormData } from "../types/auth.types";
 import { issueVerificationToken } from "./email.service";
 import { sendMail } from "../utils/mailer";
 import { emailVerifyTemplate } from "../email/templates";
+import { Person } from "@server/types/person.types";
 
 /**
  * Auth service for user login, registration, and token refresh.
@@ -20,22 +21,12 @@ import { emailVerifyTemplate } from "../email/templates";
  *
  * @module authService
  */
-
-/**
- * Logs in a user by validating credentials and generating JWT tokens.
- * @async
- * @param {string} email - User's email address.
- * @param {string} password - User's password.
- * @return {Promise<Object>} An object containing access token, refresh token, and user details.
- * @throws {AppError} If user not found or password does not match.
- */
 export async function loginUserService(email: string, password: string) {
   try {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
     const user = result.rows[0] as User;
-    console.log("User found:", user);
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new AppError("Login Failed", 404);
     }
@@ -100,20 +91,6 @@ export async function loginUserService(email: string, password: string) {
   }
 }
 
-/**
- * Registers a new user and generates JWT tokens.
- * @async
- * @param {Object} userData - User registration data.
- * @param {string} userData.email - User's email address.
- * @param {string} userData.password - User's password.
- * @param {string} userData.first_name - User's first name.
- * @param {string} userData.last_name - User's last name.
- * @param {string} [userData.date_of_birth] - User's date of birth (optional).
- * @param {string} [userData.photo_url] - URL of user's photo (optional).
- * @param {string} [userData.role] - User's role (optional, defaults to "user").
- * @return {Promise<Object>} An object containing access token, refresh token, and user details.
- * @throws {AppError} If email already registered or registration fails.
- */
 export async function registerUserService(
   data: RegisterFormData,
   meta?: { ip?: string | null; ua?: string | null }
@@ -121,18 +98,23 @@ export async function registerUserService(
   const client = await pool.connect();
   const { email, password, first_name, last_name, date_of_birth, photo_url } =
     data;
+
   try {
     await client.query("BEGIN");
 
-    const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
-      email,
-    ]);
+    // Check existing
+    const existing = await client.query(
+      "SELECT id FROM users WHERE email = $1",
+      [email]
+    );
     if (existing.rows.length > 0) {
       return { message: "Email already registered" };
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { rows } = await pool.query(
+    // Step 1: Insert user
+    const { rows: userRows } = await client.query(
       `INSERT INTO users (email, password, first_name, last_name, date_of_birth, photo_url)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
@@ -145,22 +127,32 @@ export async function registerUserService(
         photo_url || null,
       ]
     );
+    const user = userRows[0] as Partial<User>;
 
-    const user = rows[0] as User;
+    // Step 2: Insert person for this user
+    const { rows: personRows } = await client.query(
+      `INSERT INTO persons (
+        first_name, last_name, date_of_birth_from, created_by, user_id
+      )
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id`,
+      [
+        first_name,
+        last_name,
+        date_of_birth || null, // from
+        user.id,
+        user.id,
+      ]
+    );
+    const person = personRows[0] as Partial<Person>;
 
-    // const payload = {
-    //   id: user.id,
-    //   email,
-    //   role,
-    // };
+    // Step 3: Update user with person_id
+    await client.query(`UPDATE users SET person_id = $1 WHERE id = $2`, [
+      person.id,
+      user.id,
+    ]);
 
-    // const accessToken = jwt.sign(payload, JWT_SECRET_ACCESS, {
-    //   expiresIn: JWT_EXPIRES_IN_SHORT,
-    // } as SignOptions);
-    // const refreshToken = jwt.sign(payload, JWT_SECRET_REFRESH, {
-    //   expiresIn: JWT_EXPIRES_IN_LONG,
-    // } as SignOptions);
-
+    // Step 4: Issue verification token
     const { link } = await issueVerificationToken({
       userId: user.id,
       purpose: "email_verify",
@@ -168,14 +160,12 @@ export async function registerUserService(
       ua: meta?.ua ?? null,
       tx: client,
     });
-    console.log("Verification link:", link);
 
     await sendMail({
       to: email,
       subject: "Verify your email",
       html: emailVerifyTemplate(link),
     });
-    console.log("sent verification email to:", email);
 
     await client.query("COMMIT");
 
@@ -183,21 +173,21 @@ export async function registerUserService(
       message: "User registered successfully. Please verify your email.",
       user: {
         id: user.id,
-        email: email,
-        first_name: first_name,
-        last_name: last_name,
-        date_of_birth: date_of_birth,
-        photo_url: photo_url,
-        email_verified: false, // Initially false until verified
+        email,
+        first_name,
+        last_name,
+        date_of_birth,
+        photo_url,
+        email_verified: false,
+        person_id: person.id,
       },
     };
   } catch (error) {
-    console.error("Error in refreshTokenService:", error);
-    if (!(error instanceof AppError)) {
-      console.error("Unexpected error in register user:", error);
-      throw new AppError("Failed to register user", 500);
-    }
-    throw error;
+    await client.query("ROLLBACK");
+    console.error("Unexpected error in register user:", error);
+    throw new AppError("Failed to register user", 500);
+  } finally {
+    client.release();
   }
 }
 
@@ -231,7 +221,7 @@ export async function refreshTokenService(refreshToken: string) {
     } as SignOptions);
     const newRefreshToken = jwt.sign(newPayload, JWT_SECRET_REFRESH, {
       expiresIn: JWT_EXPIRES_IN_SHORT,
-    } as SignOptions); // 🆕 rotated
+    } as SignOptions);
 
     return {
       accessToken: newAccessToken,

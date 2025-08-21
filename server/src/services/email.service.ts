@@ -119,7 +119,6 @@ async function countRecentVerificationSends(
         AND created_at > now() - ($2 || ' hours')::interval`,
     [userId, String(hours)]
   )) as { rows: { cnt: number }[] };
-  console.log("countRecentVerificationSends rows:", rows);
   return rows[0].cnt;
 }
 

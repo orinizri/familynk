@@ -6,8 +6,17 @@ import TableFilters from "./TableFilters";
 import Spinner from "../Spinner/Spinner";
 import PaginationControls from "./PaginationControls/PaginationControls";
 import LimitSelector from "./LimitSelector/LimitSelector";
-import { SortOrder } from "@client/types/pagination.types";
-import { Box, Paper, TableContainer, Table, TableBody } from "@mui/material";
+import { SortOrder } from "../../types/pagination.types";
+import {
+  Box,
+  Paper,
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@mui/material";
+import { treeColumns } from "../../utils/constants";
 
 export default function TreesTable() {
   const {
@@ -70,9 +79,24 @@ export default function TreesTable() {
                   onSort={handleSort}
                 />
                 <TableBody>
-                  {data.map((tree: UserRowData) => (
-                    <TreesTableRow key={tree.id} tree={tree} />
-                  ))}
+                  {data.length ? (
+                    data.map((tree: UserRowData) => (
+                      <TreesTableRow key={tree.id} tree={tree} />
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={treeColumns.length}
+                        sx={{
+                          textAlign: "center",
+                          fontSize: "1rem",
+                          color: "#666",
+                        }}
+                      >
+                        There are no trees to display.
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

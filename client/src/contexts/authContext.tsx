@@ -93,11 +93,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!data?.success) {
         throw new Error("Register failed");
       }
-      console.log("Register response:", data);
       const { accessToken, user } = data.data;
       setAccessToken(accessToken);
       localStorage.setItem("access_token", accessToken);
-      console.log("set localStorage", localStorage.getItem("access_token"));
       setUser(user);
     } catch (err) {
       console.error(err);
@@ -107,10 +105,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const verifyEmail = useCallback(
     async (token: string, signal: AbortSignal): Promise<ApiResponse<null>> => {
-      console.log("Verifying email with token:", token);
       const res = await api.post("/email/verify-email", { token }, { signal });
       const { data } = res as AxiosResponse<ApiResponse<null>>;
-      console.log("Verify email response auth context:", data);
       return data;
     },
     []
@@ -118,14 +114,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resendVerificationEmail = useCallback(
     async (email: string, signal: AbortSignal): Promise<ApiResponse<null>> => {
-      console.log("Verifying email with token:", email);
       const res = await api.post(
         "/email/resend-token-by-email",
         { email },
         { signal }
       );
       const { data } = res as AxiosResponse<ApiResponse<null>>;
-      console.log("resendVerificationEmail:", data);
       return data;
     },
     []

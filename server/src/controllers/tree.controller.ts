@@ -5,7 +5,11 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { createTree, fetchTrees } from "../services/tree.service";
+import {
+  createTree,
+  fetchTrees,
+  getTreeNetwork,
+} from "../services/tree.service";
 import { Tree } from "../types/tree.types";
 import { sendSuccess } from "../utils/apiResponse";
 
@@ -50,6 +54,25 @@ export const createTreesController = async (
     sendSuccess(res, { tree });
   } catch (err) {
     console.error("Error in createTreesController:", err);
+    next(err);
+  }
+};
+
+/**
+ * GET /tree/:id
+ */
+export const getTreeNetworkController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userIdFromToken = req.user.id;
+    const treeId = req.params.id;
+    const response = await getTreeNetwork(userIdFromToken, treeId);
+    sendSuccess(res, response);
+  } catch (err) {
+    console.error("Error in getTreeNetworkController:", err);
     next(err);
   }
 };

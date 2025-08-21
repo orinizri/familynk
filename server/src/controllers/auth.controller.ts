@@ -58,7 +58,6 @@ export const registerController: RequestHandler = async function (
       date_of_birth,
       photo_url,
     });
-    console.log("RESPONSE", response);
     sendSuccess(res, response, 201);
   } catch (error) {
     next(error);

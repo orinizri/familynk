@@ -32,13 +32,7 @@ export async function updateUserService({
   date_of_birth,
   photo_url,
 }: UpdateUserInput): Promise<User> {
-  console.log("Entered updateUserService with data:", {
-    id,
-    first_name,
-    last_name,
-    date_of_birth,
-    photo_url,
-  });
+
   try {
     const existingUser = await pool.query("SELECT * FROM users WHERE id = $1", [
       id,

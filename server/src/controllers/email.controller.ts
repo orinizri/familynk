@@ -12,14 +12,12 @@ import { getClientIp, getUserAgent } from "../utils/reqMeta";
 /** POST /email/verify-email  (unauthenticated; body: { token }) */
 export const verifyEmailController: RequestHandler = async (req, res, next) => {
   try {
-    console.log("verifyEmailController called with query:", req.body);
     const parse = TokenSchema.safeParse(req.body);
     if (!parse.success) {
       sendError(res, parse.error.flatten().fieldErrors.token[0], 400);
       return;
     }
     const result = await verifyEmailToken(parse.data?.token);
-    console.log("verifyEmailToken result:", result);
 
     if (!result.ok) {
       switch (result.reason) {
@@ -57,7 +55,6 @@ export async function resendVerificationByEmailController(
     const { email } = parse.data;
     const meta = { ip: getClientIp(req), ua: getUserAgent(req) };
     const result = await resendVerificationByEmail(email, meta);
-    console.log("result in email controller", result);
     if ("rateLimited" in result && result.rateLimited) {
       sendError(res, "Too many requests. Try again later.", 429);
     }

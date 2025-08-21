@@ -12,6 +12,7 @@ const Lazy = {
   RegisterPage: lazy(() => import("./pages/RegisterPage")),
   Unauthorized: lazy(() => import("./pages/Unauthorized")),
   TreesDashboard: lazy(() => import("./pages/trees/TreeDashboard")),
+  TreesEditorPage: lazy(() => import("./pages/trees/TreeEditorPage")),
   verifyEmailPage: lazy(() => import("./pages/verifyEmailPage")),
 };
 
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/" element={<Lazy.HomePage />} />
               <Route path="/profile" element={<Lazy.Profile />} />
               <Route path="/trees" element={<Lazy.TreesDashboard />} />
+              <Route path="/edit-tree" element={<Lazy.TreesEditorPage />} />
             </Route>
           </Route>
         </Routes>

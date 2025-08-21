@@ -29,7 +29,6 @@ export default function VerifyEmailPage() {
   const { verifyEmail, user, resendVerificationEmail } = useAuth();
 
   useEffect(() => {
-    console.log("verify email user", user);
     if (user && user.email_verified) {
       navigate("/");
       return;
@@ -47,7 +46,6 @@ export default function VerifyEmailPage() {
       try {
         setState({ kind: apiStatus.LOADING });
         const { success, data, error } = await verifyEmail(token, ac.signal);
-        console.log("verify email page", success, data, error);
         if (success) {
           setState({ kind: apiStatus.SUCCESS, message: data });
         } else {
@@ -76,7 +74,6 @@ export default function VerifyEmailPage() {
         user.email,
         ac.signal
       );
-      console.log("resendEmail verify email page", success, data, error);
       if (success) {
         setState({ kind: apiStatus.SUCCESS, message: data });
       } else {

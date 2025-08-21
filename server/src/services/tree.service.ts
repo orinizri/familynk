@@ -4,6 +4,7 @@
  * @returns {{ reservations: object[], nextCursor: number|null }}
  */
 
+import { Person } from "@server/types/person.types";
 import pool from "../db/db";
 import {
   FetchTreesOptions,
@@ -70,6 +71,7 @@ export async function fetchTrees({
     throw new AppError("Failed to fetch trees", 500);
   }
 }
+
 export async function createTree({
   name,
   user_id,
@@ -100,5 +102,34 @@ export async function createTree({
       throw new AppError("Failed to fetch profile", 500);
     }
     throw error;
+  }
+}
+
+export async function getTreeNetwork(userId: string, treeId: string) {
+  console.log("Fetching tree network for user:", userId, "and treeId:", treeId);
+  const client = await pool.connect();
+
+  try {
+    if (!treeId) {
+      throw new AppError("Tree ID is required", 400);
+    }
+
+    await client.query("BEGIN");
+
+    const result = await client.query(
+      `SELECT * FROM persons WHERE user_id = $1 and (tree_id = $2 or tree_id IS NULL)`,
+      [userId, treeId]
+    );
+
+    const persons = result.rows as Person[];
+    console.log("Persons fetched:", persons);
+
+    return persons;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Failed to fetch tree network:", error);
+    throw new AppError("Failed to fetch tree network", 500);
+  } finally {
+    client.release();
   }
 }
